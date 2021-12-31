@@ -2,11 +2,11 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\List;
+use App\ListModel;
 use Faker\Generator as Faker;
 
-$factory->define(List::class, function (Faker $faker) {
+$factory->define(ListModel::class, function (Faker $faker) {
     return [
-        //
+        'name' => $faker->text(30)
     ];
 });
