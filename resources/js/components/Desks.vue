@@ -9,8 +9,11 @@
                             <div class="media-body">
                                 <h5 class="card-title m-0">{{ desk.name }}</h5>
                             </div>
-                            <button class="btn btn-sm">
+                            <button class="btn btn-sm btn-info">
                                 <i class="fas fa-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash"></i>
                             </button>
                         </div>
                     </div>
@@ -37,8 +40,14 @@ export default {
         updateDesk() {
 
         },
-        deleteDesk() {
-
+        deleteDesk(id) {
+            axios
+                .post('api/V1/desks/' + id, {
+                    _method: 'DELETE'
+                })
+                .then(response => { console.log(response); })
+                .catch(error => { console.log(error); })
+                .finally(() => { this.loading = false; });
         }
     }
 }

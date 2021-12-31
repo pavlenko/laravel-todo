@@ -1957,6 +1957,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1970,7 +1973,19 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     createDesk: function createDesk() {},
     updateDesk: function updateDesk() {},
-    deleteDesk: function deleteDesk() {}
+    deleteDesk: function deleteDesk(id) {
+      var _this = this;
+
+      axios.post('api/V1/desks/' + id, {
+        _method: 'DELETE'
+      }).then(function (response) {
+        console.log(response);
+      })["catch"](function (error) {
+        console.log(error);
+      })["finally"](function () {
+        _this.loading = false;
+      });
+    }
   }
 });
 
@@ -19719,6 +19734,8 @@ var render = function () {
                 ]),
                 _vm._v(" "),
                 _vm._m(0, true),
+                _vm._v(" "),
+                _vm._m(1, true),
               ]),
             ]),
           ]),
@@ -19733,8 +19750,16 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("button", { staticClass: "btn btn-sm" }, [
+    return _c("button", { staticClass: "btn btn-sm btn-info" }, [
       _c("i", { staticClass: "fas fa-pencil" }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("button", { staticClass: "btn btn-sm btn-danger" }, [
+      _c("i", { staticClass: "fas fa-trash" }),
     ])
   },
 ]
