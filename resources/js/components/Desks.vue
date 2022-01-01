@@ -1,9 +1,20 @@
 <template>
     <div>
         <h1>Desks</h1>
-        <div class="row">
-            <div class="col-6 col-sm-4" v-for="desk in desks">
-                <desks-item :desk="desk" @deleteDesk="deleteDesk(desk.id)"></desks-item>
+        <div class="row" style="margin: 0 -10px">
+            <div class="col-6 col-sm-4" style="padding: 0 8px 16px" v-for="desk in desks">
+                <div class="card bg-primary" style="position: relative; height: 80px">
+                    <a class="card-body p-2 btn text-white text-left" href="#">
+                        {{ desk.name }}
+                    </a>
+                </div>
+            </div>
+            <div class="col-6 col-sm-4" style="padding: 0 8px 16px">
+                <div class="card bg-light" style="position: relative; height: 80px">
+                    <a class="card-body p-2 d-flex justify-content-center align-items-center btn" href="#">
+                        Create desk
+                    </a>
+                </div>
             </div>
         </div>
         {{ desks }}
@@ -11,10 +22,7 @@
 </template>
 
 <script>
-import DesksItem from "./DesksItem";
-
 export default {
-    components: {DesksItem},
     data() {
         return {
             desks: []
