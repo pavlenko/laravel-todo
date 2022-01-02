@@ -4,9 +4,9 @@
         <div class="row" style="margin: 0 -10px">
             <div class="col-6 col-sm-4" style="padding: 0 8px 16px" v-for="desk in desks">
                 <div class="card bg-primary" style="position: relative; height: 80px">
-                    <a class="card-body p-2 btn text-white text-left" href="#">
+                    <router-link class="card-body p-2 btn text-white text-left" :to="{name: 'lists', params: {id: desk.id}}">
                         {{ desk.name }}
-                    </a>
+                    </router-link>
                 </div>
             </div>
             <div class="col-6 col-sm-4" style="padding: 0 8px 16px">
@@ -16,6 +16,9 @@
                     </a>
                 </div>
             </div>
+        </div>
+        <div v-if="loading" class="d-flex justify-content-center">
+            <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
         </div>
         <b-modal id="create-desk" title="Create Desk">
             <p class="my-4">Hello from modal!</p>
@@ -28,10 +31,13 @@
 export default {
     data() {
         return {
-            desks: []
+            desks: [],
+            loading: false,
+            errored: false
         };
     },
     mounted() {
+        this.loading = true;
         axios
             .get('api/V1/desks')
             .then(response => {

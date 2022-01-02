@@ -1,8 +1,8 @@
 require('./bootstrap');
 
 import Vue from "vue";
-import VueRouter from "vue-router";
-import BootstrapVue from "bootstrap-vue";
+import VueRouter from "vue-router/dist/vue-router.min";
+import BootstrapVue from "bootstrap-vue/dist/bootstrap-vue.min";
 
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
@@ -27,7 +27,7 @@ const router = new VueRouter({
         },
         {
             path: '/desks/:id',
-            name: 'desks',
+            name: 'lists',
             component: Lists
         }
     ]

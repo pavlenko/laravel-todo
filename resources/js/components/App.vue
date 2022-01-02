@@ -12,8 +12,8 @@
                             <a class="nav-link" :href="href" @click="navigate">Home</a>
                         </li>
                     </router-link>
-                    <router-link :to="{ name: 'desks'}" exact v-slot="{ href, navigate, isExactActive }">
-                        <li class="nav-item" :class="[isExactActive && 'active']">
+                    <router-link :to="{ name: 'desks'}" v-slot="{ href, navigate, isActive }">
+                        <li class="nav-item" :class="[isActive && 'active']">
                             <a class="nav-link" :href="href" @click="navigate">Desks</a>
                         </li>
                     </router-link>
