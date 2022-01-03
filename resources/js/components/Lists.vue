@@ -66,7 +66,7 @@ export default {
     },
     methods: {
         createList(list) {
-            this.lists.unshift(list);
+            this.lists.push(list);
         },
         updateList(list) {
             let index = this.lists.findIndex(item => String(item.id) === String(list.id));

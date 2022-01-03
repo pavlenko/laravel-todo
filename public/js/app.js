@@ -2521,7 +2521,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     createList: function createList(list) {
-      this.lists.unshift(list);
+      this.lists.push(list);
     },
     updateList: function updateList(list) {
       var index = this.lists.findIndex(function (item) {
