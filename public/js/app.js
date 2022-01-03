@@ -2116,6 +2116,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -38638,7 +38643,7 @@ var render = function () {
       _vm.loading
         ? _c("div", { staticClass: "d-flex justify-content-center" }, [
             _c("div", {
-              staticClass: "spinner-border ml-auto",
+              staticClass: "spinner-border",
               attrs: { role: "status", "aria-hidden": "true" },
             }),
           ])
@@ -38701,44 +38706,50 @@ var render = function () {
   return _c("div", [
     _c("h5", [_vm._v("Lists")]),
     _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "board-container",
-        staticStyle: { "min-height": "600px" },
-      },
-      [
-        _c(
+    !_vm.loading
+      ? _c(
           "div",
-          { staticClass: "board-columns" },
-          _vm._l(_vm.lists, function (list) {
-            return _c("div", { staticClass: "board-column-container" }, [
-              _c("div", { staticClass: "board-column" }, [
-                _c("div", { staticClass: "board-column-header" }, [
-                  _c("div", { staticClass: "board-column-title" }, [
-                    _c("div", { staticClass: "form-control border-0" }, [
-                      _vm._v(_vm._s(list.name)),
+          {
+            staticClass: "board-container",
+            staticStyle: { "min-height": "600px" },
+          },
+          [
+            _c(
+              "div",
+              { staticClass: "board-columns" },
+              [
+                _vm._l(_vm.lists, function (list) {
+                  return _c("div", { staticClass: "board-column-container" }, [
+                    _c("div", { staticClass: "board-column" }, [
+                      _c("div", { staticClass: "board-column-header" }, [
+                        _c("div", { staticClass: "board-column-title" }, [
+                          _c("div", { staticClass: "form-control border-0" }, [
+                            _vm._v(_vm._s(list.name)),
+                          ]),
+                        ]),
+                        _vm._v(" "),
+                        _vm._m(0, true),
+                      ]),
+                      _vm._v(" "),
+                      _vm._m(1, true),
+                      _vm._v(" "),
+                      _vm._m(2, true),
                     ]),
-                  ]),
-                  _vm._v(" "),
-                  _vm._m(0, true),
-                ]),
+                  ])
+                }),
                 _vm._v(" "),
-                _vm._m(1, true),
-                _vm._v(" "),
-                _vm._m(2, true),
-              ]),
-            ])
-          }),
-          0
-        ),
-      ]
-    ),
+                _vm._m(3),
+              ],
+              2
+            ),
+          ]
+        )
+      : _vm._e(),
     _vm._v(" "),
     _vm.loading
       ? _c("div", { staticClass: "d-flex justify-content-center" }, [
           _c("div", {
-            staticClass: "spinner-border ml-auto",
+            staticClass: "spinner-border",
             attrs: { role: "status", "aria-hidden": "true" },
           }),
         ])
@@ -38883,6 +38894,22 @@ var staticRenderFns = [
           "\n                            {% endfor %}\n                        "
         ),
       ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", {}, [
+      _c(
+        "a",
+        { staticClass: "board-column bg-light btn", attrs: { href: "#" } },
+        [
+          _c("div", { staticClass: "board-column-header" }, [
+            _vm._v("Create list"),
+          ]),
+        ]
+      ),
     ])
   },
 ]

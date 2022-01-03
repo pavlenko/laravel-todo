@@ -18,7 +18,7 @@
             </div>
         </div>
         <div v-if="loading" class="d-flex justify-content-center">
-            <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
+            <div class="spinner-border" role="status" aria-hidden="true"></div>
         </div>
         <b-modal id="create-desk" title="Create Desk">
             <p class="my-4">Hello from modal!</p>

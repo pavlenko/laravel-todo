@@ -1,7 +1,7 @@
 <template>
     <div>
         <h5>Lists</h5>
-        <div class="board-container" style="min-height: 600px">
+        <div v-if="!loading" class="board-container" style="min-height: 600px">
             <div class="board-columns">
                 <div class="board-column-container" v-for="list in lists">
                     <div class="board-column">
@@ -51,10 +51,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="">
+                    <a class="board-column bg-light btn" href="#">
+                        <div class="board-column-header">Create list</div>
+                    </a>
+                </div>
             </div>
         </div>
         <div v-if="loading" class="d-flex justify-content-center">
-            <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
+            <div class="spinner-border" role="status" aria-hidden="true"></div>
         </div>
     </div>
 </template>
