@@ -1,11 +1,7 @@
 <template>
-    <div class="col-6 col-sm-4" style="padding: 0 8px 16px">
-        <div class="card bg-light" style="position: relative; height: 80px">
-            <a class="card-body p-2 d-flex justify-content-center align-items-center btn" href="#" v-b-modal="uuid">
-                Create desk
-            </a>
-        </div>
-        <b-modal :id="uuid" title="Create Desk" hide-footer>
+    <div>
+        <button type="button" @click.prevent v-b-modal="uuid">Delete</button>
+        <b-modal :id="uuid" title="Delete Desk" hide-footer>
             <div v-if="errored" class="alert alert-danger p-2" role="alert">
                 <h4 class="alert-heading m-0">
                     Something went wrong
@@ -14,11 +10,9 @@
                     </button>
                 </h4>
             </div>
-            <form @submit.prevent="createDesk" style="position: relative">
-                <div class="form-group">
-                    <input type="text" class="form-control" name="name" placeholder="Enter desk name">
-                </div>
-                <button type="submit" class="btn btn-primary">Create</button>
+            <form @submit.prevent="deleteDesk" style="position: relative">
+                <p class="text-danger text-center">Are you sure you want delete "{{ desk.name }}"</p>
+                <button type="submit" class="btn btn-primary">Delete</button>
                 <div v-if="errored" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)"></div>
                 <div v-if="loading" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)">
                     <div class="d-flex justify-content-center align-items-center">
@@ -31,24 +25,27 @@
 </template>
 
 <script>
-import {v4 as uuid} from 'uuid';
+import {v4 as uuid} from "uuid";
 
 export default {
+    props: {
+        desk: Object
+    },
     data() {
         return {
             uuid: uuid(),
             loading: false,
             errored: false
-        };
+        }
     },
     methods: {
-        createDesk(event) {
+        deleteDesk() {
             this.loading = true;
             this.errored = false;
             axios
-                .post(__baseURL + '/api/V1/desks', new FormData(event.target))
+                .post(__baseURL + '/api/V1/desks/' + this.desk.id, {_method: 'DELETE'})
                 .then(response => {
-                    this.$emit('success', response.data.data);
+                    this.$emit('success', this.desk);
                     this.$bvModal.hide(this.uuid);
                 })
                 .catch(error => {

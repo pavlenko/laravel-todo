@@ -6,6 +6,7 @@
                 <div class="card bg-primary" style="position: relative; height: 80px">
                     <router-link class="card-body p-2 btn text-white text-left" :to="{name: 'lists', params: {id: desk.id}}">
                         {{ desk.name }}
+                        <desks-delete :desk="desk" @success="deleteDesk"></desks-delete>
                     </router-link>
                 </div>
             </div>
@@ -14,15 +15,15 @@
         <div v-if="loading" class="d-flex justify-content-center">
             <div class="spinner-border" role="status" aria-hidden="true"></div>
         </div>
-        {{ desks }}
     </div>
 </template>
 
 <script>
 import DesksCreate from "./DesksCreate";
+import DesksDelete from "./DesksDelete";
 
 export default {
-    components: {DesksCreate},
+    components: {DesksCreate, DesksDelete},
     data() {
         return {
             desks: [],
@@ -45,16 +46,10 @@ export default {
         updateDesk() {
 
         },
-        deleteDesk(id) {
-            axios
-                .post(__baseURL + '/api/V1/desks/' + id, {_method: 'DELETE'})
-                .then(() => {
-                    this.desks = this.desks.filter(desk => {
-                        return desk.id != id;
-                    });
-                })
-                .catch(error => { console.log(error); })
-                .finally(() => { this.loading = false; });
+        deleteDesk(desk) {
+            this.desks = this.desks.filter(item => {
+                return String(item.id) !== String(desk.id);
+            });
         }
     }
 }
