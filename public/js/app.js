@@ -2024,6 +2024,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DesksCreate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DesksCreate */ "./resources/js/components/DesksCreate.vue");
 //
 //
 //
@@ -2034,6 +2035,74 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    DesksCreate: _DesksCreate__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  data: function data() {
+    return {
+      desks: [],
+      loading: false,
+      errored: false
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    this.loading = true;
+    axios.get(__baseURL + '/api/V1/desks').then(function (response) {
+      _this.desks = response.data.data;
+    })["catch"](function (error) {
+      console.log(error);
+    })["finally"](function () {
+      _this.loading = false;
+    });
+  },
+  methods: {
+    createDesk: function createDesk(desk) {
+      this.desks.unshift(desk);
+    },
+    updateDesk: function updateDesk() {},
+    deleteDesk: function deleteDesk(id) {
+      var _this2 = this;
+
+      axios.post(__baseURL + '/api/V1/desks/' + id, {
+        _method: 'DELETE'
+      }).then(function () {
+        _this2.desks = _this2.desks.filter(function (desk) {
+          return desk.id != id;
+        });
+      })["catch"](function (error) {
+        console.log(error);
+      })["finally"](function () {
+        _this2.loading = false;
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DesksCreate.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/DesksCreate.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 //
 //
 //
@@ -2061,49 +2130,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      desks: [],
-      loading: false,
-      errored: false
+      loading: false
     };
-  },
-  mounted: function mounted() {
-    var _this = this;
-
-    this.loading = true;
-    axios.get(__baseURL + '/api/V1/desks').then(function (response) {
-      _this.desks = response.data.data;
-    })["catch"](function (error) {
-      console.log(error);
-    })["finally"](function () {
-      _this.loading = false;
-    });
   },
   methods: {
     createDesk: function createDesk(event) {
-      var _this2 = this;
+      var _this = this;
 
+      this.loading = true;
       axios.post(__baseURL + '/api/V1/desks', new FormData(event.target)).then(function (response) {
-        _this2.desks.unshift(response.data.data);
-      })["catch"](function (error) {
-        console.log(error);
-      })["finally"](function () {
-        _this2.loading = false;
-      });
-    },
-    updateDesk: function updateDesk() {},
-    deleteDesk: function deleteDesk(id) {
-      var _this3 = this;
+        _this.$emit('success', response.data.data);
 
-      axios.post(__baseURL + '/api/V1/desks/' + id, {
-        _method: 'DELETE'
-      }).then(function () {
-        _this3.desks = _this3.desks.filter(function (desk) {
-          return desk.id != id;
-        });
+        _this.$bvModal.hide('create-desk');
       })["catch"](function (error) {
         console.log(error);
       })["finally"](function () {
-        _this3.loading = false;
+        _this.loading = false;
       });
     }
   }
@@ -38784,54 +38826,15 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("h1", [_vm._v("Desks")]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "row", staticStyle: { margin: "0 -10px" } },
-        [
-          _vm._l(_vm.desks, function (desk) {
-            return _c(
-              "div",
-              {
-                staticClass: "col-6 col-sm-4",
-                staticStyle: { padding: "0 8px 16px" },
-              },
-              [
-                _c(
-                  "div",
-                  {
-                    staticClass: "card bg-primary",
-                    staticStyle: { position: "relative", height: "80px" },
-                  },
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "card-body p-2 btn text-white text-left",
-                        attrs: {
-                          to: { name: "lists", params: { id: desk.id } },
-                        },
-                      },
-                      [
-                        _vm._v(
-                          "\n                    " +
-                            _vm._s(desk.name) +
-                            "\n                "
-                        ),
-                      ]
-                    ),
-                  ],
-                  1
-                ),
-              ]
-            )
-          }),
-          _vm._v(" "),
-          _c(
+  return _c("div", [
+    _c("h1", [_vm._v("Desks")]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "row", staticStyle: { margin: "0 -10px" } },
+      [
+        _vm._l(_vm.desks, function (desk) {
+          return _c(
             "div",
             {
               staticClass: "col-6 col-sm-4",
@@ -38841,46 +38844,98 @@ var render = function () {
               _c(
                 "div",
                 {
-                  staticClass: "card bg-light",
+                  staticClass: "card bg-primary",
                   staticStyle: { position: "relative", height: "80px" },
                 },
                 [
                   _c(
-                    "a",
+                    "router-link",
                     {
-                      directives: [
-                        {
-                          name: "b-modal",
-                          rawName: "v-b-modal.create-desk",
-                          modifiers: { "create-desk": true },
-                        },
-                      ],
-                      staticClass:
-                        "card-body p-2 d-flex justify-content-center align-items-center btn",
-                      attrs: { href: "#" },
+                      staticClass: "card-body p-2 btn text-white text-left",
+                      attrs: { to: { name: "lists", params: { id: desk.id } } },
                     },
                     [
                       _vm._v(
-                        "\n                    Create desk\n                "
+                        "\n                    " +
+                          _vm._s(desk.name) +
+                          "\n                "
                       ),
                     ]
                   ),
-                ]
+                ],
+                1
               ),
             ]
+          )
+        }),
+        _vm._v(" "),
+        _c("desks-create", { on: { success: _vm.createDesk } }),
+      ],
+      2
+    ),
+    _vm._v(" "),
+    _vm.loading
+      ? _c("div", { staticClass: "d-flex justify-content-center" }, [
+          _c("div", {
+            staticClass: "spinner-border",
+            attrs: { role: "status", "aria-hidden": "true" },
+          }),
+        ])
+      : _vm._e(),
+    _vm._v("\n    " + _vm._s(_vm.desks) + "\n"),
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DesksCreate.vue?vue&type=template&id=2817fe7b&":
+/*!**************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/DesksCreate.vue?vue&type=template&id=2817fe7b& ***!
+  \**************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "col-6 col-sm-4", staticStyle: { padding: "0 8px 16px" } },
+    [
+      _c(
+        "div",
+        {
+          staticClass: "card bg-light",
+          staticStyle: { position: "relative", height: "80px" },
+        },
+        [
+          _c(
+            "a",
+            {
+              directives: [
+                {
+                  name: "b-modal",
+                  rawName: "v-b-modal.create-desk",
+                  modifiers: { "create-desk": true },
+                },
+              ],
+              staticClass:
+                "card-body p-2 d-flex justify-content-center align-items-center btn",
+              attrs: { href: "#" },
+            },
+            [_vm._v("\n            Create desk\n        ")]
           ),
-        ],
-        2
+        ]
       ),
-      _vm._v(" "),
-      _vm.loading
-        ? _c("div", { staticClass: "d-flex justify-content-center" }, [
-            _c("div", {
-              staticClass: "spinner-border",
-              attrs: { role: "status", "aria-hidden": "true" },
-            }),
-          ])
-        : _vm._e(),
       _vm._v(" "),
       _c(
         "b-modal",
@@ -38917,9 +38972,35 @@ var render = function () {
               ),
             ]
           ),
+          _vm._v(" "),
+          _vm.loading
+            ? _c(
+                "div",
+                {
+                  staticClass: "card-img-overlay",
+                  staticStyle: {
+                    "background-color": "rgba(255, 255, 255, 0.5)",
+                  },
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "d-flex justify-content-center align-items-center",
+                    },
+                    [
+                      _c("div", {
+                        staticClass: "spinner-border",
+                        attrs: { role: "status", "aria-hidden": "true" },
+                      }),
+                    ]
+                  ),
+                ]
+              )
+            : _vm._e(),
         ]
       ),
-      _vm._v("\n    " + _vm._s(_vm.desks) + "\n"),
     ],
     1
   )
@@ -51649,6 +51730,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Desks_vue_vue_type_template_id_3968409f___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Desks_vue_vue_type_template_id_3968409f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/DesksCreate.vue":
+/*!*************************************************!*\
+  !*** ./resources/js/components/DesksCreate.vue ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DesksCreate_vue_vue_type_template_id_2817fe7b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DesksCreate.vue?vue&type=template&id=2817fe7b& */ "./resources/js/components/DesksCreate.vue?vue&type=template&id=2817fe7b&");
+/* harmony import */ var _DesksCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DesksCreate.vue?vue&type=script&lang=js& */ "./resources/js/components/DesksCreate.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _DesksCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _DesksCreate_vue_vue_type_template_id_2817fe7b___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _DesksCreate_vue_vue_type_template_id_2817fe7b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/DesksCreate.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/DesksCreate.vue?vue&type=script&lang=js&":
+/*!**************************************************************************!*\
+  !*** ./resources/js/components/DesksCreate.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DesksCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./DesksCreate.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DesksCreate.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DesksCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/DesksCreate.vue?vue&type=template&id=2817fe7b&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/DesksCreate.vue?vue&type=template&id=2817fe7b& ***!
+  \********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DesksCreate_vue_vue_type_template_id_2817fe7b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./DesksCreate.vue?vue&type=template&id=2817fe7b& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DesksCreate.vue?vue&type=template&id=2817fe7b&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DesksCreate_vue_vue_type_template_id_2817fe7b___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DesksCreate_vue_vue_type_template_id_2817fe7b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
