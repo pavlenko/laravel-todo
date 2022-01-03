@@ -24,7 +24,11 @@ class ListController extends Controller
 
     public function store(ListRequest $request)
     {
-        return new ListResource(ListModel::create($request->validated()));
+        $request->validate([
+            'desk_id' => 'required|integer|exists:desks,id'
+        ]);
+
+        return new ListResource(ListModel::create($request->input()));
     }
 
     public function show(ListModel $list)

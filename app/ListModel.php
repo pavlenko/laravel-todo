@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ListModel extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['desk_id', 'name'];
 
     public function getTable(): string
     {
