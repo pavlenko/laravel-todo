@@ -2053,6 +2053,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2067,7 +2072,6 @@ __webpack_require__.r(__webpack_exports__);
     this.loading = true;
     axios.get(__baseURL + '/api/V1/desks').then(function (response) {
       _this.desks = response.data.data;
-      console.log(response);
     })["catch"](function (error) {
       console.log(error);
     })["finally"](function () {
@@ -2075,21 +2079,31 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
-    createDesk: function createDesk() {},
+    createDesk: function createDesk(event) {
+      var _this2 = this;
+
+      axios.post(__baseURL + '/api/V1/desks', new FormData(event.target)).then(function (response) {
+        _this2.desks.unshift(response.data.data);
+      })["catch"](function (error) {
+        console.log(error);
+      })["finally"](function () {
+        _this2.loading = false;
+      });
+    },
     updateDesk: function updateDesk() {},
     deleteDesk: function deleteDesk(id) {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.post(__baseURL + '/api/V1/desks/' + id, {
         _method: 'DELETE'
       }).then(function () {
-        _this2.desks = _this2.desks.filter(function (desk) {
+        _this3.desks = _this3.desks.filter(function (desk) {
           return desk.id != id;
         });
       })["catch"](function (error) {
         console.log(error);
       })["finally"](function () {
-        _this2.loading = false;
+        _this3.loading = false;
       });
     }
   }
@@ -38868,9 +38882,43 @@ var render = function () {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _c("b-modal", { attrs: { id: "create-desk", title: "Create Desk" } }, [
-        _c("p", { staticClass: "my-4" }, [_vm._v("Hello from modal!")]),
-      ]),
+      _c(
+        "b-modal",
+        {
+          attrs: { id: "create-desk", title: "Create Desk", "hide-footer": "" },
+        },
+        [
+          _c(
+            "form",
+            {
+              on: {
+                submit: function ($event) {
+                  $event.preventDefault()
+                  return _vm.createDesk.apply(null, arguments)
+                },
+              },
+            },
+            [
+              _c("div", { staticClass: "form-group" }, [
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    name: "name",
+                    placeholder: "Enter desk name",
+                  },
+                }),
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+                [_vm._v("Create")]
+              ),
+            ]
+          ),
+        ]
+      ),
       _vm._v("\n    " + _vm._s(_vm.desks) + "\n"),
     ],
     1

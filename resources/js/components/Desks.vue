@@ -20,8 +20,14 @@
         <div v-if="loading" class="d-flex justify-content-center">
             <div class="spinner-border" role="status" aria-hidden="true"></div>
         </div>
-        <b-modal id="create-desk" title="Create Desk">
-            <p class="my-4">Hello from modal!</p>
+        <b-modal id="create-desk" title="Create Desk" hide-footer>
+            <!-- TODO move to separate component & close on success & spinner overlay during ajax -->
+            <form @submit.prevent="createDesk">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="name" placeholder="Enter desk name">
+                </div>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
         </b-modal>
         {{ desks }}
     </div>
@@ -40,25 +46,24 @@ export default {
         this.loading = true;
         axios
             .get(__baseURL + '/api/V1/desks')
-            .then(response => {
-                this.desks = response.data.data;
-                console.log(response);
-            })
+            .then(response => { this.desks = response.data.data; })
             .catch(error => { console.log(error); })
             .finally(() => { this.loading = false; });
     },
     methods: {
-        createDesk() {
-
+        createDesk(event) {
+            axios
+                .post(__baseURL + '/api/V1/desks', new FormData(event.target))
+                .then(response => { this.desks.unshift(response.data.data); })
+                .catch(error => { console.log(error); })
+                .finally(() => { this.loading = false; });
         },
         updateDesk() {
 
         },
         deleteDesk(id) {
             axios
-                .post(__baseURL + '/api/V1/desks/' + id, {
-                    _method: 'DELETE'
-                })
+                .post(__baseURL + '/api/V1/desks/' + id, {_method: 'DELETE'})
                 .then(() => {
                     this.desks = this.desks.filter(desk => {
                         return desk.id != id;

@@ -13,7 +13,7 @@ class DeskController extends Controller
 {
     public function index()
     {
-        return DeskResource::collection(DeskModel::all());
+        return DeskResource::collection(DeskModel::orderBy('created_at', 'desc')->get());
     }
 
     public function store(DeskRequest $request)
