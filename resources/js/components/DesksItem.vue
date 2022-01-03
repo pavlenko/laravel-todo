@@ -1,6 +1,6 @@
 <template>
-    <div class="col-6 col-sm-4" style="padding: 0 8px 16px">
-        <div class="card bg-primary text-white" style="position: relative; height: 80px">
+    <div class="col-6 col-sm-4" style="padding: 0 7.5px 15px">
+        <div class="card bg-primary text-white m-0" style="position: relative; height: 80px">
             <div class="card-body p-2">
                 <div class="media">
                     <div class="media-body">

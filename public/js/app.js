@@ -2098,6 +2098,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2125,6 +2137,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.desks = response.data.data;
       })["catch"](function (error) {
         _this.errored = true;
+        console.log(error);
       })["finally"](function () {
         _this.loading = false;
       });
@@ -39963,60 +39976,108 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("h1", [_vm._v("Desks")]),
-    _vm._v(" "),
-    !_vm.loading && !_vm.errored
-      ? _c(
-          "div",
-          { staticClass: "row", staticStyle: { margin: "0 -10px" } },
-          [
-            _vm._l(_vm.desks, function (desk) {
-              return _c("desks-item", {
-                key: desk.id,
-                attrs: { desk: desk },
-                on: { updateDesk: _vm.updateDesk, deleteDesk: _vm.deleteDesk },
-              })
-            }),
-            _vm._v(" "),
-            _c("desks-create", { on: { createDesk: _vm.createDesk } }),
-          ],
-          2
-        )
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.errored
-      ? _c(
-          "div",
-          { staticClass: "alert alert-danger p-2", attrs: { role: "alert" } },
-          [
-            _c("h4", { staticClass: "alert-heading m-0" }, [
-              _vm._v("\n            Something went wrong\n            "),
+  return _c("div", { staticClass: "content-wrapper" }, [
+    _c("section", { staticClass: "content-header" }, [
+      _c("div", { staticClass: "container-fluid" }, [
+        _c("div", { staticClass: "row mb-2" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-sm-6" }, [
+            _c("ol", { staticClass: "breadcrumb float-sm-right" }, [
               _c(
-                "button",
-                {
-                  staticClass: "btn btn-sm btn-danger",
-                  attrs: { type: "button", "data-dismiss": "alert" },
-                  on: { click: _vm.load },
-                },
-                [_vm._v("\n                Try again\n            ")]
+                "li",
+                { staticClass: "breadcrumb-item" },
+                [
+                  _c("router-link", { attrs: { to: { name: "home" } } }, [
+                    _vm._v("Home"),
+                  ]),
+                ],
+                1
               ),
+              _vm._v(" "),
+              _c("li", { staticClass: "breadcrumb-item active" }, [
+                _vm._v("Desks"),
+              ]),
             ]),
-          ]
-        )
-      : _vm._e(),
+          ]),
+        ]),
+      ]),
+    ]),
     _vm._v(" "),
-    _vm.loading
-      ? _c("div", { staticClass: "d-flex justify-content-center" }, [
-          _c("div", {
-            staticClass: "spinner-border",
-            attrs: { role: "status", "aria-hidden": "true" },
-          }),
-        ])
-      : _vm._e(),
+    _c("section", { staticClass: "content" }, [
+      _c("div", { staticClass: "container-fluid" }, [
+        !_vm.loading && !_vm.errored
+          ? _c(
+              "div",
+              { staticClass: "row", staticStyle: { margin: "0 -7.5px" } },
+              [
+                _vm._l(_vm.desks, function (desk) {
+                  return _c("desks-item", {
+                    key: desk.id,
+                    attrs: { desk: desk },
+                    on: {
+                      updateDesk: _vm.updateDesk,
+                      deleteDesk: _vm.deleteDesk,
+                    },
+                  })
+                }),
+                _vm._v(" "),
+                _c("desks-create", { on: { createDesk: _vm.createDesk } }),
+              ],
+              2
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.errored
+          ? _c(
+              "div",
+              {
+                staticClass: "alert alert-danger p-2",
+                attrs: { role: "alert" },
+              },
+              [
+                _c("h4", { staticClass: "alert-heading m-0" }, [
+                  _vm._v(
+                    "\n                    Something went wrong\n                    "
+                  ),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-sm btn-danger",
+                      attrs: { type: "button", "data-dismiss": "alert" },
+                      on: { click: _vm.load },
+                    },
+                    [
+                      _vm._v(
+                        "\n                        Try again\n                    "
+                      ),
+                    ]
+                  ),
+                ]),
+              ]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.loading
+          ? _c("div", { staticClass: "d-flex justify-content-center" }, [
+              _c("div", {
+                staticClass: "spinner-border",
+                attrs: { role: "status", "aria-hidden": "true" },
+              }),
+            ])
+          : _vm._e(),
+      ]),
+    ]),
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [_c("h1", [_vm._v("Desks")])])
+  },
+]
 render._withStripped = true
 
 
@@ -40040,12 +40101,12 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "col-6 col-sm-4", staticStyle: { padding: "0 8px 16px" } },
+    { staticClass: "col-6 col-sm-4", staticStyle: { padding: "0 7.5px 15px" } },
     [
       _c(
         "div",
         {
-          staticClass: "card bg-light",
+          staticClass: "card bg-light m-0",
           staticStyle: { position: "relative", height: "80px" },
         },
         [
@@ -40352,12 +40413,12 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "col-6 col-sm-4", staticStyle: { padding: "0 8px 16px" } },
+    { staticClass: "col-6 col-sm-4", staticStyle: { padding: "0 7.5px 15px" } },
     [
       _c(
         "div",
         {
-          staticClass: "card bg-primary text-white",
+          staticClass: "card bg-primary text-white m-0",
           staticStyle: { position: "relative", height: "80px" },
         },
         [

@@ -1,29 +1,41 @@
 <template>
-    <div>
-        <h1>Desks</h1>
-        <div v-if="!loading && !errored" class="row" style="margin: 0 -10px">
-            <!--<div class="col-6 col-sm-4" style="padding: 0 8px 16px" v-for="desk in desks">
-                <div class="card bg-primary" style="position: relative; height: 80px">
-                    <router-link class="card-body p-2 btn text-white text-left" :to="{name: 'lists', params: {id: desk.id}}">
-                        {{ desk.name }}
-                        <desks-delete :desk="desk" @success="deleteDesk"></desks-delete>
-                    </router-link>
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Desks</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <router-link :to="{ name: 'home'}">Home</router-link>
+                            </li>
+                            <li class="breadcrumb-item active">Desks</li>
+                        </ol>
+                    </div>
                 </div>
-            </div>-->
-            <desks-item v-for="desk in desks" :key="desk.id" :desk="desk" @updateDesk="updateDesk" @deleteDesk="deleteDesk"></desks-item>
-            <desks-create @createDesk="createDesk"></desks-create>
-        </div>
-        <div v-if="errored" class="alert alert-danger p-2" role="alert">
-            <h4 class="alert-heading m-0">
-                Something went wrong
-                <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" @click="load">
-                    Try again
-                </button>
-            </h4>
-        </div>
-        <div v-if="loading" class="d-flex justify-content-center">
-            <div class="spinner-border" role="status" aria-hidden="true"></div>
-        </div>
+            </div>
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                <div v-if="!loading && !errored" class="row" style="margin: 0 -7.5px">
+                    <desks-item v-for="desk in desks" :key="desk.id" :desk="desk" @updateDesk="updateDesk" @deleteDesk="deleteDesk"></desks-item>
+                    <desks-create @createDesk="createDesk"></desks-create>
+                </div>
+                <div v-if="errored" class="alert alert-danger p-2" role="alert">
+                    <h4 class="alert-heading m-0">
+                        Something went wrong
+                        <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" @click="load">
+                            Try again
+                        </button>
+                    </h4>
+                </div>
+                <div v-if="loading" class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status" aria-hidden="true"></div>
+                </div>
+            </div>
+        </section>
     </div>
 </template>
 
@@ -50,7 +62,10 @@ export default {
             axios
                 .get(__baseURL + '/api/V1/desks')
                 .then(response => { this.desks = response.data.data; })
-                .catch(error => { this.errored = true; })
+                .catch(error => {
+                    this.errored = true;
+                    console.log(error);
+                })
                 .finally(() => { this.loading = false; });
         },
         createDesk(desk) {

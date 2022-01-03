@@ -1,6 +1,6 @@
 <template>
-    <div class="col-6 col-sm-4" style="padding: 0 8px 16px">
-        <div class="card bg-light" style="position: relative; height: 80px">
+    <div class="col-6 col-sm-4" style="padding: 0 7.5px 15px">
+        <div class="card bg-light m-0" style="position: relative; height: 80px">
             <a class="card-body p-2 d-flex justify-content-center align-items-center btn" href="#" v-b-modal="uuid">
                 Create desk
             </a>
