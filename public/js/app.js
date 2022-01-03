@@ -2127,10 +2127,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      loading: false
+      loading: false,
+      errored: false
     };
   },
   methods: {
@@ -2138,11 +2147,13 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.loading = true;
+      this.errored = false;
       axios.post(__baseURL + '/api/V1/desks', new FormData(event.target)).then(function (response) {
         _this.$emit('success', response.data.data);
 
         _this.$bvModal.hide('create-desk');
       })["catch"](function (error) {
+        _this.errored = true;
         console.log(error);
       })["finally"](function () {
         _this.loading = false;
@@ -38943,9 +38954,44 @@ var render = function () {
           attrs: { id: "create-desk", title: "Create Desk", "hide-footer": "" },
         },
         [
+          _vm.errored
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger p-2",
+                  attrs: { role: "alert" },
+                },
+                [
+                  _c("h4", { staticClass: "alert-heading m-0" }, [
+                    _vm._v(
+                      "\n                Something went wrong\n                "
+                    ),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-sm btn-danger",
+                        attrs: { type: "button", "data-dismiss": "alert" },
+                        on: {
+                          click: function ($event) {
+                            _vm.errored = false
+                          },
+                        },
+                      },
+                      [
+                        _vm._v(
+                          "\n                    Try again\n                "
+                        ),
+                      ]
+                    ),
+                  ]),
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
           _c(
             "form",
             {
+              staticStyle: { position: "relative" },
               on: {
                 submit: function ($event) {
                   $event.preventDefault()
@@ -38970,35 +39016,44 @@ var render = function () {
                 { staticClass: "btn btn-primary", attrs: { type: "submit" } },
                 [_vm._v("Create")]
               ),
-            ]
-          ),
-          _vm._v(" "),
-          _vm.loading
-            ? _c(
-                "div",
-                {
-                  staticClass: "card-img-overlay",
-                  staticStyle: {
-                    "background-color": "rgba(255, 255, 255, 0.5)",
-                  },
-                },
-                [
-                  _c(
+              _vm._v(" "),
+              _vm.errored
+                ? _c("div", {
+                    staticClass: "card-img-overlay",
+                    staticStyle: {
+                      "background-color": "rgba(255, 255, 255, 0.5)",
+                    },
+                  })
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.loading
+                ? _c(
                     "div",
                     {
-                      staticClass:
-                        "d-flex justify-content-center align-items-center",
+                      staticClass: "card-img-overlay",
+                      staticStyle: {
+                        "background-color": "rgba(255, 255, 255, 0.5)",
+                      },
                     },
                     [
-                      _c("div", {
-                        staticClass: "spinner-border",
-                        attrs: { role: "status", "aria-hidden": "true" },
-                      }),
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "d-flex justify-content-center align-items-center",
+                        },
+                        [
+                          _c("div", {
+                            staticClass: "spinner-border",
+                            attrs: { role: "status", "aria-hidden": "true" },
+                          }),
+                        ]
+                      ),
                     ]
-                  ),
-                ]
-              )
-            : _vm._e(),
+                  )
+                : _vm._e(),
+            ]
+          ),
         ]
       ),
     ],
