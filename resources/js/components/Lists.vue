@@ -7,7 +7,7 @@
                     <div class="board-column">
                         <div class="board-column-header">
                             <div class="board-column-title">
-                                <div class="form-control border-0">{{ list.name }}</div>
+                                <div class="border-0 p-1">{{ list.name }}</div>
                             </div>
                             <div class="dropdown">
                                 <a href="#" class="btn" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -22,32 +22,7 @@
                         </div>
                         <button class="my-1 btn btn-light btn-block btn-sm"><i class="fa fa-plus"></i></button>
                         <div class="board-column-body">
-                            <div class="board-column-cards">
-                                {% for card_index in 0..6 %}
-                                <div class="board-column-card">
-                                    <div class="my-2 mx-1 p-2 border bg-light" style="/*min-height: 200px; flex: 0 0 auto; border: 1px solid var(--danger); background: var(--blue); padding: 2rem*/">
-                                        <div class="board-card-img text-center">
-                                            <img class="img-thumbnail" src="asset('bundles/pecoreui/img/avatars/1.jpg')">
-                                        </div>
-                                        <div class="board-card-pills">
-                                            <div class="d-inline-block rounded bg-primary p-1" style="width: 50px"></div>
-                                            <div class="d-inline-block rounded bg-secondary p-1" style="width: 50px"></div>
-                                            <div class="d-inline-block rounded bg-success p-1" style="width: 50px"></div>
-                                        </div>
-                                        <div class="board-card-title">CARD TITLE</div>
-                                        <div class="d-flex">
-                                            <div><img class="img-avatar" src="asset('bundles/pecoreui/img/avatars/2.jpg')" style="width: 24px; height: 24px;"></div>
-                                            <div class="board-card-date">Today</div>
-                                            <div class="board-card-comments">10 <i class="fa fa-comment-o"></i></div>
-                                        </div>
-                                        <div class="board-card-meta">
-                                            <div class="board-card-meta-left"></div>
-                                            <div class="board-card-meta-right"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
+                            <cards :list-id="list.id"></cards>
                         </div>
                     </div>
                 </div>
@@ -65,7 +40,10 @@
 </template>
 
 <script>
+import Cards from "./Cards";
+
 export default {
+    components: {Cards},
     data() {
         return {
             deskID: this.$route.params.id,
@@ -123,19 +101,6 @@ export default {
 .board-column-body {
     flex: 1;
     position: relative;
-}
-.board-column-cards {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-}
-.board-card-title {
-    margin-bottom: .5rem;
-}
-.board-card-date {
-    flex: 1;
-    padding: 0 .5rem;
 }
 .sortable-drag {
     opacity: 1 !important;

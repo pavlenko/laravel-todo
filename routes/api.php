@@ -21,5 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::apiResource('desks', 'DeskController');
 Route::apiResource('lists', 'ListController');
+Route::apiResource('cards', 'CardController');
 
 
