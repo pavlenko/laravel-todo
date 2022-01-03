@@ -1995,7 +1995,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.loading = true;
-    axios.get('api/V1/desks').then(function (response) {
+    axios.get(__baseURL + '/api/V1/desks').then(function (response) {
       _this.desks = response.data.data;
       console.log(response);
     })["catch"](function (error) {
@@ -2010,7 +2010,7 @@ __webpack_require__.r(__webpack_exports__);
     deleteDesk: function deleteDesk(id) {
       var _this2 = this;
 
-      axios.post('api/V1/desks/' + id, {
+      axios.post(__baseURL + '/api/V1/desks/' + id, {
         _method: 'DELETE'
       }).then(function () {
         _this2.desks = _this2.desks.filter(function (desk) {
@@ -2092,21 +2092,54 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      lists: [{
-        name: 'To do'
-      }, {
-        name: 'In progress'
-      }, {
-        name: 'Reopen'
-      }, {
-        name: 'Resolved'
-      }, {
-        name: 'Closed'
-      }]
+      deskID: this.$route.params.id,
+      lists: [],
+      loading: false
     };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    this.loading = true;
+    axios.get(__baseURL + '/api/V1/lists/', {
+      params: {
+        desk_id: this.deskID
+      }
+    }).then(function (response) {
+      _this.lists = response.data.data;
+      console.log(response);
+    })["catch"](function (error) {
+      console.log(error);
+    })["finally"](function () {
+      _this.loading = false;
+    });
   }
 });
 
@@ -38668,32 +38701,48 @@ var render = function () {
   return _c("div", [
     _c("h5", [_vm._v("Lists")]),
     _vm._v(" "),
-    _c("div", { staticClass: "board-container" }, [
-      _c(
-        "div",
-        { staticClass: "board-columns" },
-        _vm._l(_vm.lists, function (list) {
-          return _c("div", { staticClass: "board-column-container" }, [
-            _c("div", { staticClass: "board-column" }, [
-              _c("div", { staticClass: "board-column-header" }, [
-                _c("div", { staticClass: "board-column-title" }, [
-                  _c("div", { staticClass: "form-control border-0" }, [
-                    _vm._v(_vm._s(list.name)),
+    _c(
+      "div",
+      {
+        staticClass: "board-container",
+        staticStyle: { "min-height": "600px" },
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "board-columns" },
+          _vm._l(_vm.lists, function (list) {
+            return _c("div", { staticClass: "board-column-container" }, [
+              _c("div", { staticClass: "board-column" }, [
+                _c("div", { staticClass: "board-column-header" }, [
+                  _c("div", { staticClass: "board-column-title" }, [
+                    _c("div", { staticClass: "form-control border-0" }, [
+                      _vm._v(_vm._s(list.name)),
+                    ]),
                   ]),
+                  _vm._v(" "),
+                  _vm._m(0, true),
                 ]),
                 _vm._v(" "),
-                _vm._m(0, true),
+                _vm._m(1, true),
+                _vm._v(" "),
+                _vm._m(2, true),
               ]),
-              _vm._v(" "),
-              _vm._m(1, true),
-              _vm._v(" "),
-              _vm._m(2, true),
-            ]),
-          ])
-        }),
-        0
-      ),
-    ]),
+            ])
+          }),
+          0
+        ),
+      ]
+    ),
+    _vm._v(" "),
+    _vm.loading
+      ? _c("div", { staticClass: "d-flex justify-content-center" }, [
+          _c("div", {
+            staticClass: "spinner-border ml-auto",
+            attrs: { role: "status", "aria-hidden": "true" },
+          }),
+        ])
+      : _vm._e(),
   ])
 }
 var staticRenderFns = [
@@ -38757,7 +38806,81 @@ var staticRenderFns = [
     return _c("div", { staticClass: "board-column-body" }, [
       _c("div", { staticClass: "board-column-cards" }, [
         _vm._v(
-          "\n                            {% for card_index in 0..6 %}\n                            block('_card')\n                            {% endfor %}\n                        "
+          "\n                            {% for card_index in 0..6 %}\n                            "
+        ),
+        _c("div", { staticClass: "board-column-card" }, [
+          _c(
+            "div",
+            {
+              staticClass: "my-2 mx-1 p-2 border bg-light",
+              staticStyle: {
+                "/*min-height": "200px",
+                flex: "0 0 auto",
+                border: "1px solid var(--danger)",
+                background: "var(--blue)",
+                padding: "2rem*/",
+              },
+            },
+            [
+              _c("div", { staticClass: "board-card-img text-center" }, [
+                _c("img", {
+                  staticClass: "img-thumbnail",
+                  attrs: { src: "asset('bundles/pecoreui/img/avatars/1.jpg')" },
+                }),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "board-card-pills" }, [
+                _c("div", {
+                  staticClass: "d-inline-block rounded bg-primary p-1",
+                  staticStyle: { width: "50px" },
+                }),
+                _vm._v(" "),
+                _c("div", {
+                  staticClass: "d-inline-block rounded bg-secondary p-1",
+                  staticStyle: { width: "50px" },
+                }),
+                _vm._v(" "),
+                _c("div", {
+                  staticClass: "d-inline-block rounded bg-success p-1",
+                  staticStyle: { width: "50px" },
+                }),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "board-card-title" }, [
+                _vm._v("CARD TITLE"),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "d-flex" }, [
+                _c("div", [
+                  _c("img", {
+                    staticClass: "img-avatar",
+                    staticStyle: { width: "24px", height: "24px" },
+                    attrs: {
+                      src: "asset('bundles/pecoreui/img/avatars/2.jpg')",
+                    },
+                  }),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "board-card-date" }, [
+                  _vm._v("Today"),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "board-card-comments" }, [
+                  _vm._v("10 "),
+                  _c("i", { staticClass: "fa fa-comment-o" }),
+                ]),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "board-card-meta" }, [
+                _c("div", { staticClass: "board-card-meta-left" }),
+                _vm._v(" "),
+                _c("div", { staticClass: "board-card-meta-right" }),
+              ]),
+            ]
+          ),
+        ]),
+        _vm._v(
+          "\n                            {% endfor %}\n                        "
         ),
       ]),
     ])

@@ -1,7 +1,7 @@
 <template>
     <div>
         <h5>Lists</h5>
-        <div class="board-container">
+        <div class="board-container" style="min-height: 600px">
             <div class="board-columns">
                 <div class="board-column-container" v-for="list in lists">
                     <div class="board-column">
@@ -24,13 +24,37 @@
                         <div class="board-column-body">
                             <div class="board-column-cards">
                                 {% for card_index in 0..6 %}
-                                block('_card')
+                                <div class="board-column-card">
+                                    <div class="my-2 mx-1 p-2 border bg-light" style="/*min-height: 200px; flex: 0 0 auto; border: 1px solid var(--danger); background: var(--blue); padding: 2rem*/">
+                                        <div class="board-card-img text-center">
+                                            <img class="img-thumbnail" src="asset('bundles/pecoreui/img/avatars/1.jpg')">
+                                        </div>
+                                        <div class="board-card-pills">
+                                            <div class="d-inline-block rounded bg-primary p-1" style="width: 50px"></div>
+                                            <div class="d-inline-block rounded bg-secondary p-1" style="width: 50px"></div>
+                                            <div class="d-inline-block rounded bg-success p-1" style="width: 50px"></div>
+                                        </div>
+                                        <div class="board-card-title">CARD TITLE</div>
+                                        <div class="d-flex">
+                                            <div><img class="img-avatar" src="asset('bundles/pecoreui/img/avatars/2.jpg')" style="width: 24px; height: 24px;"></div>
+                                            <div class="board-card-date">Today</div>
+                                            <div class="board-card-comments">10 <i class="fa fa-comment-o"></i></div>
+                                        </div>
+                                        <div class="board-card-meta">
+                                            <div class="board-card-meta-left"></div>
+                                            <div class="board-card-meta-right"></div>
+                                        </div>
+                                    </div>
+                                </div>
                                 {% endfor %}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div v-if="loading" class="d-flex justify-content-center">
+            <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
         </div>
     </div>
 </template>
@@ -39,14 +63,21 @@
 export default {
     data() {
         return {
-            lists: [
-                {name: 'To do'},
-                {name: 'In progress'},
-                {name: 'Reopen'},
-                {name: 'Resolved'},
-                {name: 'Closed'}
-            ]
+            deskID: this.$route.params.id,
+            lists: [],
+            loading: false
         };
+    },
+    mounted() {
+        this.loading = true;
+        axios
+            .get(__baseURL + '/api/V1/lists/', {params: {desk_id: this.deskID}})
+            .then(response => {
+                this.lists = response.data.data;
+                console.log(response);
+            })
+            .catch(error => { console.log(error); })
+            .finally(() => { this.loading = false; });
     }
 }
 </script>

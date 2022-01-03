@@ -39,7 +39,7 @@ export default {
     mounted() {
         this.loading = true;
         axios
-            .get('api/V1/desks')
+            .get(__baseURL + '/api/V1/desks')
             .then(response => {
                 this.desks = response.data.data;
                 console.log(response);
@@ -56,7 +56,7 @@ export default {
         },
         deleteDesk(id) {
             axios
-                .post('api/V1/desks/' + id, {
+                .post(__baseURL + '/api/V1/desks/' + id, {
                     _method: 'DELETE'
                 })
                 .then(() => {
