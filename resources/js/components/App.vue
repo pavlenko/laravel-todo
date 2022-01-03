@@ -35,36 +35,10 @@
             </div>
         </aside>
         <router-view></router-view>
-        <!--<footer class="main-footer">
-            <div class="float-right d-none d-sm-block">
-                <b>Version</b> 3.1.0
-            </div>
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
-        </footer>-->
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2022. All rights reserved.</strong>
+        </footer>
     </div>
-    <!--<div class="container">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <router-link :to="{ name: 'home'}" exact v-slot="{ href, navigate, isExactActive }">
-                        <li class="nav-item" :class="[isExactActive && 'active']">
-                            <a class="nav-link" :href="href" @click="navigate">Home</a>
-                        </li>
-                    </router-link>
-                    <router-link :to="{ name: 'desks'}" v-slot="{ href, navigate, isActive }">
-                        <li class="nav-item" :class="[isActive && 'active']">
-                            <a class="nav-link" :href="href" @click="navigate">Desks</a>
-                        </li>
-                    </router-link>
-                </ul>
-            </div>
-        </nav>
-        <router-view></router-view>
-    </div>-->
 </template>
 
 <script>

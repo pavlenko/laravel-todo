@@ -1,5 +1,32 @@
 <template>
-    <div>
+    <div class="content-wrapper kanban">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h1>{{ desk.name }}</h1>
+                    </div>
+                    <div class="col-sm-6 d-none d-sm-block">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <router-link :to="{name: 'home'}">Home</router-link>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <router-link :to="{name: 'desks'}">Desks</router-link>
+                            </li>
+                            <li class="breadcrumb-item active">{{ desk.name }}</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content pb-3">
+            <div class="container-fluid h-100" style="min-width: 100%">
+                <lists-item v-for="list in lists" :key="list.id" :list="list" @updateList="updateList" @deleteList="deleteDesk"></lists-item>
+            </div>
+        </section>
+    </div>
+    <!--<div>
         <h1>{{ desk.name }}</h1>
         <div v-if="!loading" class="board-container" style="min-height: 600px">
             <div class="board-columns">
@@ -36,14 +63,15 @@
         <div v-if="loading" class="d-flex justify-content-center">
             <div class="spinner-border" role="status" aria-hidden="true"></div>
         </div>
-    </div>
+    </div>-->
 </template>
 
 <script>
 import Cards from "./Cards";
+import ListsItem from "./ListsItem";
 
 export default {
-    components: {Cards},
+    components: {ListsItem, Cards},
     data() {
         return {
             deskID: this.$route.params.id,
@@ -71,51 +99,17 @@ export default {
             ])
             .catch(error => { console.log(error); })
             .finally(() => { this.loading = false; });
+    },
+    methods: {
+        updateList(list) {
+            let index = this.lists.findIndex(item => String(item.id) === String(list.id));
+            if (index !== -1) {
+                this.lists.splice(index, 1, list);
+            }
+        },
+        deleteDesk(list) {
+            this.lists = this.lists.filter(item => String(item.id) !== String(list.id));
+        }
     }
 }
 </script>
-
-<style scoped>
-.board-container {
-    flex: 1;
-    position: relative;
-}
-.board-columns {
-    display: flex;
-    flex-direction: row;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    overflow-y: hidden;
-}
-.board-column-container {
-    display: flex;
-}
-.board-column {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--secondary);
-    border-radius: 0.25rem;
-    background-color: var(--white);
-    margin: .25rem;
-    padding: .25rem;
-}
-.board-column-header {
-    display: flex;
-    flex-direction: row;
-    width: 250px;
-}
-.board-column-title {
-    flex: 1;
-}
-.board-column-body {
-    flex: 1;
-    position: relative;
-}
-.sortable-drag {
-    opacity: 1 !important;
-}
-.sortable-ghost {
-    opacity: .25 !important;
-}
-</style>

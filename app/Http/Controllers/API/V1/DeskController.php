@@ -13,7 +13,6 @@ class DeskController extends Controller
 {
     public function index()
     {
-        //throw new \Exception();
         return DeskResource::collection(DeskModel::orderBy('created_at', 'desc')->get());
     }
 

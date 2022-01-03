@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CardModel extends Model
 {
+    protected $fillable = ['name'];
+
     public function getTable(): string
     {
         return 'cards';

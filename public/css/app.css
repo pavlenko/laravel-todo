@@ -14392,3 +14392,11 @@ input[type=color].form-control:disabled {
   vertical-align: text-bottom;
 }
 
+.sortable-drag {
+  opacity: 1 !important;
+}
+
+.sortable-ghost {
+  opacity: 0.25 !important;
+}
+

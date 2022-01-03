@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ListModel extends Model
 {
+    protected $fillable = ['name'];
+
     public function getTable(): string
     {
         return 'lists';

@@ -2,7 +2,7 @@
     <div class="content-wrapper">
         <section class="content-header">
             <div class="container-fluid">
-                <div class="row mb-2">
+                <div class="row">
                     <div class="col-sm-6">
                         <h1>Desks</h1>
                     </div>
@@ -18,7 +18,7 @@
             </div>
         </section>
         <section class="content">
-            <div class="container-fluid">
+            <div class="container-fluid" style="min-width: 100%">
                 <div v-if="!loading && !errored" class="row" style="margin: 0 -7.5px">
                     <desks-item v-for="desk in desks" :key="desk.id" :desk="desk" @updateDesk="updateDesk" @deleteDesk="deleteDesk"></desks-item>
                     <desks-create @createDesk="createDesk"></desks-create>

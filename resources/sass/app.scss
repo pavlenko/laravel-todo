@@ -1,3 +1,10 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap-vue/src/index';
+
+.sortable-drag {
+    opacity: 1 !important;
+}
+.sortable-ghost {
+    opacity: .25 !important;
+}
