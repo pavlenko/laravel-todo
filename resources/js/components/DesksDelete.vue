@@ -1,28 +1,27 @@
 <template>
-        <button type="button" class="btn btn-sm btn-danger" @click.prevent v-b-modal="uuid">
-            <i class="fas fa-trash"></i>
-            <b-modal :id="uuid" title="Delete Desk" hide-footer>
-                <div v-if="errored" class="alert alert-danger p-2" role="alert">
-                    <h4 class="alert-heading m-0">
-                        Something went wrong
-                        <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" @click="errored = false">
-                            Try again
-                        </button>
-                    </h4>
-                </div>
-                <form @submit.prevent="deleteDesk" style="position: relative">
-                    <p class="text-danger text-center">Are you sure you want delete "{{ desk.name }}"</p>
-                    <button type="submit" class="btn btn-primary">Delete</button>
-                    <div v-if="errored" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)"></div>
-                    <div v-if="loading" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="spinner-border" role="status" aria-hidden="true"></div>
-                        </div>
+    <button type="button" class="btn btn-sm btn-primary" @click.prevent v-b-modal="uuid">
+        <i class="fas fa-trash"></i>
+        <b-modal :id="uuid" title="Delete Desk" hide-footer>
+            <div v-if="errored" class="alert alert-danger p-2" role="alert">
+                <h4 class="alert-heading m-0">
+                    Something went wrong
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" @click="errored = false">
+                        Try again
+                    </button>
+                </h4>
+            </div>
+            <form @submit.prevent="deleteDesk" style="position: relative">
+                <p class="text-danger text-center">Are you sure you want delete "{{ desk.name }}"</p>
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <div v-if="errored" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)"></div>
+                <div v-if="loading" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="spinner-border" role="status" aria-hidden="true"></div>
                     </div>
-                </form>
-            </b-modal>
-        </button>
-
+                </div>
+            </form>
+        </b-modal>
+    </button>
 </template>
 
 <script>

@@ -2026,7 +2026,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DesksItem__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DesksItem */ "./resources/js/components/DesksItem.vue");
 /* harmony import */ var _DesksCreate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DesksCreate */ "./resources/js/components/DesksCreate.vue");
-/* harmony import */ var _DesksDelete__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DesksDelete */ "./resources/js/components/DesksDelete.vue");
 //
 //
 //
@@ -2048,14 +2047,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     DesksItem: _DesksItem__WEBPACK_IMPORTED_MODULE_0__["default"],
-    DesksCreate: _DesksCreate__WEBPACK_IMPORTED_MODULE_1__["default"],
-    DesksDelete: _DesksDelete__WEBPACK_IMPORTED_MODULE_2__["default"]
+    DesksCreate: _DesksCreate__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
@@ -2080,7 +2077,16 @@ __webpack_require__.r(__webpack_exports__);
     createDesk: function createDesk(desk) {
       this.desks.unshift(desk);
     },
-    updateDesk: function updateDesk() {},
+    updateDesk: function updateDesk(desk) {
+      var index = this.desks.findIndex(function (item) {
+        return String(item.id) === String(desk.id);
+      });
+      console.log(index);
+
+      if (index !== -1) {
+        this.desks.splice(index, 1, desk);
+      }
+    },
     deleteDesk: function deleteDesk(desk) {
       this.desks = this.desks.filter(function (item) {
         return String(item.id) !== String(desk.id);
@@ -2200,7 +2206,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2246,7 +2251,70 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _DesksDelete__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DesksDelete */ "./resources/js/components/DesksDelete.vue");
+/* harmony import */ var _DesksUpdate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DesksUpdate */ "./resources/js/components/DesksUpdate.vue");
+/* harmony import */ var _DesksDelete__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DesksDelete */ "./resources/js/components/DesksDelete.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    DesksUpdate: _DesksUpdate__WEBPACK_IMPORTED_MODULE_0__["default"],
+    DesksDelete: _DesksDelete__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  props: {
+    desk: Object
+  },
+  data: function data() {
+    return {};
+  },
+  methods: {
+    updateDesk: function updateDesk(desk) {
+      this.$emit('updateDesk', desk);
+    },
+    deleteDesk: function deleteDesk(desk) {
+      this.$emit('deleteDesk', desk);
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DesksUpdate.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/DesksUpdate.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2265,18 +2333,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    DesksDelete: _DesksDelete__WEBPACK_IMPORTED_MODULE_0__["default"]
-  },
   props: {
     desk: Object
   },
   data: function data() {
-    return {};
+    return {
+      uuid: Object(uuid__WEBPACK_IMPORTED_MODULE_0__["v4"])(),
+      loading: false,
+      errored: false
+    };
   },
   methods: {
-    deleteDesk: function deleteDesk(desk) {
-      this.$emit('deleteDesk', desk);
+    updateDesk: function updateDesk(event) {
+      var _this = this;
+
+      this.loading = true;
+      this.errored = false;
+      axios.post(__baseURL + '/api/V1/desks/' + this.desk.id, new FormData(event.target)).then(function (response) {
+        _this.$emit('updateDesk', response.data.data);
+
+        _this.$bvModal.hide(_this.uuid);
+      })["catch"](function (error) {
+        _this.errored = true;
+        console.log(error);
+      })["finally"](function () {
+        _this.loading = false;
+      });
     }
   }
 });
@@ -39806,7 +39888,7 @@ var render = function () {
           return _c("desks-item", {
             key: desk.id,
             attrs: { desk: desk },
-            on: { deleteDesk: _vm.deleteDesk },
+            on: { updateDesk: _vm.updateDesk, deleteDesk: _vm.deleteDesk },
           })
         }),
         _vm._v(" "),
@@ -39941,7 +40023,7 @@ var render = function () {
               _vm._v(" "),
               _c(
                 "button",
-                { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+                { staticClass: "btn btn-success", attrs: { type: "submit" } },
                 [_vm._v("Create")]
               ),
               _vm._v(" "),
@@ -40090,7 +40172,7 @@ var render = function () {
               _vm._v(" "),
               _c(
                 "button",
-                { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+                { staticClass: "btn btn-danger", attrs: { type: "submit" } },
                 [_vm._v("Delete")]
               ),
               _vm._v(" "),
@@ -40170,7 +40252,7 @@ var render = function () {
           staticStyle: { position: "relative", height: "80px" },
         },
         [
-          _c("div", { staticClass: "card-header p-2 border-bottom-0" }, [
+          _c("div", { staticClass: "card-body p-2" }, [
             _c(
               "div",
               { staticClass: "media" },
@@ -40178,6 +40260,11 @@ var render = function () {
                 _c("div", { staticClass: "media-body" }, [
                   _vm._v(_vm._s(_vm.desk.name)),
                 ]),
+                _vm._v(" "),
+                _c("desks-update", {
+                  attrs: { desk: _vm.desk },
+                  on: { updateDesk: _vm.updateDesk },
+                }),
                 _vm._v(" "),
                 _c("desks-delete", {
                   attrs: { desk: _vm.desk },
@@ -40187,27 +40274,171 @@ var render = function () {
               1
             ),
           ]),
-          _vm._v(" "),
-          _vm._m(0),
         ]
       ),
     ]
   )
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-body p-2" }, [
-      _c("p", { staticClass: "card-text" }, [
-        _vm._v(
-          "Some quick example text to build on the card title and make up the bulk of the card's content."
-        ),
-      ]),
-    ])
-  },
-]
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DesksUpdate.vue?vue&type=template&id=76503070&":
+/*!**************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/DesksUpdate.vue?vue&type=template&id=76503070& ***!
+  \**************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "button",
+    {
+      directives: [
+        {
+          name: "b-modal",
+          rawName: "v-b-modal",
+          value: _vm.uuid,
+          expression: "uuid",
+        },
+      ],
+      staticClass: "btn btn-sm btn-primary",
+      attrs: { type: "button" },
+      on: {
+        click: function ($event) {
+          $event.preventDefault()
+        },
+      },
+    },
+    [
+      _c("i", { staticClass: "fas fa-pencil" }),
+      _vm._v(" "),
+      _c(
+        "b-modal",
+        { attrs: { id: _vm.uuid, title: "Update Desk", "hide-footer": "" } },
+        [
+          _vm.errored
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger p-2",
+                  attrs: { role: "alert" },
+                },
+                [
+                  _c("h4", { staticClass: "alert-heading m-0" }, [
+                    _vm._v(
+                      "\n                Something went wrong\n                "
+                    ),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-sm btn-danger",
+                        attrs: { type: "button", "data-dismiss": "alert" },
+                        on: {
+                          click: function ($event) {
+                            _vm.errored = false
+                          },
+                        },
+                      },
+                      [
+                        _vm._v(
+                          "\n                    Try again\n                "
+                        ),
+                      ]
+                    ),
+                  ]),
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "form",
+            {
+              staticStyle: { position: "relative" },
+              on: {
+                submit: function ($event) {
+                  $event.preventDefault()
+                  return _vm.updateDesk.apply(null, arguments)
+                },
+              },
+            },
+            [
+              _c("input", {
+                attrs: { type: "hidden", name: "_method", value: "PUT" },
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    name: "name",
+                    placeholder: "Enter desk name",
+                  },
+                  domProps: { value: _vm.desk.name },
+                }),
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                { staticClass: "btn btn-success", attrs: { type: "submit" } },
+                [_vm._v("Update")]
+              ),
+              _vm._v(" "),
+              _vm.errored
+                ? _c("div", {
+                    staticClass: "card-img-overlay",
+                    staticStyle: {
+                      "background-color": "rgba(255, 255, 255, 0.5)",
+                    },
+                  })
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.loading
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "card-img-overlay",
+                      staticStyle: {
+                        "background-color": "rgba(255, 255, 255, 0.5)",
+                      },
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "d-flex justify-content-center align-items-center",
+                        },
+                        [
+                          _c("div", {
+                            staticClass: "spinner-border",
+                            attrs: { role: "status", "aria-hidden": "true" },
+                          }),
+                        ]
+                      ),
+                    ]
+                  )
+                : _vm._e(),
+            ]
+          ),
+        ]
+      ),
+    ],
+    1
+  )
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -53139,6 +53370,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DesksItem_vue_vue_type_template_id_443602d2___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DesksItem_vue_vue_type_template_id_443602d2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/DesksUpdate.vue":
+/*!*************************************************!*\
+  !*** ./resources/js/components/DesksUpdate.vue ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DesksUpdate_vue_vue_type_template_id_76503070___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DesksUpdate.vue?vue&type=template&id=76503070& */ "./resources/js/components/DesksUpdate.vue?vue&type=template&id=76503070&");
+/* harmony import */ var _DesksUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DesksUpdate.vue?vue&type=script&lang=js& */ "./resources/js/components/DesksUpdate.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _DesksUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _DesksUpdate_vue_vue_type_template_id_76503070___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _DesksUpdate_vue_vue_type_template_id_76503070___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/DesksUpdate.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/DesksUpdate.vue?vue&type=script&lang=js&":
+/*!**************************************************************************!*\
+  !*** ./resources/js/components/DesksUpdate.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DesksUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./DesksUpdate.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DesksUpdate.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DesksUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/DesksUpdate.vue?vue&type=template&id=76503070&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/DesksUpdate.vue?vue&type=template&id=76503070& ***!
+  \********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DesksUpdate_vue_vue_type_template_id_76503070___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./DesksUpdate.vue?vue&type=template&id=76503070& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DesksUpdate.vue?vue&type=template&id=76503070&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DesksUpdate_vue_vue_type_template_id_76503070___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DesksUpdate_vue_vue_type_template_id_76503070___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

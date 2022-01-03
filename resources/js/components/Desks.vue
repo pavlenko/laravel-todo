@@ -10,7 +10,7 @@
                     </router-link>
                 </div>
             </div>-->
-            <desks-item  v-for="desk in desks" :key="desk.id" :desk="desk" @deleteDesk="deleteDesk"></desks-item>
+            <desks-item  v-for="desk in desks" :key="desk.id" :desk="desk" @updateDesk="updateDesk" @deleteDesk="deleteDesk"></desks-item>
             <desks-create @success="createDesk"></desks-create>
         </div>
         <div v-if="loading" class="d-flex justify-content-center">
@@ -44,13 +44,14 @@ export default {
         createDesk(desk) {
             this.desks.unshift(desk);
         },
-        updateDesk() {
-
+        updateDesk(desk) {
+            let index = this.desks.findIndex(item => String(item.id) === String(desk.id));
+            if (index !== -1) {
+                this.desks.splice(index, 1, desk);
+            }
         },
         deleteDesk(desk) {
-            this.desks = this.desks.filter(item => {
-                return String(item.id) !== String(desk.id);
-            });
+            this.desks = this.desks.filter(item => String(item.id) !== String(desk.id));
         }
     }
 }
