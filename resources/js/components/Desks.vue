@@ -2,14 +2,15 @@
     <div>
         <h1>Desks</h1>
         <div class="row" style="margin: 0 -10px">
-            <div class="col-6 col-sm-4" style="padding: 0 8px 16px" v-for="desk in desks">
+            <!--<div class="col-6 col-sm-4" style="padding: 0 8px 16px" v-for="desk in desks">
                 <div class="card bg-primary" style="position: relative; height: 80px">
                     <router-link class="card-body p-2 btn text-white text-left" :to="{name: 'lists', params: {id: desk.id}}">
                         {{ desk.name }}
                         <desks-delete :desk="desk" @success="deleteDesk"></desks-delete>
                     </router-link>
                 </div>
-            </div>
+            </div>-->
+            <desks-item  v-for="desk in desks" :key="desk.id" :desk="desk" @deleteDesk="deleteDesk"></desks-item>
             <desks-create @success="createDesk"></desks-create>
         </div>
         <div v-if="loading" class="d-flex justify-content-center">
@@ -19,11 +20,11 @@
 </template>
 
 <script>
+import DesksItem from "./DesksItem";
 import DesksCreate from "./DesksCreate";
-import DesksDelete from "./DesksDelete";
 
 export default {
-    components: {DesksCreate, DesksDelete},
+    components: {DesksItem, DesksCreate},
     data() {
         return {
             desks: [],
