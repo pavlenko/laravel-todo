@@ -2047,6 +2047,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2062,18 +2070,22 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    var _this = this;
-
-    this.loading = true;
-    axios.get(__baseURL + '/api/V1/desks').then(function (response) {
-      _this.desks = response.data.data;
-    })["catch"](function (error) {
-      console.log(error);
-    })["finally"](function () {
-      _this.loading = false;
-    });
+    this.load();
   },
   methods: {
+    load: function load() {
+      var _this = this;
+
+      this.loading = true;
+      this.errored = false;
+      axios.get(__baseURL + '/api/V1/desks').then(function (response) {
+        _this.desks = response.data.data;
+      })["catch"](function (error) {
+        _this.errored = true;
+      })["finally"](function () {
+        _this.loading = false;
+      });
+    },
     createDesk: function createDesk(desk) {
       this.desks.unshift(desk);
     },
@@ -2081,7 +2093,6 @@ __webpack_require__.r(__webpack_exports__);
       var index = this.desks.findIndex(function (item) {
         return String(item.id) === String(desk.id);
       });
-      console.log(index);
 
       if (index !== -1) {
         this.desks.splice(index, 1, desk);
@@ -2155,7 +2166,7 @@ __webpack_require__.r(__webpack_exports__);
       this.loading = true;
       this.errored = false;
       axios.post(__baseURL + '/api/V1/desks', new FormData(event.target)).then(function (response) {
-        _this.$emit('success', response.data.data);
+        _this.$emit('createDesk', response.data.data);
 
         _this.$bvModal.hide(_this.uuid);
       })["catch"](function (error) {
@@ -2253,6 +2264,10 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DesksUpdate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DesksUpdate */ "./resources/js/components/DesksUpdate.vue");
 /* harmony import */ var _DesksDelete__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DesksDelete */ "./resources/js/components/DesksDelete.vue");
+//
+//
+//
+//
 //
 //
 //
@@ -2443,6 +2458,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       deskID: this.$route.params.id,
+      desk: {},
       lists: [],
       loading: false
     };
@@ -2451,14 +2467,17 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.loading = true;
-    axios.get(__baseURL + '/api/V1/lists/', {
+    axios.all([axios.get(__baseURL + '/api/V1/desks/' + this.deskID).then(function (response) {
+      _this.desk = response.data.data;
+      console.log(response);
+    }), axios.get(__baseURL + '/api/V1/lists/', {
       params: {
         desk_id: this.deskID
       }
     }).then(function (response) {
       _this.lists = response.data.data;
       console.log(response);
-    })["catch"](function (error) {
+    })])["catch"](function (error) {
       console.log(error);
     })["finally"](function () {
       _this.loading = false;
@@ -39880,22 +39899,45 @@ var render = function () {
   return _c("div", [
     _c("h1", [_vm._v("Desks")]),
     _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "row", staticStyle: { margin: "0 -10px" } },
-      [
-        _vm._l(_vm.desks, function (desk) {
-          return _c("desks-item", {
-            key: desk.id,
-            attrs: { desk: desk },
-            on: { updateDesk: _vm.updateDesk, deleteDesk: _vm.deleteDesk },
-          })
-        }),
-        _vm._v(" "),
-        _c("desks-create", { on: { success: _vm.createDesk } }),
-      ],
-      2
-    ),
+    !_vm.loading && !_vm.errored
+      ? _c(
+          "div",
+          { staticClass: "row", staticStyle: { margin: "0 -10px" } },
+          [
+            _vm._l(_vm.desks, function (desk) {
+              return _c("desks-item", {
+                key: desk.id,
+                attrs: { desk: desk },
+                on: { updateDesk: _vm.updateDesk, deleteDesk: _vm.deleteDesk },
+              })
+            }),
+            _vm._v(" "),
+            _c("desks-create", { on: { createDesk: _vm.createDesk } }),
+          ],
+          2
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.errored
+      ? _c(
+          "div",
+          { staticClass: "alert alert-danger p-2", attrs: { role: "alert" } },
+          [
+            _c("h4", { staticClass: "alert-heading m-0" }, [
+              _vm._v("\n            Something went wrong\n            "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm btn-danger",
+                  attrs: { type: "button", "data-dismiss": "alert" },
+                  on: { click: _vm.load },
+                },
+                [_vm._v("\n                Try again\n            ")]
+              ),
+            ]),
+          ]
+        )
+      : _vm._e(),
     _vm._v(" "),
     _vm.loading
       ? _c("div", { staticClass: "d-flex justify-content-center" }, [
@@ -40257,9 +40299,29 @@ var render = function () {
               "div",
               { staticClass: "media" },
               [
-                _c("div", { staticClass: "media-body" }, [
-                  _vm._v(_vm._s(_vm.desk.name)),
-                ]),
+                _c(
+                  "div",
+                  { staticClass: "media-body" },
+                  [
+                    _c(
+                      "router-link",
+                      {
+                        staticClass: "text-white text-decoration-none",
+                        attrs: {
+                          to: { name: "lists", params: { id: _vm.desk.id } },
+                        },
+                      },
+                      [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(_vm.desk.name) +
+                            "\n                    "
+                        ),
+                      ]
+                    ),
+                  ],
+                  1
+                ),
                 _vm._v(" "),
                 _c("desks-update", {
                   attrs: { desk: _vm.desk },
@@ -40485,7 +40547,7 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h5", [_vm._v("Lists")]),
+    _c("h1", [_vm._v(_vm._s(_vm.desk.name))]),
     _vm._v(" "),
     !_vm.loading
       ? _c(

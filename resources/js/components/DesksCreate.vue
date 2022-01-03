@@ -48,7 +48,7 @@ export default {
             axios
                 .post(__baseURL + '/api/V1/desks', new FormData(event.target))
                 .then(response => {
-                    this.$emit('success', response.data.data);
+                    this.$emit('createDesk', response.data.data);
                     this.$bvModal.hide(this.uuid);
                 })
                 .catch(error => {

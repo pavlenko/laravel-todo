@@ -3,7 +3,11 @@
         <div class="card bg-primary text-white" style="position: relative; height: 80px">
             <div class="card-body p-2">
                 <div class="media">
-                    <div class="media-body">{{ desk.name }}</div>
+                    <div class="media-body">
+                        <router-link class="text-white text-decoration-none" :to="{name: 'lists', params: {id: desk.id}}">
+                            {{ desk.name }}
+                        </router-link>
+                    </div>
                     <desks-update :desk="desk" @updateDesk="updateDesk"></desks-update>
                     <desks-delete :desk="desk" @deleteDesk="deleteDesk"></desks-delete>
                 </div>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h5>Lists</h5>
+        <h1>{{ desk.name }}</h1>
         <div v-if="!loading" class="board-container" style="min-height: 600px">
             <div class="board-columns">
                 <div class="board-column-container" v-for="list in lists">
@@ -47,6 +47,7 @@ export default {
     data() {
         return {
             deskID: this.$route.params.id,
+            desk: {},
             lists: [],
             loading: false
         };
@@ -54,11 +55,20 @@ export default {
     mounted() {
         this.loading = true;
         axios
-            .get(__baseURL + '/api/V1/lists/', {params: {desk_id: this.deskID}})
-            .then(response => {
-                this.lists = response.data.data;
-                console.log(response);
-            })
+            .all([
+                axios
+                    .get(__baseURL + '/api/V1/desks/' + this.deskID)
+                    .then(response => {
+                        this.desk = response.data.data;
+                        console.log(response);
+                    }),
+                axios
+                    .get(__baseURL + '/api/V1/lists/', {params: {desk_id: this.deskID}})
+                    .then(response => {
+                        this.lists = response.data.data;
+                        console.log(response);
+                    })
+            ])
             .catch(error => { console.log(error); })
             .finally(() => { this.loading = false; });
     }
