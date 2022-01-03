@@ -16,6 +16,8 @@ class CreateListsTable extends Migration
         Schema::create('lists', function (Blueprint $table) {
             $table->integerIncrements('id')->unsigned();
             $table->integer('desk_id')->unsigned()->nullable(false);
+            $table->integer('prev')->unsigned()->nullable(false)->default(0);
+            $table->integer('next')->unsigned()->nullable(false)->default(0);
             $table->string('name')->nullable(false);
             $table->timestamps();
         });
