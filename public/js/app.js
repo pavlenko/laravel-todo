@@ -1935,6 +1935,49 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "App",
@@ -2389,6 +2432,16 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -39630,28 +39683,24 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "container" },
+    { staticClass: "wrapper" },
     [
+      _vm._m(0),
+      _vm._v(" "),
       _c(
-        "nav",
-        { staticClass: "navbar navbar-expand-lg navbar-light bg-light" },
+        "aside",
+        { staticClass: "main-sidebar sidebar-dark-primary elevation-4" },
         [
-          _c("a", { staticClass: "navbar-brand", attrs: { href: "#" } }, [
-            _vm._v("Navbar"),
-          ]),
+          _vm._m(1),
           _vm._v(" "),
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "collapse navbar-collapse",
-              attrs: { id: "navbarSupportedContent" },
-            },
-            [
+          _c("div", { staticClass: "sidebar" }, [
+            _c("nav", { staticClass: "mt-2 nav-compact nav-flat" }, [
               _c(
                 "ul",
-                { staticClass: "navbar-nav mr-auto" },
+                {
+                  staticClass: "nav nav-pills nav-sidebar flex-column",
+                  attrs: { role: "menu", "data-accordion": "false" },
+                },
                 [
                   _c("router-link", {
                     attrs: { to: { name: "home" }, exact: "" },
@@ -39663,24 +39712,25 @@ var render = function () {
                           var navigate = ref.navigate
                           var isExactActive = ref.isExactActive
                           return [
-                            _c(
-                              "li",
-                              {
-                                staticClass: "nav-item",
-                                class: [isExactActive && "active"],
-                              },
-                              [
-                                _c(
-                                  "a",
-                                  {
-                                    staticClass: "nav-link",
-                                    attrs: { href: href },
-                                    on: { click: navigate },
-                                  },
-                                  [_vm._v("Home")]
-                                ),
-                              ]
-                            ),
+                            _c("li", { staticClass: "nav-item" }, [
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "nav-link",
+                                  class: [isExactActive && "active"],
+                                  attrs: { href: href },
+                                  on: { click: navigate },
+                                },
+                                [
+                                  _c("i", {
+                                    staticClass: "nav-icon fas fa-home",
+                                  }),
+                                  _vm._v(
+                                    "\n                                Home\n                            "
+                                  ),
+                                ]
+                              ),
+                            ]),
                           ]
                         },
                       },
@@ -39697,24 +39747,25 @@ var render = function () {
                           var navigate = ref.navigate
                           var isActive = ref.isActive
                           return [
-                            _c(
-                              "li",
-                              {
-                                staticClass: "nav-item",
-                                class: [isActive && "active"],
-                              },
-                              [
-                                _c(
-                                  "a",
-                                  {
-                                    staticClass: "nav-link",
-                                    attrs: { href: href },
-                                    on: { click: navigate },
-                                  },
-                                  [_vm._v("Desks")]
-                                ),
-                              ]
-                            ),
+                            _c("li", { staticClass: "nav-item" }, [
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "nav-link",
+                                  class: [isActive && "active"],
+                                  attrs: { href: href },
+                                  on: { click: navigate },
+                                },
+                                [
+                                  _c("i", {
+                                    staticClass: "nav-icon fas fa-columns",
+                                  }),
+                                  _vm._v(
+                                    "\n                                Desks\n                            "
+                                  ),
+                                ]
+                              ),
+                            ]),
                           ]
                         },
                       },
@@ -39723,8 +39774,8 @@ var render = function () {
                 ],
                 1
               ),
-            ]
-          ),
+            ]),
+          ]),
         ]
       ),
       _vm._v(" "),
@@ -39739,20 +39790,36 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c(
-      "button",
+      "nav",
       {
-        staticClass: "navbar-toggler",
-        attrs: {
-          type: "button",
-          "data-toggle": "collapse",
-          "data-target": "#navbarSupportedContent",
-          "aria-controls": "navbarSupportedContent",
-          "aria-expanded": "false",
-          "aria-label": "Toggle navigation",
-        },
+        staticClass:
+          "main-header navbar navbar-expand navbar-white navbar-light",
       },
-      [_c("span", { staticClass: "navbar-toggler-icon" })]
+      [
+        _c("ul", { staticClass: "navbar-nav" }, [
+          _c("li", { staticClass: "nav-item" }, [
+            _c(
+              "a",
+              {
+                staticClass: "nav-link",
+                attrs: { "data-widget": "pushmenu", href: "#", role: "button" },
+              },
+              [_c("i", { staticClass: "fas fa-bars" })]
+            ),
+          ]),
+        ]),
+      ]
     )
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "brand-link" }, [
+      _c("span", { staticClass: "brand-text font-weight-light" }, [
+        _vm._v("Laravel VUE"),
+      ]),
+    ])
   },
 ]
 render._withStripped = true
@@ -40522,9 +40589,26 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("h5", [_vm._v("Home")])
+  return _vm._m(0)
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "content-wrapper" }, [
+      _c("section", { staticClass: "content-header" }, [
+        _c("div", { staticClass: "container-fluid" }, [
+          _c("div", { staticClass: "row mb-2" }, [
+            _c("div", { staticClass: "col-sm-6" }, [
+              _c("h1", [_vm._v("Welcome")]),
+            ]),
+          ]),
+        ]),
+      ]),
+    ])
+  },
+]
 render._withStripped = true
 
 
