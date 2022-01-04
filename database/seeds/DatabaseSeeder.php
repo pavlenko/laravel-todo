@@ -22,8 +22,18 @@ class DatabaseSeeder extends Seeder
                 $list->next = ($lists[$key + 1] ?? null)->id ?? 0;
                 $list->save();
 
-                factory(CardModel::class, 5)->create(['list_id' => $list->id])->each(function(CardModel $card) {
-                    factory(TaskModel::class, 5)->create(['card_id' => $card->id]);
+                $cards = factory(CardModel::class, 5)->create(['list_id' => $list->id]);
+                $cards->each(function(CardModel $card, $key) use ($cards) {
+                    $card->prev = ($cards[$key - 1] ?? null)->id ?? 0;
+                    $card->next = ($cards[$key + 1] ?? null)->id ?? 0;
+                    $card->save();
+
+                    $tasks = factory(TaskModel::class, 5)->create(['card_id' => $card->id]);
+                    $tasks->each(function(TaskModel $task, $key) use ($tasks) {
+                        $task->prev = ($tasks[$key - 1] ?? null)->id ?? 0;
+                        $task->next = ($tasks[$key + 1] ?? null)->id ?? 0;
+                        $task->save();
+                    });
                 });
             });
         });
