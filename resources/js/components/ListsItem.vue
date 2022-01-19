@@ -11,7 +11,8 @@
                 <lists-delete :list="list" @deleteList="deleteList"></lists-delete>
             </div>
         </div>
-        <div class="card-body p-2">
+        <cards :listId="list.id"></cards>
+        <!--<div class="card-body p-2">
             <div class="card card-info card-outline">
                 <div class="card-header">
                     <h5 class="card-title">Create Labels</h5>
@@ -96,17 +97,18 @@
                         nascetur ridiculus mus.
                     </p>
                 </div>
-            </div>
-        </div>
+            </div>            
+        </div>-->
     </div>
 </template>
 
 <script>
 import ListsUpdate from "./ListsUpdate";
 import ListsDelete from "./ListsDelete";
+import Cards from "./Cards";
 
 export default {
-    components: {ListsUpdate, ListsDelete},
+    components: {ListsUpdate, ListsDelete, Cards},
     props: {
         list: Object
     },

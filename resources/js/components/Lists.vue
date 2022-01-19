@@ -20,13 +20,26 @@
                 </div>
             </div>
         </section>
+        <section class="content">
+            <div v-if="errored" class="alert alert-danger p-2" role="alert">
+                <h4 class="alert-heading m-0">
+                    Something went wrong
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" TODO-click="load">
+                        Try again
+                    </button>
+                </h4>
+            </div>
+            <div v-if="loading" class="d-flex justify-content-center">
+                <div class="spinner-border" role="status" aria-hidden="true"></div>
+            </div>
+        </section>        
         <section class="content pb-3">
-            <div class="container-fluid h-100 board-columns" style="min-width: 100%" ref="boardColumns">
+            <div v-if="!loading && !errored" class="container-fluid h-100" style="min-width: 100%">
                 <draggable
                     v-model="lists"
                     :forceFallback="true"
                     @start="dragging = true"
-                    @end="dragging = false">
+                    @end="dragging = false" class="container-fluid h-100">
                     <lists-item v-for="list in lists" :key="list.id" :list="list" @updateList="updateList" @deleteList="deleteDesk"></lists-item>
                 </draggable>
                 <lists-create :desk-id="desk.id" @createList="createList"></lists-create>
@@ -36,23 +49,24 @@
 </template>
 
 <script>
-import Cards from "./Cards";
 import ListsItem from "./ListsItem";
 import ListsCreate from "./ListsCreate";
 import draggable from "vuedraggable";
 
 export default {
-    components: {ListsItem, ListsCreate, Cards, draggable},
+    components: {ListsItem, ListsCreate, draggable},
     data() {
         return {
             deskId: this.$route.params.id,
             desk: {},
             lists: [],
-            loading: false
+            loading: false,
+            errored: false
         };
     },
     mounted() {
         this.loading = true;
+        this.errored = false;
         axios
             .all([
                 axios
@@ -68,13 +82,8 @@ export default {
                         console.log(response);
                     })
             ])
-            .catch(error => { console.log(error); })
+            .catch(error => { this.errored = true; console.log(error); })
             .finally(() => { this.loading = false; });
-
-        // Sortable.create(this.$refs.boardColumns[0], {
-        //     handle: '.board-column-title',
-        //     forceFallback: true
-        // });
     },
     methods: {
         createList(list) {
