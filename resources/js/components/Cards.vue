@@ -1,6 +1,13 @@
 <template>
     <div class="card-body p-2">
-        <cards-item v-for="card in cards" :key="card.id" :card="card"></cards-item>
+        <draggable
+            v-model="cards"
+            :forceFallback="true"
+            group="cards"
+            @start="dragging = true"
+            @end="dragging = false">
+            <cards-item v-for="card in cards" :key="card.id" :card="card"></cards-item>
+        </draggable>
         <cards-create :listId="listId" @createCard="createCard"></cards-create>
         <div v-if="loading" class="d-flex justify-content-center">
             <div class="spinner-border" role="status" aria-hidden="true"></div>
@@ -11,9 +18,10 @@
 <script>
 import CardsItem from "./CardsItem";
 import CardsCreate from "./CardsCreate";
+import draggable from "vuedraggable";
 
 export default {
-    components: {CardsItem, CardsCreate},
+    components: {CardsItem, CardsCreate, draggable},
     props: {
         listId: Number
     },

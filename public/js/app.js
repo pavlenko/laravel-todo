@@ -1973,6 +1973,8 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CardsItem__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CardsItem */ "./resources/js/components/CardsItem.vue");
 /* harmony import */ var _CardsCreate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CardsCreate */ "./resources/js/components/CardsCreate.vue");
+/* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.umd.js");
+/* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_2__);
 //
 //
 //
@@ -1983,12 +1985,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     CardsItem: _CardsItem__WEBPACK_IMPORTED_MODULE_0__["default"],
-    CardsCreate: _CardsCreate__WEBPACK_IMPORTED_MODULE_1__["default"]
+    CardsCreate: _CardsCreate__WEBPACK_IMPORTED_MODULE_1__["default"],
+    draggable: vuedraggable__WEBPACK_IMPORTED_MODULE_2___default.a
   },
   props: {
     listId: Number
@@ -39689,9 +39700,31 @@ var render = function () {
     "div",
     { staticClass: "card-body p-2" },
     [
-      _vm._l(_vm.cards, function (card) {
-        return _c("cards-item", { key: card.id, attrs: { card: card } })
-      }),
+      _c(
+        "draggable",
+        {
+          attrs: { forceFallback: true, group: "cards" },
+          on: {
+            start: function ($event) {
+              _vm.dragging = true
+            },
+            end: function ($event) {
+              _vm.dragging = false
+            },
+          },
+          model: {
+            value: _vm.cards,
+            callback: function ($$v) {
+              _vm.cards = $$v
+            },
+            expression: "cards",
+          },
+        },
+        _vm._l(_vm.cards, function (card) {
+          return _c("cards-item", { key: card.id, attrs: { card: card } })
+        }),
+        1
+      ),
       _vm._v(" "),
       _c("cards-create", {
         attrs: { listId: _vm.listId },
@@ -39707,7 +39740,7 @@ var render = function () {
           ])
         : _vm._e(),
     ],
-    2
+    1
   )
 }
 var staticRenderFns = []
