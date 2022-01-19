@@ -4,9 +4,7 @@
             <h5 class="card-title">{{ card.name }}</h5>
             <div class="card-tools">
                 <a href="#" class="btn btn-tool btn-link">#3</a>
-                <a href="#" class="btn btn-tool">
-                    <i class="fas fa-pen"></i>
-                </a>
+                <cards-update :card="card" @updateCard="updateCard"></cards-update>
             </div>
         </div>
         <div class="card-body">
@@ -38,9 +36,16 @@
 </template>
 
 <script>
+import CardsUpdate from "./CardsUpdate";
+
 export default {
+    components: {CardsUpdate},
     props: {
         card: Object
+    },
+    methods: {
+        updateCard(card) { this.$emit('updateCard', card); },
+        deleteCard(card) { this.$emit('deleteCard', card); }
     }
 }
 </script>

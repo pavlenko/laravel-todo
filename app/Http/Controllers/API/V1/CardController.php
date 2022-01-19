@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\CardModel;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CardRequest;
 use App\Http\Resources\CardResource;
 use Illuminate\Http\Request;
 
@@ -46,16 +47,10 @@ class CardController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update(CardRequest $request, CardModel $card)
     {
-        //
+        $card->update($request->validated());
+        return new CardResource($card);
     }
 
     /**
