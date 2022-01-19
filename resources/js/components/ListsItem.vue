@@ -2,7 +2,7 @@
     <div class="card card-row">
         <div class="card-header p-2">
             <div class="media">
-                <div class="media-body">
+                <div class="media-body board-column-title">
                     <h3 class="card-title">
                         {{ list.name }}
                     </h3>

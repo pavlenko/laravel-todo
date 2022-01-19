@@ -21,8 +21,14 @@
             </div>
         </section>
         <section class="content pb-3">
-            <div class="container-fluid h-100" style="min-width: 100%">
-                <lists-item v-for="list in lists" :key="list.id" :list="list" @updateList="updateList" @deleteList="deleteDesk"></lists-item>
+            <div class="container-fluid h-100 board-columns" style="min-width: 100%" ref="boardColumns">
+                <draggable
+                    v-model="lists"
+                    :forceFallback="true"
+                    @start="dragging = true"
+                    @end="dragging = false">
+                    <lists-item v-for="list in lists" :key="list.id" :list="list" @updateList="updateList" @deleteList="deleteDesk"></lists-item>
+                </draggable>
                 <lists-create :desk-id="desk.id" @createList="createList"></lists-create>
             </div>
         </section>
@@ -33,9 +39,10 @@
 import Cards from "./Cards";
 import ListsItem from "./ListsItem";
 import ListsCreate from "./ListsCreate";
+import draggable from "vuedraggable";
 
 export default {
-    components: {ListsItem, ListsCreate, Cards},
+    components: {ListsItem, ListsCreate, Cards, draggable},
     data() {
         return {
             deskId: this.$route.params.id,
@@ -63,6 +70,11 @@ export default {
             ])
             .catch(error => { console.log(error); })
             .finally(() => { this.loading = false; });
+
+        // Sortable.create(this.$refs.boardColumns[0], {
+        //     handle: '.board-column-title',
+        //     forceFallback: true
+        // });
     },
     methods: {
         createList(list) {
@@ -76,6 +88,9 @@ export default {
         },
         deleteDesk(list) {
             this.lists = this.lists.filter(item => String(item.id) !== String(list.id));
+        },
+        checkMove: function(e) {
+            window.console.log("Future index: " + e.draggedContext.futureIndex);
         }
     }
 }
