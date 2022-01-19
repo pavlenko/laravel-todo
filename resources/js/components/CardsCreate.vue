@@ -18,7 +18,7 @@
                 TODO content field
                 <input type="hidden" name="list_id" :value="listId">
                 <div class="form-group">
-                    <input type="text" class="form-control" name="name" placeholder="Enter list name">
+                    <input type="text" class="form-control" name="name" placeholder="Enter Card name">
                 </div>
                 <button type="submit" class="btn btn-success">Create</button>
                 <div v-if="errored" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)"></div>
@@ -45,6 +45,23 @@ export default {
             loading: false,
             errored: false
         };
+    },
+    methods: {
+        createCard(event) {
+            this.loading = true;
+            this.errored = false;
+            axios
+                .post(__baseURL + '/api/V1/cards', new FormData(event.target))
+                .then(response => {
+                    this.$emit('createCard', response.data.data);
+                    this.$bvModal.hide(this.uuid);
+                })
+                .catch(error => {
+                    this.errored = true;
+                    console.log(error);
+                })
+                .finally(() => { this.loading = false; });
+        }
     }
 }
 </script>

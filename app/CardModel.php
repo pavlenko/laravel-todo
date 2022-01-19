@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CardModel extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['list_id', 'name'];
 
     public function getTable(): string
     {

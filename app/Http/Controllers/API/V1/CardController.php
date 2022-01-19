@@ -28,7 +28,11 @@ class CardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'list_id' => 'required|integer|exists:lists,id'
+        ]);
+
+        return new CardResource(CardModel::create($request->input()));
     }
 
     /**

@@ -1,7 +1,7 @@
 <template>
     <div class="card-body p-2">
         <cards-item v-for="card in cards" :key="card.id" :card="card"></cards-item>
-        <cards-create></cards-create>
+        <cards-create :listId="listId" @createCard="createCard"></cards-create>
         <div v-if="loading" class="d-flex justify-content-center">
             <div class="spinner-border" role="status" aria-hidden="true"></div>
         </div>
@@ -33,6 +33,20 @@ export default {
             })
             .catch(error => { console.log(error); })
             .finally(() => { this.loading = false; });
+    },
+    methods: {
+        createCard(card) {
+            this.cards.push(card);
+        },
+        updateCard(card) {
+            let index = this.cards.findIndex(item => String(item.id) === String(card.id));
+            if (index !== -1) {
+                this.cards.splice(index, 1, card);
+            }
+        },
+        deleteCard(card) {
+            this.cards = this.cards.filter(item => String(item.id) !== String(card.id));
+        }
     }
 };
 </script>

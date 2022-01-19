@@ -2015,6 +2015,25 @@ __webpack_require__.r(__webpack_exports__);
     })["finally"](function () {
       _this.loading = false;
     });
+  },
+  methods: {
+    createCard: function createCard(card) {
+      this.cards.push(card);
+    },
+    updateCard: function updateCard(card) {
+      var index = this.cards.findIndex(function (item) {
+        return String(item.id) === String(card.id);
+      });
+
+      if (index !== -1) {
+        this.cards.splice(index, 1, card);
+      }
+    },
+    deleteCard: function deleteCard(card) {
+      this.cards = this.cards.filter(function (item) {
+        return String(item.id) !== String(card.id);
+      });
+    }
   }
 });
 
@@ -2075,6 +2094,24 @@ __webpack_require__.r(__webpack_exports__);
       loading: false,
       errored: false
     };
+  },
+  methods: {
+    createCard: function createCard(event) {
+      var _this = this;
+
+      this.loading = true;
+      this.errored = false;
+      axios.post(__baseURL + '/api/V1/cards', new FormData(event.target)).then(function (response) {
+        _this.$emit('createCard', response.data.data);
+
+        _this.$bvModal.hide(_this.uuid);
+      })["catch"](function (error) {
+        _this.errored = true;
+        console.log(error);
+      })["finally"](function () {
+        _this.loading = false;
+      });
+    }
   }
 });
 
@@ -2657,13 +2694,10 @@ __webpack_require__.r(__webpack_exports__);
         this.lists.splice(index, 1, list);
       }
     },
-    deleteDesk: function deleteDesk(list) {
+    deleteList: function deleteList(list) {
       this.lists = this.lists.filter(function (item) {
         return String(item.id) !== String(list.id);
       });
-    },
-    checkMove: function checkMove(e) {
-      window.console.log("Future index: " + e.draggedContext.futureIndex);
     }
   }
 });
@@ -39659,7 +39693,10 @@ var render = function () {
         return _c("cards-item", { key: card.id, attrs: { card: card } })
       }),
       _vm._v(" "),
-      _c("cards-create"),
+      _c("cards-create", {
+        attrs: { listId: _vm.listId },
+        on: { createCard: _vm.createCard },
+      }),
       _vm._v(" "),
       _vm.loading
         ? _c("div", { staticClass: "d-flex justify-content-center" }, [
@@ -39787,7 +39824,7 @@ var render = function () {
                   attrs: {
                     type: "text",
                     name: "name",
-                    placeholder: "Enter list name",
+                    placeholder: "Enter Card name",
                   },
                 }),
               ]),
@@ -40731,7 +40768,7 @@ var render = function () {
                     attrs: { list: list },
                     on: {
                       updateList: _vm.updateList,
-                      deleteList: _vm.deleteDesk,
+                      deleteList: _vm.deleteList,
                     },
                   })
                 }),

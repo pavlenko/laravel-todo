@@ -38,7 +38,7 @@
                     :forceFallback="true"
                     @start="dragging = true"
                     @end="dragging = false" class="container-fluid h-100">
-                    <lists-item v-for="list in lists" :key="list.id" :list="list" @updateList="updateList" @deleteList="deleteDesk"></lists-item>
+                    <lists-item v-for="list in lists" :key="list.id" :list="list" @updateList="updateList" @deleteList="deleteList"></lists-item>
                 </draggable>
                 <lists-create :desk-id="desk.id" @createList="createList"></lists-create>
             </div>
@@ -93,11 +93,8 @@ export default {
                 this.lists.splice(index, 1, list);
             }
         },
-        deleteDesk(list) {
+        deleteList(list) {
             this.lists = this.lists.filter(item => String(item.id) !== String(list.id));
-        },
-        checkMove: function(e) {
-            window.console.log("Future index: " + e.draggedContext.futureIndex);
         }
     }
 }
