@@ -1,6 +1,6 @@
 <template>
     <div class="card card-row border-0 bg-transparent shadow-none">
-        <div class="card bg-light m-0" style="position: relative;">
+        <div class="card bg-info m-0" style="position: relative;">
             <a class="card-body p-2 d-flex btn" href="#" v-b-modal="uuid">
                 Create List
             </a>

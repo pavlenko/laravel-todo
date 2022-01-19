@@ -16,7 +16,7 @@ class ListController extends Controller
         $request->validate([
             'desk_id' => 'required|integer|exists:desks,id'
         ]);
-throw new \Exception();
+
         return ListResource::collection(
             ListModel::orderBy('created_at', 'desc')->where('desk_id', $request->desk_id)->get()
         );

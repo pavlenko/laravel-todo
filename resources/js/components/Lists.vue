@@ -20,7 +20,7 @@
                 </div>
             </div>
         </section>
-        <section class="content">
+        <section class="content pb-3">
             <div v-if="errored" class="alert alert-danger p-2" role="alert">
                 <h4 class="alert-heading m-0">
                     Something went wrong
@@ -32,8 +32,6 @@
             <div v-if="loading" class="d-flex justify-content-center">
                 <div class="spinner-border" role="status" aria-hidden="true"></div>
             </div>
-        </section>        
-        <section class="content pb-3">
             <div v-if="!loading && !errored" class="container-fluid h-100" style="min-width: 100%">
                 <draggable
                     v-model="lists"

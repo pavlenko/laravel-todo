@@ -1,7 +1,7 @@
 <template>
     <div class="card card-info card-outline">
         <div class="card-header">
-            <h5 class="card-title">Create Labels</h5>
+            <h5 class="card-title">{{ card.name }}</h5>
             <div class="card-tools">
                 <a href="#" class="btn btn-tool btn-link">#3</a>
                 <a href="#" class="btn btn-tool">
@@ -10,6 +10,8 @@
             </div>
         </div>
         <div class="card-body">
+            TODO content
+            <!--
             <div class="custom-control custom-checkbox">
                 <input class="custom-control-input" type="checkbox" id="customCheckbox1" disabled>
                 <label for="customCheckbox1" class="custom-control-label">Bug</label>
@@ -30,12 +32,15 @@
                 <input class="custom-control-input" type="checkbox" id="customCheckbox5" disabled>
                 <label for="customCheckbox5" class="custom-control-label">Examples</label>
             </div>
+            -->
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    
+    props: {
+        card: Object
+    }
 }
 </script>

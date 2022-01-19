@@ -1,6 +1,6 @@
 <template>
     <div class="card-body p-2">
-        <cards-item v-for="card in cards" :key="card.id" :listId="listId"></cards-item>
+        <cards-item v-for="card in cards" :key="card.id" :card="card"></cards-item>
         <cards-create></cards-create>
         <div v-if="loading" class="d-flex justify-content-center">
             <div class="spinner-border" role="status" aria-hidden="true"></div>

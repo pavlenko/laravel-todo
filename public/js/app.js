@@ -2029,6 +2029,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
 //
 //
 //
@@ -2062,7 +2063,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    listId: Number
+  },
+  data: function data() {
+    return {
+      uuid: Object(uuid__WEBPACK_IMPORTED_MODULE_0__["v4"])(),
+      loading: false,
+      errored: false
+    };
+  }
+});
 
 /***/ }),
 
@@ -2111,7 +2125,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    card: Object
+  }
+});
 
 /***/ }),
 
@@ -2535,10 +2556,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ListsCreate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ListsCreate */ "./resources/js/components/ListsCreate.vue");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.umd.js");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_2__);
-//
-//
-//
-//
 //
 //
 //
@@ -39639,7 +39656,7 @@ var render = function () {
     { staticClass: "card-body p-2" },
     [
       _vm._l(_vm.cards, function (card) {
-        return _c("cards-item", { key: card.id, attrs: { listId: _vm.listId } })
+        return _c("cards-item", { key: card.id, attrs: { card: card } })
       }),
       _vm._v(" "),
       _c("cards-create"),
@@ -39680,12 +39697,12 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "card card-row border-0 bg-transparent shadow-none" },
+    { staticClass: "card border-0 bg-transparent shadow-none" },
     [
       _c(
         "div",
         {
-          staticClass: "card bg-light m-0",
+          staticClass: "card bg-info m-0",
           staticStyle: { position: "relative" },
         },
         [
@@ -39700,17 +39717,17 @@ var render = function () {
                   expression: "uuid",
                 },
               ],
-              staticClass: "card-body p-2 d-flex btn",
+              staticClass: "card-body p-1 d-flex btn",
               attrs: { href: "#" },
             },
-            [_vm._v("\n            Create List\n        ")]
+            [_vm._v("\n            Create Card\n        ")]
           ),
         ]
       ),
       _vm._v(" "),
       _c(
         "b-modal",
-        { attrs: { id: _vm.uuid, title: "Create List", "hide-footer": "" } },
+        { attrs: { id: _vm.uuid, title: "Create Card", "hide-footer": "" } },
         [
           _vm.errored
             ? _c(
@@ -39753,14 +39770,15 @@ var render = function () {
               on: {
                 submit: function ($event) {
                   $event.preventDefault()
-                  return _vm.createList.apply(null, arguments)
+                  return _vm.createCard.apply(null, arguments)
                 },
               },
             },
             [
+              _vm._v("\n            TODO content field\n            "),
               _c("input", {
-                attrs: { type: "hidden", name: "desk_id" },
-                domProps: { value: _vm.deskId },
+                attrs: { type: "hidden", name: "list_id" },
+                domProps: { value: _vm.listId },
               }),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
@@ -39845,110 +39863,30 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "card card-info card-outline" }, [
+    _c("div", { staticClass: "card-header" }, [
+      _c("h5", { staticClass: "card-title" }, [_vm._v(_vm._s(_vm.card.name))]),
+      _vm._v(" "),
+      _vm._m(0),
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "card-body" }, [
+      _vm._v("\n        TODO content\n        "),
+    ]),
+  ])
 }
 var staticRenderFns = [
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card card-info card-outline" }, [
-      _c("div", { staticClass: "card-header" }, [
-        _c("h5", { staticClass: "card-title" }, [_vm._v("Create Labels")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-tools" }, [
-          _c(
-            "a",
-            { staticClass: "btn btn-tool btn-link", attrs: { href: "#" } },
-            [_vm._v("#3")]
-          ),
-          _vm._v(" "),
-          _c("a", { staticClass: "btn btn-tool", attrs: { href: "#" } }, [
-            _c("i", { staticClass: "fas fa-pen" }),
-          ]),
-        ]),
+    return _c("div", { staticClass: "card-tools" }, [
+      _c("a", { staticClass: "btn btn-tool btn-link", attrs: { href: "#" } }, [
+        _vm._v("#3"),
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c("div", { staticClass: "custom-control custom-checkbox" }, [
-          _c("input", {
-            staticClass: "custom-control-input",
-            attrs: { type: "checkbox", id: "customCheckbox1", disabled: "" },
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "custom-control-label",
-              attrs: { for: "customCheckbox1" },
-            },
-            [_vm._v("Bug")]
-          ),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "custom-control custom-checkbox" }, [
-          _c("input", {
-            staticClass: "custom-control-input",
-            attrs: { type: "checkbox", id: "customCheckbox2", disabled: "" },
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "custom-control-label",
-              attrs: { for: "customCheckbox2" },
-            },
-            [_vm._v("Feature")]
-          ),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "custom-control custom-checkbox" }, [
-          _c("input", {
-            staticClass: "custom-control-input",
-            attrs: { type: "checkbox", id: "customCheckbox3", disabled: "" },
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "custom-control-label",
-              attrs: { for: "customCheckbox3" },
-            },
-            [_vm._v("Enhancement")]
-          ),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "custom-control custom-checkbox" }, [
-          _c("input", {
-            staticClass: "custom-control-input",
-            attrs: { type: "checkbox", id: "customCheckbox4", disabled: "" },
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "custom-control-label",
-              attrs: { for: "customCheckbox4" },
-            },
-            [_vm._v("Documentation")]
-          ),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "custom-control custom-checkbox" }, [
-          _c("input", {
-            staticClass: "custom-control-input",
-            attrs: { type: "checkbox", id: "customCheckbox5", disabled: "" },
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "custom-control-label",
-              attrs: { for: "customCheckbox5" },
-            },
-            [_vm._v("Examples")]
-          ),
-        ]),
+      _c("a", { staticClass: "btn btn-tool", attrs: { href: "#" } }, [
+        _c("i", { staticClass: "fas fa-pen" }),
       ]),
     ])
   },
@@ -40130,7 +40068,10 @@ var render = function () {
                 "card-body p-2 d-flex justify-content-center align-items-center btn",
               attrs: { href: "#" },
             },
-            [_vm._v("\n            Create desk\n        ")]
+            [
+              _c("i", { staticClass: "far fa-plus" }),
+              _vm._v(" Create desk\n        "),
+            ]
           ),
         ]
       ),
@@ -40737,7 +40678,7 @@ var render = function () {
       ]),
     ]),
     _vm._v(" "),
-    _c("section", { staticClass: "content" }, [
+    _c("section", { staticClass: "content pb-3" }, [
       _vm.errored
         ? _c(
             "div",
@@ -40754,9 +40695,7 @@ var render = function () {
             }),
           ])
         : _vm._e(),
-    ]),
-    _vm._v(" "),
-    _c("section", { staticClass: "content pb-3" }, [
+      _vm._v(" "),
       !_vm.loading && !_vm.errored
         ? _c(
             "div",
@@ -40816,9 +40755,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("h4", { staticClass: "alert-heading m-0" }, [
-      _vm._v(
-        "\n                    Something went wrong\n                    "
-      ),
+      _vm._v("\n                Something went wrong\n                "),
       _c(
         "button",
         {
@@ -40829,7 +40766,7 @@ var staticRenderFns = [
             "TODO-click": "load",
           },
         },
-        [_vm._v("\n                        Try again\n                    ")]
+        [_vm._v("\n                    Try again\n                ")]
       ),
     ])
   },
@@ -40862,7 +40799,7 @@ var render = function () {
       _c(
         "div",
         {
-          staticClass: "card bg-light m-0",
+          staticClass: "card bg-info m-0",
           staticStyle: { position: "relative" },
         },
         [

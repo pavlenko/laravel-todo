@@ -1,11 +1,11 @@
 <template>
-    <div class="card card-row border-0 bg-transparent shadow-none">
-        <div class="card bg-light m-0" style="position: relative;">
-            <a class="card-body p-2 d-flex btn" href="#" v-b-modal="uuid">
-                Create List
+    <div class="card border-0 bg-transparent shadow-none">
+        <div class="card bg-info m-0" style="position: relative;">
+            <a class="card-body p-1 d-flex btn" href="#" v-b-modal="uuid">
+                Create Card
             </a>
         </div>
-        <b-modal :id="uuid" title="Create List" hide-footer>
+        <b-modal :id="uuid" title="Create Card" hide-footer>
             <div v-if="errored" class="alert alert-danger p-2" role="alert">
                 <h4 class="alert-heading m-0">
                     Something went wrong
@@ -14,8 +14,9 @@
                     </button>
                 </h4>
             </div>
-            <form @submit.prevent="createList" style="position: relative">
-                <input type="hidden" name="desk_id" :value="deskId">
+            <form @submit.prevent="createCard" style="position: relative">
+                TODO content field
+                <input type="hidden" name="list_id" :value="listId">
                 <div class="form-group">
                     <input type="text" class="form-control" name="name" placeholder="Enter list name">
                 </div>
@@ -32,7 +33,18 @@
 </template>
 
 <script>
+import {v4 as uuid} from "uuid";
+
 export default {
-    
+    props: {
+        listId: Number
+    },
+    data() {
+        return {
+            uuid: uuid(),
+            loading: false,
+            errored: false
+        };
+    }
 }
 </script>
