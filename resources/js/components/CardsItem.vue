@@ -5,6 +5,7 @@
             <div class="card-tools">
                 <a href="#" class="btn btn-tool btn-link">#3</a>
                 <cards-update :card="card" @updateCard="updateCard"></cards-update>
+                <cards-delete :card="card" @deleteCard="deleteCard"></cards-delete>
             </div>
         </div>
         <div class="card-body">
@@ -37,9 +38,10 @@
 
 <script>
 import CardsUpdate from "./CardsUpdate";
+import CardsDelete from "./CardsDelete";
 
 export default {
-    components: {CardsUpdate},
+    components: {CardsUpdate, CardsDelete},
     props: {
         card: Object
     },

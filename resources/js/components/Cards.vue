@@ -6,7 +6,7 @@
             group="cards"
             @start="dragging = true"
             @end="dragging = false">
-            <cards-item v-for="card in cards" :key="card.id" :card="card" @updateCard="updateCard"></cards-item>
+            <cards-item v-for="card in cards" :key="card.id" :card="card" @updateCard="updateCard" @deleteCard="deleteCard"></cards-item>
         </draggable>
         <cards-create :listId="listId" @createCard="createCard"></cards-create>
         <div v-if="loading" class="d-flex justify-content-center">

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CardRequest;
 use App\Http\Resources\CardResource;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CardController extends Controller
 {
@@ -21,13 +22,7 @@ class CardController extends Controller
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(CardRequest $request)
     {
         $request->validate([
             'list_id' => 'required|integer|exists:lists,id'
@@ -53,14 +48,9 @@ class CardController extends Controller
         return new CardResource($card);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(CardModel $card)
     {
-        //
+        $card->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }
