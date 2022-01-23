@@ -5,7 +5,8 @@
             :forceFallback="true"
             group="cards"
             @start="dragging = true"
-            @end="dragging = false">
+            @end="dragging = false"
+            :class="{'mb-3': cards.length > 0}">
             <cards-item v-for="card in cards" :key="card.id" :card="card" @updateCard="updateCard" @deleteCard="deleteCard"></cards-item>
         </draggable>
         <cards-create :listId="listId" @createCard="createCard"></cards-create>
