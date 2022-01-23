@@ -22,7 +22,7 @@
             :class="{'mb-3': tasks.length > 0}">
             <tasks-item v-for="task in tasks" :key="task.id" :task="task"></tasks-item>
         </draggable>
-        <tasks-create></tasks-create>
+        <tasks-create :card-id="cardId" @createTask="createTask"></tasks-create>
     </div>
 </template>
 
@@ -58,10 +58,20 @@ export default {
                 console.log(error);
             })
             .finally(() => { this.loading = false; });
+    },
+    methods: {
+        createTask(task) {
+            this.tasks.push(task);
+        },
+        updateTask(task) {
+            let index = this.tasks.findIndex(item => String(item.id) === String(task.id));
+            if (index !== -1) {
+                this.tasks.splice(index, 1, task);
+            }
+        },
+        deleteTask(task) {
+            this.tasks = this.tasks.filter(item => String(item.id) !== String(task.id));
+        }
     }
 }
 </script>
-
-<style scoped>
-
-</style>

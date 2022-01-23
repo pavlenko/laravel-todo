@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TaskModel extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['card_id', 'name'];
 
     public function getTable(): string
     {
