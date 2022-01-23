@@ -3242,10 +3242,54 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     TasksCreate: _TasksCreate__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  props: {
+    cardId: Number
+  },
+  data: function data() {
+    return {
+      tasks: [],
+      loading: false,
+      errored: false
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    this.loading = true;
+    this.errored = false;
+    axios.get(__baseURL + '/api/V1/tasks', {
+      params: {
+        card_id: this.cardId
+      }
+    }).then(function (response) {
+      if (!response.data || response.data.length == 0) {
+        throw new Error('Invalid data');
+      }
+
+      _this.tasks = response.data.data;
+      console.log(response);
+    })["catch"](function (error) {
+      _this.errored = true;
+      console.log(error);
+    })["finally"](function () {
+      _this.loading = false;
+    });
   }
 });
 
@@ -40498,7 +40542,7 @@ var render = function () {
             ]
           ),
           _vm._v(" "),
-          _c("tasks"),
+          _c("tasks", { attrs: { "card-id": _vm.card.id } }),
         ],
         1
       ),
@@ -41948,7 +41992,24 @@ var render = function () {
     [
       _c("h4", [_vm._v("Tasks")]),
       _vm._v(" "),
-      _vm._m(0),
+      _vm.loading
+        ? _c("div", { staticClass: "d-flex justify-content-center" }, [
+            _c("div", {
+              staticClass: "spinner-border",
+              attrs: { role: "status", "aria-hidden": "true" },
+            }),
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.errored
+        ? _c(
+            "div",
+            { staticClass: "alert alert-danger p-2", attrs: { role: "alert" } },
+            [_vm._m(0)]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm._m(1),
       _vm._v(" "),
       _c("tasks-create"),
     ],
@@ -41956,6 +42017,26 @@ var render = function () {
   )
 }
 var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h4", { staticClass: "alert-heading m-0" }, [
+      _vm._v("\n            Something went wrong\n            "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-sm btn-danger",
+          attrs: {
+            type: "button",
+            "data-dismiss": "alert",
+            "TODO-click": "load",
+          },
+        },
+        [_vm._v("\n                Try again\n            ")]
+      ),
+    ])
+  },
   function () {
     var _vm = this
     var _h = _vm.$createElement

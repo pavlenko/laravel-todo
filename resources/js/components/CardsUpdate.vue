@@ -26,7 +26,7 @@
                     </div>
                 </div>
             </form>
-            <tasks></tasks>
+            <tasks :card-id="card.id"></tasks>
         </b-modal>
     </button>
 </template>
