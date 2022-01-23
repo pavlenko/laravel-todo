@@ -20,7 +20,7 @@
             tag="ul"
             class="list-group"
             :class="{'mb-3': tasks.length > 0}">
-            <tasks-item v-for="task in tasks" :key="task.id" :task="task" @deleteTask="deleteTask"></tasks-item>
+            <tasks-item v-for="task in tasks" :key="task.id" :task="task" @updateTask="updateTask" @deleteTask="deleteTask"></tasks-item>
         </draggable>
         <tasks-create :card-id="cardId" @createTask="createTask"></tasks-create>
     </div>
@@ -63,7 +63,7 @@ export default {
         createTask(task) {
             this.tasks.push(task);
         },
-        updateTask(task) {
+        updateTask(task) { console.log(task);
             let index = this.tasks.findIndex(item => String(item.id) === String(task.id));
             if (index !== -1) {
                 this.tasks.splice(index, 1, task);

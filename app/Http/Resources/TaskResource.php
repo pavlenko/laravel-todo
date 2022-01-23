@@ -8,6 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @property $id
  * @property $name
+ * @property $status
  * @property $created_at
  */
 class TaskResource extends JsonResource
@@ -23,6 +24,7 @@ class TaskResource extends JsonResource
         return [
             'id'         => $this->id,
             'name'       => $this->name,
+            'status'     => $this->status,
             'created_at' => $this->created_at,
         ];
     }

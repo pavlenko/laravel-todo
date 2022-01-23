@@ -8,25 +8,17 @@
             <i class="far fa-undo"></i>
         </button>
         <span v-if="!editing" class="flex-grow-1" @click="editMode">{{ task.name }}</span>
-        <div v-if="!editing">
-            <div class="dropdown">
-                <a class="badge badge-secondary" href="#" role="button" data-toggle="dropdown">New</a>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#"><span class="badge badge-secondary">New</span></a>
-                    <a class="dropdown-item" href="#"><span class="badge badge-primary">In Progress</span></a>
-                    <a class="dropdown-item" href="#"><span class="badge badge-success">Done</span></a>
-                </div>
-            </div>
-        </div>
+        <tasks-status v-if="!editing" :task="task" @updateTask="updateTask"></tasks-status>
         <tasks-delete v-if="!editing" :task="task" @deleteTask="deleteTask"></tasks-delete>
     </li>
 </template>
 
 <script>
 import TasksDelete from "./TasksDelete";
+import TasksStatus from "./TasksStatus";
 
 export default {
-    components: {TasksDelete},
+    components: {TasksStatus, TasksDelete},
     props: {
         task: Object
     },
@@ -46,6 +38,7 @@ export default {
                 this.$refs.name.focus();
             });
         },
+        updateTask(task) { this.$emit('updateTask', task); },
         deleteTask(task) { this.$emit('deleteTask', task); }
     }
 }

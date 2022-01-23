@@ -19,6 +19,7 @@ class CreateTasksTable extends Migration
             $table->integer('prev')->unsigned()->nullable(false)->default(0);
             $table->integer('next')->unsigned()->nullable(false)->default(0);
             $table->string('name')->nullable(false);
+            $table->integer('status')->unsigned()->nullable(false)->default(0);
             $table->timestamps();
         });
     }
