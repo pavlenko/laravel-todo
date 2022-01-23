@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ListRequest;
 use App\Http\Resources\ListResource;
-use App\ListModel;
+use App\Models\ListModel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use App\DeskModel;
+use App\Models\DeskModel;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeskRequest;
 use App\Http\Resources\DeskResource;

@@ -1,9 +1,9 @@
 <?php
 
-use App\CardModel;
-use App\DeskModel;
-use App\ListModel;
-use App\TaskModel;
+use App\Models\CardModel;
+use App\Models\DeskModel;
+use App\Models\ListModel;
+use App\Models\TaskModel;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
