@@ -11,16 +11,20 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-tool m-0 py-0 text-danger">
-            <i class="fas fa-trash"></i>
-        </button>
+        <tasks-delete :task="task" @deleteTask="deleteTask"></tasks-delete>
     </li>
 </template>
 
 <script>
+import TasksDelete from "./TasksDelete";
+
 export default {
+    components: {TasksDelete},
     props: {
         task: Object
+    },
+    methods: {
+        deleteTask(task) { this.$emit('deleteTask', task); }
     }
 }
 </script>

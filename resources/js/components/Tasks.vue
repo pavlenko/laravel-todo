@@ -20,7 +20,7 @@
             tag="ul"
             class="list-group"
             :class="{'mb-3': tasks.length > 0}">
-            <tasks-item v-for="task in tasks" :key="task.id" :task="task"></tasks-item>
+            <tasks-item v-for="task in tasks" :key="task.id" :task="task" @deleteTask="deleteTask"></tasks-item>
         </draggable>
         <tasks-create :card-id="cardId" @createTask="createTask"></tasks-create>
     </div>

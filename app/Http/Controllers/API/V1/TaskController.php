@@ -7,6 +7,7 @@ use App\Http\Requests\TaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Models\TaskModel;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class TaskController extends Controller
 {
@@ -28,5 +29,11 @@ class TaskController extends Controller
         ]);
 
         return new TaskResource(TaskModel::create($request->input()));
+    }
+
+    public function destroy(TaskModel $task)
+    {
+        $task->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }

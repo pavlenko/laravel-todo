@@ -3354,6 +3354,78 @@ __webpack_require__.r(__webpack_exports__);
       axios.post(__baseURL + '/api/V1/tasks', new FormData(event.target)).then(function (response) {
         _this.$emit('createTask', response.data.data);
 
+        event.target.reset();
+      })["catch"](function (error) {
+        _this.errored = true;
+        console.log(error);
+      })["finally"](function () {
+        _this.loading = false;
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TasksDelete.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TasksDelete.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    task: Object
+  },
+  data: function data() {
+    return {
+      uuid: Object(uuid__WEBPACK_IMPORTED_MODULE_0__["v4"])(),
+      loading: false,
+      errored: false
+    };
+  },
+  methods: {
+    deleteTask: function deleteTask() {
+      var _this = this;
+
+      this.loading = true;
+      this.errored = false;
+      axios.post(__baseURL + '/api/V1/tasks/' + this.task.id, {
+        _method: 'DELETE'
+      }).then(function () {
+        _this.$emit('deleteTask', _this.task);
+
         _this.$bvModal.hide(_this.uuid);
       })["catch"](function (error) {
         _this.errored = true;
@@ -3376,6 +3448,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _TasksDelete__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TasksDelete */ "./resources/js/components/TasksDelete.vue");
 //
 //
 //
@@ -3393,11 +3466,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    TasksDelete: _TasksDelete__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   props: {
     task: Object
+  },
+  methods: {
+    deleteTask: function deleteTask(task) {
+      this.$emit('deleteTask', task);
+    }
   }
 });
 
@@ -40498,7 +40578,6 @@ var render = function () {
             title: "Update List",
             "hide-footer": "",
             "header-class": "py-1 px-3",
-            "body-class": "p-3",
           },
         },
         [
@@ -42117,7 +42196,11 @@ var render = function () {
           },
         },
         _vm._l(_vm.tasks, function (task) {
-          return _c("tasks-item", { key: task.id, attrs: { task: task } })
+          return _c("tasks-item", {
+            key: task.id,
+            attrs: { task: task },
+            on: { deleteTask: _vm.deleteTask },
+          })
         }),
         1
       ),
@@ -42282,6 +42365,165 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TasksDelete.vue?vue&type=template&id=55e8713e&":
+/*!**************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TasksDelete.vue?vue&type=template&id=55e8713e& ***!
+  \**************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "button",
+    {
+      directives: [
+        {
+          name: "b-modal",
+          rawName: "v-b-modal",
+          value: _vm.uuid,
+          expression: "uuid",
+        },
+      ],
+      staticClass: "btn btn-tool m-0 py-0 text-danger",
+      attrs: { type: "button" },
+      on: {
+        click: function ($event) {
+          $event.preventDefault()
+        },
+      },
+    },
+    [
+      _c("i", { staticClass: "fas fa-trash" }),
+      _vm._v(" "),
+      _c(
+        "b-modal",
+        {
+          attrs: {
+            id: _vm.uuid,
+            title: "Delete Task",
+            "hide-footer": "",
+            "header-class": "py-1 px-3",
+          },
+        },
+        [
+          _vm.errored
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger p-2",
+                  attrs: { role: "alert" },
+                },
+                [
+                  _c("h4", { staticClass: "alert-heading m-0" }, [
+                    _vm._v(
+                      "\n                Something went wrong\n                "
+                    ),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-sm btn-danger",
+                        attrs: { type: "button", "data-dismiss": "alert" },
+                        on: {
+                          click: function ($event) {
+                            _vm.errored = false
+                          },
+                        },
+                      },
+                      [
+                        _vm._v(
+                          "\n                    Try again\n                "
+                        ),
+                      ]
+                    ),
+                  ]),
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "form",
+            {
+              staticStyle: { position: "relative" },
+              on: {
+                submit: function ($event) {
+                  $event.preventDefault()
+                  return _vm.deleteTask.apply(null, arguments)
+                },
+              },
+            },
+            [
+              _c("p", { staticClass: "text-danger text-center" }, [
+                _vm._v(
+                  'Are you sure you want delete "' + _vm._s(_vm.task.name) + '"'
+                ),
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm btn-danger",
+                  attrs: { type: "submit" },
+                },
+                [_vm._v("Delete")]
+              ),
+              _vm._v(" "),
+              _vm.errored
+                ? _c("div", {
+                    staticClass: "card-img-overlay",
+                    staticStyle: {
+                      "background-color": "rgba(255, 255, 255, 0.5)",
+                    },
+                  })
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.loading
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "card-img-overlay",
+                      staticStyle: {
+                        "background-color": "rgba(255, 255, 255, 0.5)",
+                      },
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "d-flex justify-content-center align-items-center",
+                        },
+                        [
+                          _c("div", {
+                            staticClass: "spinner-border",
+                            attrs: { role: "status", "aria-hidden": "true" },
+                          }),
+                        ]
+                      ),
+                    ]
+                  )
+                : _vm._e(),
+            ]
+          ),
+        ]
+      ),
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TasksItem.vue?vue&type=template&id=0d9fd566&scoped=true&":
 /*!************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TasksItem.vue?vue&type=template&id=0d9fd566&scoped=true& ***!
@@ -42307,8 +42549,12 @@ var render = function () {
       _vm._v(" "),
       _vm._m(0),
       _vm._v(" "),
-      _vm._m(1),
-    ]
+      _c("tasks-delete", {
+        attrs: { task: _vm.task },
+        on: { deleteTask: _vm.deleteTask },
+      }),
+    ],
+    1
   )
 }
 var staticRenderFns = [
@@ -42348,19 +42594,6 @@ var staticRenderFns = [
         ]),
       ]),
     ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "btn btn-tool m-0 py-0 text-danger",
-        attrs: { type: "button" },
-      },
-      [_c("i", { staticClass: "fas fa-trash" })]
-    )
   },
 ]
 render._withStripped = true
@@ -62183,6 +62416,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TasksCreate_vue_vue_type_template_id_3e577c0f___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TasksCreate_vue_vue_type_template_id_3e577c0f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/TasksDelete.vue":
+/*!*************************************************!*\
+  !*** ./resources/js/components/TasksDelete.vue ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _TasksDelete_vue_vue_type_template_id_55e8713e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TasksDelete.vue?vue&type=template&id=55e8713e& */ "./resources/js/components/TasksDelete.vue?vue&type=template&id=55e8713e&");
+/* harmony import */ var _TasksDelete_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TasksDelete.vue?vue&type=script&lang=js& */ "./resources/js/components/TasksDelete.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _TasksDelete_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _TasksDelete_vue_vue_type_template_id_55e8713e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _TasksDelete_vue_vue_type_template_id_55e8713e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/TasksDelete.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/TasksDelete.vue?vue&type=script&lang=js&":
+/*!**************************************************************************!*\
+  !*** ./resources/js/components/TasksDelete.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TasksDelete_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./TasksDelete.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TasksDelete.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TasksDelete_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/TasksDelete.vue?vue&type=template&id=55e8713e&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/TasksDelete.vue?vue&type=template&id=55e8713e& ***!
+  \********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TasksDelete_vue_vue_type_template_id_55e8713e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./TasksDelete.vue?vue&type=template&id=55e8713e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TasksDelete.vue?vue&type=template&id=55e8713e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TasksDelete_vue_vue_type_template_id_55e8713e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TasksDelete_vue_vue_type_template_id_55e8713e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

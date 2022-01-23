@@ -43,7 +43,7 @@ export default {
                 .post(__baseURL + '/api/V1/tasks', new FormData(event.target))
                 .then(response => {
                     this.$emit('createTask', response.data.data);
-                    this.$bvModal.hide(this.uuid);
+                    event.target.reset();
                 })
                 .catch(error => {
                     this.errored = true;
