@@ -1,7 +1,14 @@
 <template>
     <li class="list-group-item p-2 d-flex justify-content-between">
-        <span class="flex-grow-1">{{ task.name }}</span>
-        <div>
+        <div v-if="editing" class="flex-grow-1">
+            <input class="form-control form-control-sm" name="name" v-model="task.name">
+        </div>
+        <button v-if="editing" type="button" class="btn btn-sm"><i class="far fa-check"></i></button>
+        <button v-if="editing" type="button" class="btn btn-sm" @click="name = task.name; editing = false">
+            <i class="far fa-undo"></i>
+        </button>
+        <span v-if="!editing" class="flex-grow-1" @click="editMode">{{ task.name }}</span>
+        <div v-if="!editing">
             <div class="dropdown">
                 <a class="badge badge-secondary" href="#" role="button" data-toggle="dropdown">New</a>
                 <div class="dropdown-menu">
@@ -11,7 +18,7 @@
                 </div>
             </div>
         </div>
-        <tasks-delete :task="task" @deleteTask="deleteTask"></tasks-delete>
+        <tasks-delete v-if="!editing" :task="task" @deleteTask="deleteTask"></tasks-delete>
     </li>
 </template>
 
@@ -23,7 +30,18 @@ export default {
     props: {
         task: Object
     },
+    data() {
+        return {
+            name: '',
+            editing: false,
+            loading: false,
+            errored: false
+        };
+    },
     methods: {
+        editMode() {
+            this.editing = true;
+        },
         deleteTask(task) { this.$emit('deleteTask', task); }
     }
 }

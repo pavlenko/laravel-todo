@@ -3466,6 +3466,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3474,7 +3481,18 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     task: Object
   },
+  data: function data() {
+    return {
+      name: '',
+      editing: false,
+      loading: false,
+      errored: false
+    };
+  },
   methods: {
+    editMode: function editMode() {
+      this.editing = true;
+    },
     deleteTask: function deleteTask(task) {
       this.$emit('deleteTask', task);
     }
@@ -42543,16 +42561,73 @@ var render = function () {
     "li",
     { staticClass: "list-group-item p-2 d-flex justify-content-between" },
     [
-      _c("span", { staticClass: "flex-grow-1" }, [
-        _vm._v(_vm._s(_vm.task.name)),
-      ]),
+      _vm.editing
+        ? _c("div", { staticClass: "flex-grow-1" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.task.name,
+                  expression: "task.name",
+                },
+              ],
+              staticClass: "form-control form-control-sm",
+              attrs: { name: "name" },
+              domProps: { value: _vm.task.name },
+              on: {
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.task, "name", $event.target.value)
+                },
+              },
+            }),
+          ])
+        : _vm._e(),
       _vm._v(" "),
-      _vm._m(0),
+      _vm.editing
+        ? _c(
+            "button",
+            { staticClass: "btn btn-sm", attrs: { type: "button" } },
+            [_c("i", { staticClass: "far fa-check" })]
+          )
+        : _vm._e(),
       _vm._v(" "),
-      _c("tasks-delete", {
-        attrs: { task: _vm.task },
-        on: { deleteTask: _vm.deleteTask },
-      }),
+      _vm.editing
+        ? _c(
+            "button",
+            {
+              staticClass: "btn btn-sm",
+              attrs: { type: "button" },
+              on: {
+                click: function ($event) {
+                  _vm.name = _vm.task.name
+                  _vm.editing = false
+                },
+              },
+            },
+            [_c("i", { staticClass: "far fa-undo" })]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.editing
+        ? _c(
+            "span",
+            { staticClass: "flex-grow-1", on: { click: _vm.editMode } },
+            [_vm._v(_vm._s(_vm.task.name))]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.editing ? _c("div", [_vm._m(0)]) : _vm._e(),
+      _vm._v(" "),
+      !_vm.editing
+        ? _c("tasks-delete", {
+            attrs: { task: _vm.task },
+            on: { deleteTask: _vm.deleteTask },
+          })
+        : _vm._e(),
     ],
     1
   )
@@ -42562,35 +42637,29 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("div", { staticClass: "dropdown" }, [
-        _c(
-          "a",
-          {
-            staticClass: "badge badge-secondary",
-            attrs: { href: "#", role: "button", "data-toggle": "dropdown" },
-          },
-          [_vm._v("New")]
-        ),
+    return _c("div", { staticClass: "dropdown" }, [
+      _c(
+        "a",
+        {
+          staticClass: "badge badge-secondary",
+          attrs: { href: "#", role: "button", "data-toggle": "dropdown" },
+        },
+        [_vm._v("New")]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "dropdown-menu" }, [
+        _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
+          _c("span", { staticClass: "badge badge-secondary" }, [_vm._v("New")]),
+        ]),
         _vm._v(" "),
-        _c("div", { staticClass: "dropdown-menu" }, [
-          _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
-            _c("span", { staticClass: "badge badge-secondary" }, [
-              _vm._v("New"),
-            ]),
+        _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
+          _c("span", { staticClass: "badge badge-primary" }, [
+            _vm._v("In Progress"),
           ]),
-          _vm._v(" "),
-          _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
-            _c("span", { staticClass: "badge badge-primary" }, [
-              _vm._v("In Progress"),
-            ]),
-          ]),
-          _vm._v(" "),
-          _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
-            _c("span", { staticClass: "badge badge-success" }, [
-              _vm._v("Done"),
-            ]),
-          ]),
+        ]),
+        _vm._v(" "),
+        _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
+          _c("span", { staticClass: "badge badge-success" }, [_vm._v("Done")]),
         ]),
       ]),
     ])
