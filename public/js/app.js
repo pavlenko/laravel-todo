@@ -2371,6 +2371,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -40437,18 +40448,70 @@ var render = function () {
               "li",
               {
                 staticClass:
-                  "list-group-item d-flex justify-content-between align-items-center",
+                  "list-group-item p-2 d-flex justify-content-between",
               },
               [
-                _c("span", [_vm._v("#1")]),
-                _vm._v(" "),
                 _c("span", { staticClass: "flex-grow-1" }, [
                   _vm._v("Cras justo odio"),
                 ]),
                 _vm._v(" "),
-                _c("span", { staticClass: "badge badge-secondary" }, [
-                  _vm._v("New"),
+                _c("div", [
+                  _c("div", { staticClass: "dropdown" }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "badge badge-secondary",
+                        attrs: {
+                          href: "#",
+                          role: "button",
+                          "data-toggle": "dropdown",
+                        },
+                      },
+                      [_vm._v("New")]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "dropdown-menu" }, [
+                      _c(
+                        "a",
+                        { staticClass: "dropdown-item", attrs: { href: "#" } },
+                        [
+                          _c("span", { staticClass: "badge badge-secondary" }, [
+                            _vm._v("New"),
+                          ]),
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        { staticClass: "dropdown-item", attrs: { href: "#" } },
+                        [
+                          _c("span", { staticClass: "badge badge-primary" }, [
+                            _vm._v("In Progress"),
+                          ]),
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        { staticClass: "dropdown-item", attrs: { href: "#" } },
+                        [
+                          _c("span", { staticClass: "badge badge-success" }, [
+                            _vm._v("Done"),
+                          ]),
+                        ]
+                      ),
+                    ]),
+                  ]),
                 ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-tool m-0 py-0 text-danger",
+                    attrs: { type: "button" },
+                  },
+                  [_c("i", { staticClass: "fas fa-trash" })]
+                ),
               ]
             ),
             _vm._v(" "),
@@ -40486,7 +40549,7 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "form-group d-flex align-items-center" }, [
-            _c("span", { staticClass: "text-nowrap" }, [_vm._v("Task Name")]),
+            _c("span", { staticClass: "text-nowrap" }, [_vm._v("Task")]),
             _vm._v(" "),
             _c("input", {
               staticClass: "form-control",
