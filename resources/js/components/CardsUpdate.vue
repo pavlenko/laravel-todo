@@ -1,7 +1,7 @@
 <template>
     <button type="button" class="btn btn-tool m-0 py-0" @click.prevent v-b-modal="uuid">
         <i class="fas fa-pencil"></i>
-        <b-modal :id="uuid" title="Update List" hide-footer>
+        <b-modal :id="uuid" title="Update List" hide-footer :header-class="'py-1 px-3'" :body-class="'p-3'">
             <div v-if="errored" class="alert alert-danger p-2" role="alert">
                 <h4 class="alert-heading m-0">
                     Something went wrong
@@ -18,7 +18,6 @@
                 <div class="form-group">
                     <ckeditor class="form-control" :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
                 </div>
-
                 <button type="submit" class="btn btn-success">Update</button>
                 <div v-if="errored" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)"></div>
                 <div v-if="loading" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)">
@@ -27,40 +26,7 @@
                     </div>
                 </div>
             </form>
-            <h4>Tasks</h4>
-            <ul class="list-group">
-                <li class="list-group-item p-2 d-flex justify-content-between">
-                    <span class="flex-grow-1">Cras justo odio</span>
-                    <div>
-                        <div class="dropdown">
-                            <a class="badge badge-secondary" href="#" role="button" data-toggle="dropdown">New</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#"><span class="badge badge-secondary">New</span></a>
-                                <a class="dropdown-item" href="#"><span class="badge badge-primary">In Progress</span></a>
-                                <a class="dropdown-item" href="#"><span class="badge badge-success">Done</span></a>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-tool m-0 py-0 text-danger">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <span>#1</span>
-                    Dapibus ac facilisis in
-                    <span class="badge badge-primary">In Progress</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <span>#1</span>
-                    Morbi leo risus
-                    <span class="badge badge-success">Done</span>
-                </li>
-            </ul>
-            <div class="form-group d-flex align-items-center">
-                <span class="text-nowrap">Task</span>
-                <input class="form-control" name="task">
-                <button type="button" class="btn btn-sm btn-success"><i class="far fa-check"></i></button>
-            </div>
+            <tasks></tasks>
         </b-modal>
     </button>
 </template>
@@ -68,8 +34,10 @@
 <script>
 import {v4 as uuid} from "uuid";
 import Editor from '@ckeditor/ckeditor5-build-classic';
+import Tasks from "./Tasks";
 
 export default {
+    components: {Tasks},
     props: {
         card: Object
     },
