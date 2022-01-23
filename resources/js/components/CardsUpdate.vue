@@ -15,6 +15,10 @@
                 <div class="form-group">
                     <input type="text" class="form-control" name="name" :value="card.name" placeholder="Enter desk name">
                 </div>
+                <div class="form-group">
+                    <ckeditor class="form-control" :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
+                </div>
+
                 <button type="submit" class="btn btn-success">Update</button>
                 <div v-if="errored" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)"></div>
                 <div v-if="loading" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)">
@@ -23,12 +27,36 @@
                     </div>
                 </div>
             </form>
+            <h4>Tasks</h4>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>#1</span>
+                    <span class="flex-grow-1">Cras justo odio</span>
+                    <span class="badge badge-secondary">New</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>#1</span>
+                    Dapibus ac facilisis in
+                    <span class="badge badge-primary">In Progress</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>#1</span>
+                    Morbi leo risus
+                    <span class="badge badge-success">Done</span>
+                </li>
+            </ul>
+            <div class="form-group d-flex align-items-center">
+                <span class="text-nowrap">Task Name</span>
+                <input class="form-control" name="task">
+                <button type="button" class="btn btn-sm btn-success"><i class="far fa-check"></i></button>
+            </div>
         </b-modal>
     </button>
 </template>
 
 <script>
 import {v4 as uuid} from "uuid";
+import Editor from '@ckeditor/ckeditor5-build-classic';
 
 export default {
     props: {
@@ -38,7 +66,10 @@ export default {
         return {
             uuid: uuid(),
             loading: false,
-            errored: false
+            errored: false,
+            editor: Editor,
+            editorData: 'AAA',
+            editorConfig: {}
         };
     },
     methods: {
