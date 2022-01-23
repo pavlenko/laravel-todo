@@ -3491,7 +3491,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     editMode: function editMode() {
+      var _this = this;
+
+      this.name = this.task.name;
       this.editing = true;
+      this.$nextTick(function () {
+        _this.$refs.name.focus();
+      });
     },
     deleteTask: function deleteTask(task) {
       this.$emit('deleteTask', task);
@@ -42568,19 +42574,23 @@ var render = function () {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.task.name,
-                  expression: "task.name",
+                  value: _vm.name,
+                  expression: "name",
                 },
               ],
+              ref: "name",
               staticClass: "form-control form-control-sm",
               attrs: { name: "name" },
-              domProps: { value: _vm.task.name },
+              domProps: { value: _vm.name },
               on: {
+                blur: function ($event) {
+                  _vm.editing = false
+                },
                 input: function ($event) {
                   if ($event.target.composing) {
                     return
                   }
-                  _vm.$set(_vm.task, "name", $event.target.value)
+                  _vm.name = $event.target.value
                 },
               },
             }),

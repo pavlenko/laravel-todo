@@ -1,7 +1,7 @@
 <template>
     <li class="list-group-item p-2 d-flex justify-content-between">
         <div v-if="editing" class="flex-grow-1">
-            <input class="form-control form-control-sm" name="name" v-model="task.name">
+            <input class="form-control form-control-sm" name="name" ref="name" v-model="name" @blur="editing = false">
         </div>
         <button v-if="editing" type="button" class="btn btn-sm"><i class="far fa-check"></i></button>
         <button v-if="editing" type="button" class="btn btn-sm" @click="name = task.name; editing = false">
@@ -40,7 +40,11 @@ export default {
     },
     methods: {
         editMode() {
+            this.name = this.task.name;
             this.editing = true;
+            this.$nextTick(() => {
+                this.$refs.name.focus();
+            });
         },
         deleteTask(task) { this.$emit('deleteTask', task); }
     }
