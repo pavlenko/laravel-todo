@@ -35,9 +35,19 @@ export default {
             return this.statuses[code].label;
         },
         updateTask(code) {
-            // TODO ajax update status
-            this.task.status = code;
-            this.$emit('updateTask', this.task);
+            this.loading = true;
+            this.errored = false;
+            axios
+                .post(__baseURL + '/api/V1/tasks/' + this.task.id, {_method: 'PUT', name: this.task.name, status: code})
+                .then(response => {
+                    this.$emit('updateTask', response.data.data);
+                    this.$bvModal.hide(this.uuid);
+                })
+                .catch(error => {
+                    this.errored = true;
+                    console.log(error);
+                })
+                .finally(() => { this.loading = false; });
         }
     }
 }

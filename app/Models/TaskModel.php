@@ -10,12 +10,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property $prev
  * @property $next
  * @property $name
+ * @property $status
  * @property $created_at
  * @property $updated_at
  */
 class TaskModel extends Model
 {
-    protected $fillable = ['card_id', 'name'];
+    protected $fillable = ['card_id', 'name', 'status'];
 
     public function getTable(): string
     {

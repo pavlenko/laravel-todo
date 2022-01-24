@@ -31,6 +31,12 @@ class TaskController extends Controller
         return new TaskResource(TaskModel::create($request->input()));
     }
 
+    public function update(TaskRequest $request, TaskModel $task)
+    {
+        $task->update($request->validated());
+        return new TaskResource($task);
+    }
+
     public function destroy(TaskModel $task)
     {
         $task->delete();

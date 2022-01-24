@@ -3555,9 +3555,27 @@ __webpack_require__.r(__webpack_exports__);
       return this.statuses[code].label;
     },
     updateTask: function updateTask(code) {
+      var _this = this;
+
       // TODO ajax update status
-      this.task.status = code;
-      this.$emit('updateTask', this.task);
+      //this.task.status = code;
+      //this.$emit('updateTask', this.task);
+      this.loading = true;
+      this.errored = false;
+      axios.post(__baseURL + '/api/V1/tasks/' + this.task.id, {
+        _method: 'PUT',
+        name: this.task.name,
+        status: code
+      }).then(function (response) {
+        _this.$emit('updateTask', response.data.data);
+
+        _this.$bvModal.hide(_this.uuid);
+      })["catch"](function (error) {
+        _this.errored = true;
+        console.log(error);
+      })["finally"](function () {
+        _this.loading = false;
+      });
     }
   }
 });
