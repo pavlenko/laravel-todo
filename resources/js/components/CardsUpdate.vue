@@ -11,12 +11,11 @@
                 </h4>
             </div>
             <form @submit.prevent="updateCard" style="position: relative">
-                <input type="hidden" name="_method" value="PUT">
                 <div class="form-group">
-                    <input type="text" class="form-control" name="name" :value="card.name" placeholder="Enter desk name">
+                    <input type="text" class="form-control" name="name" v-model="card.name" placeholder="Enter desk name">
                 </div>
                 <div class="form-group">
-                    <ckeditor :editor="editor" tag-name="textarea" name="text" :value="card.text" :config="editorConfig"></ckeditor>
+                    <ckeditor :editor="editor" tag-name="textarea" name="text" v-model="card.text" :config="editorConfig"></ckeditor>
                 </div>
                 <button type="submit" class="btn btn-success">Update</button>
                 <div v-if="errored" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)"></div>
@@ -56,7 +55,7 @@ export default {
             this.loading = true;
             this.errored = false;
             axios
-                .post(__baseURL + '/api/V1/cards/' + this.card.id, new FormData(event.target))
+                .post(__baseURL + '/api/V1/cards/' + this.card.id, Object.assign({_method: 'PUT'}, this.card))
                 .then(response => {
                     this.$emit('updateCard', response.data.data);
                     this.$bvModal.hide(this.uuid);

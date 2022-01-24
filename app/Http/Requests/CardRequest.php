@@ -25,6 +25,7 @@ class CardRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255',
+            'text' => 'string',
         ];
     }
 }

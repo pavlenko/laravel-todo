@@ -2356,7 +2356,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -2383,7 +2382,9 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/cards/' + this.card.id, new FormData(event.target)).then(function (response) {
+      axios.post(__baseURL + '/api/V1/cards/' + this.card.id, Object.assign({
+        _method: 'PUT'
+      }, this.card)).then(function (response) {
         _this.$emit('updateCard', response.data.data);
 
         _this.$bvModal.hide(_this.uuid);
@@ -40810,12 +40811,16 @@ var render = function () {
               },
             },
             [
-              _c("input", {
-                attrs: { type: "hidden", name: "_method", value: "PUT" },
-              }),
-              _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
                 _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.card.name,
+                      expression: "card.name",
+                    },
+                  ],
                   staticClass: "form-control",
                   attrs: {
                     type: "text",
@@ -40823,6 +40828,14 @@ var render = function () {
                     placeholder: "Enter desk name",
                   },
                   domProps: { value: _vm.card.name },
+                  on: {
+                    input: function ($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.card, "name", $event.target.value)
+                    },
+                  },
                 }),
               ]),
               _vm._v(" "),
@@ -40835,8 +40848,14 @@ var render = function () {
                       editor: _vm.editor,
                       "tag-name": "textarea",
                       name: "text",
-                      value: _vm.card.text,
                       config: _vm.editorConfig,
+                    },
+                    model: {
+                      value: _vm.card.text,
+                      callback: function ($$v) {
+                        _vm.$set(_vm.card, "text", $$v)
+                      },
+                      expression: "card.text",
                     },
                   }),
                 ],
