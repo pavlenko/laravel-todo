@@ -3525,29 +3525,41 @@ __webpack_require__.r(__webpack_exports__);
     statusLabel: function statusLabel(code) {
       return this.statuses[code].label;
     },
-    editMode: function editMode() {
+    viewName: function viewName() {
       var _this = this;
+
+      setTimeout(function () {
+        _this.editing = false;
+      }, 300);
+    },
+    editName: function editName() {
+      var _this2 = this;
 
       this.name = this.task.name;
       this.editing = true;
       this.$nextTick(function () {
-        _this.$refs.name.focus();
+        _this2.$refs.name.focus();
       });
     },
+    saveName: function saveName() {
+      this.task.name = this.name;
+      this.updateTask();
+      this.viewName();
+    },
     updateTask: function updateTask() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.loading = true;
       this.errored = false;
       axios.post(__baseURL + '/api/V1/tasks/' + this.task.id, Object.assign({
         _method: 'PUT'
       }, this.task)).then(function (response) {
-        _this2.$emit('updateTask', response.data.data);
+        _this3.$emit('updateTask', response.data.data);
       })["catch"](function (error) {
-        _this2.errored = true;
+        _this3.errored = true;
         console.log(error);
       })["finally"](function () {
-        _this2.loading = false;
+        _this3.loading = false;
       });
     },
     deleteTask: function deleteTask(task) {
@@ -42709,6 +42721,7 @@ var render = function () {
                 attrs: { name: "name" },
                 domProps: { value: _vm.name },
                 on: {
+                  blur: _vm.viewName,
                   input: function ($event) {
                     if ($event.target.composing) {
                       return
@@ -42726,14 +42739,7 @@ var render = function () {
               {
                 staticClass: "btn btn-sm",
                 attrs: { type: "button" },
-                on: {
-                  click: function ($event) {
-                    $event.preventDefault()
-                    _vm.task.name = _vm.name
-                    _vm.editing = false
-                    _vm.updateTask()
-                  },
-                },
+                on: { click: _vm.saveName },
               },
               [_c("i", { staticClass: "far fa-check" })]
             )
@@ -42745,13 +42751,7 @@ var render = function () {
               {
                 staticClass: "btn btn-sm",
                 attrs: { type: "button" },
-                on: {
-                  click: function ($event) {
-                    $event.preventDefault()
-                    _vm.name = _vm.task.name
-                    _vm.editing = false
-                  },
-                },
+                on: { click: _vm.viewName },
               },
               [_c("i", { staticClass: "far fa-undo" })]
             )
@@ -42760,7 +42760,7 @@ var render = function () {
         !_vm.editing
           ? _c(
               "span",
-              { staticClass: "flex-grow-1", on: { click: _vm.editMode } },
+              { staticClass: "flex-grow-1", on: { click: _vm.editName } },
               [_vm._v(_vm._s(_vm.task.name))]
             )
           : _vm._e(),

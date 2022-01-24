@@ -2,15 +2,15 @@
     <li class="list-group-item p-2">
         <div class="d-flex justify-content-between position-relative">
             <div v-if="editing" class="flex-grow-1">
-                <input class="form-control form-control-sm" name="name" ref="name" v-model="name">
+                <input class="form-control form-control-sm" name="name" ref="name" v-model="name" @blur="viewName">
             </div>
-            <button v-if="editing" type="button" class="btn btn-sm" @click.prevent="task.name = name; editing = false; updateTask()">
+            <button v-if="editing" type="button" class="btn btn-sm" @click="saveName">
                 <i class="far fa-check"></i>
             </button>
-            <button v-if="editing" type="button" class="btn btn-sm" @click.prevent="name = task.name; editing = false">
+            <button v-if="editing" type="button" class="btn btn-sm" @click="viewName">
                 <i class="far fa-undo"></i>
             </button>
-            <span v-if="!editing" class="flex-grow-1" @click="editMode">{{ task.name }}</span>
+            <span v-if="!editing" class="flex-grow-1" @click="editName">{{ task.name }}</span>
             <div v-if="!editing">
                 <div class="dropdown">
                     <a class="badge" :class="statusClass(task.status || 0)" href="#" data-toggle="dropdown">
@@ -66,13 +66,22 @@ export default {
         statusLabel(code) {
             return this.statuses[code].label;
         },
-        //TODO view/edit/save task name
-        editMode() {
+        viewName() {
+            setTimeout(() => {
+                this.editing = false;
+            }, 300);
+        },
+        editName() {
             this.name = this.task.name;
             this.editing = true;
             this.$nextTick(() => {
                 this.$refs.name.focus();
             });
+        },
+        saveName() {
+            this.task.name = this.name;
+            this.updateTask();
+            this.viewName();
         },
         updateTask() {
             this.loading = true;
