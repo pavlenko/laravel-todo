@@ -2093,6 +2093,10 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
+/* harmony import */ var _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ckeditor/ckeditor5-build-classic */ "./node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js");
+/* harmony import */ var _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_1__);
+//
+//
 //
 //
 //
@@ -2128,6 +2132,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     listId: Number
@@ -2136,7 +2141,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       uuid: Object(uuid__WEBPACK_IMPORTED_MODULE_0__["v4"])(),
       loading: false,
-      errored: false
+      errored: false,
+      editor: _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_1___default.a,
+      editorConfig: {}
     };
   },
   methods: {
@@ -40417,7 +40424,6 @@ var render = function () {
               },
             },
             [
-              _vm._v("\n            TODO content field\n            "),
               _c("input", {
                 attrs: { type: "hidden", name: "list_id" },
                 domProps: { value: _vm.listId },
@@ -40433,6 +40439,22 @@ var render = function () {
                   },
                 }),
               ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "form-group" },
+                [
+                  _c("ckeditor", {
+                    attrs: {
+                      editor: _vm.editor,
+                      "tag-name": "textarea",
+                      name: "text",
+                      config: _vm.editorConfig,
+                    },
+                  }),
+                ],
+                1
+              ),
               _vm._v(" "),
               _c(
                 "button",
@@ -40809,14 +40831,12 @@ var render = function () {
                 { staticClass: "form-group" },
                 [
                   _c("ckeditor", {
-                    staticClass: "form-control",
-                    attrs: { editor: _vm.editor, config: _vm.editorConfig },
-                    model: {
-                      value: _vm.editorData,
-                      callback: function ($$v) {
-                        _vm.editorData = $$v
-                      },
-                      expression: "editorData",
+                    attrs: {
+                      editor: _vm.editor,
+                      "tag-name": "textarea",
+                      name: "text",
+                      value: _vm.card.text,
+                      config: _vm.editorConfig,
                     },
                   }),
                 ],

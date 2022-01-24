@@ -15,10 +15,12 @@
                 </h4>
             </div>
             <form @submit.prevent="createCard" style="position: relative">
-                TODO content field
                 <input type="hidden" name="list_id" :value="listId">
                 <div class="form-group">
                     <input type="text" class="form-control" name="name" placeholder="Enter Card name">
+                </div>
+                <div class="form-group">
+                    <ckeditor :editor="editor" tag-name="textarea" name="text" :config="editorConfig"></ckeditor>
                 </div>
                 <button type="submit" class="btn btn-success">Create</button>
                 <div v-if="errored" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)"></div>
@@ -34,6 +36,7 @@
 
 <script>
 import {v4 as uuid} from "uuid";
+import Editor from '@ckeditor/ckeditor5-build-classic';
 
 export default {
     props: {
@@ -43,7 +46,9 @@ export default {
         return {
             uuid: uuid(),
             loading: false,
-            errored: false
+            errored: false,
+            editor: Editor,
+            editorConfig: {}
         };
     },
     methods: {

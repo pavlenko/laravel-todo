@@ -19,6 +19,7 @@ class CreateCardsTable extends Migration
             $table->integer('prev')->unsigned()->nullable(false)->default(0);
             $table->integer('next')->unsigned()->nullable(false)->default(0);
             $table->string('name')->nullable(false);
+            $table->text('text')->nullable(true);
             $table->timestamps();
         });
     }

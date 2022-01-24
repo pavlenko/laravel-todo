@@ -16,7 +16,7 @@
                     <input type="text" class="form-control" name="name" :value="card.name" placeholder="Enter desk name">
                 </div>
                 <div class="form-group">
-                    <ckeditor class="form-control" :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
+                    <ckeditor :editor="editor" tag-name="textarea" name="text" :value="card.text" :config="editorConfig"></ckeditor>
                 </div>
                 <button type="submit" class="btn btn-success">Update</button>
                 <div v-if="errored" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)"></div>
