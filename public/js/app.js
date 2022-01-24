@@ -3466,6 +3466,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3481,10 +3505,26 @@ __webpack_require__.r(__webpack_exports__);
       name: '',
       editing: false,
       loading: false,
-      errored: false
+      errored: false,
+      statuses: [{
+        label: 'New',
+        "class": 'badge-secondary'
+      }, {
+        label: 'In Progress',
+        "class": 'badge-primary'
+      }, {
+        label: 'Done',
+        "class": 'badge-success'
+      }]
     };
   },
   methods: {
+    statusClass: function statusClass(code) {
+      return this.statuses[code]["class"];
+    },
+    statusLabel: function statusLabel(code) {
+      return this.statuses[code].label;
+    },
     editMode: function editMode() {
       var _this = this;
 
@@ -3494,8 +3534,21 @@ __webpack_require__.r(__webpack_exports__);
         _this.$refs.name.focus();
       });
     },
-    updateTask: function updateTask(task) {
-      this.$emit('updateTask', task);
+    updateTask: function updateTask() {
+      var _this2 = this;
+
+      this.loading = true;
+      this.errored = false;
+      axios.post(__baseURL + '/api/V1/tasks/' + this.task.id, Object.assign({
+        _method: 'PUT'
+      }, this.task)).then(function (response) {
+        _this2.$emit('updateTask', response.data.data);
+      })["catch"](function (error) {
+        _this2.errored = true;
+        console.log(error);
+      })["finally"](function () {
+        _this2.loading = false;
+      });
     },
     deleteTask: function deleteTask(task) {
       this.$emit('deleteTask', task);
@@ -3557,9 +3610,6 @@ __webpack_require__.r(__webpack_exports__);
     updateTask: function updateTask(code) {
       var _this = this;
 
-      // TODO ajax update status
-      //this.task.status = code;
-      //this.$emit('updateTask', this.task);
       this.loading = true;
       this.errored = false;
       axios.post(__baseURL + '/api/V1/tasks/' + this.task.id, {
@@ -42638,91 +42688,192 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "li",
-    { staticClass: "list-group-item p-2 d-flex justify-content-between" },
-    [
-      _vm.editing
-        ? _c("div", { staticClass: "flex-grow-1" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.name,
-                  expression: "name",
+  return _c("li", { staticClass: "list-group-item p-2" }, [
+    _c(
+      "div",
+      { staticClass: "d-flex justify-content-between position-relative" },
+      [
+        _vm.editing
+          ? _c("div", { staticClass: "flex-grow-1" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.name,
+                    expression: "name",
+                  },
+                ],
+                ref: "name",
+                staticClass: "form-control form-control-sm",
+                attrs: { name: "name" },
+                domProps: { value: _vm.name },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.name = $event.target.value
+                  },
                 },
-              ],
-              ref: "name",
-              staticClass: "form-control form-control-sm",
-              attrs: { name: "name" },
-              domProps: { value: _vm.name },
-              on: {
-                blur: function ($event) {
-                  _vm.editing = false
-                },
-                input: function ($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.name = $event.target.value
+              }),
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.editing
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-sm",
+                attrs: { type: "button" },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    _vm.task.name = _vm.name
+                    _vm.editing = false
+                    _vm.updateTask()
+                  },
                 },
               },
-            }),
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.editing
-        ? _c(
-            "button",
-            { staticClass: "btn btn-sm", attrs: { type: "button" } },
-            [_c("i", { staticClass: "far fa-check" })]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.editing
-        ? _c(
-            "button",
+              [_c("i", { staticClass: "far fa-check" })]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.editing
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-sm",
+                attrs: { type: "button" },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    _vm.name = _vm.task.name
+                    _vm.editing = false
+                  },
+                },
+              },
+              [_c("i", { staticClass: "far fa-undo" })]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        !_vm.editing
+          ? _c(
+              "span",
+              { staticClass: "flex-grow-1", on: { click: _vm.editMode } },
+              [_vm._v(_vm._s(_vm.task.name))]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        !_vm.editing
+          ? _c("div", [
+              _c("div", { staticClass: "dropdown" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "badge",
+                    class: _vm.statusClass(_vm.task.status || 0),
+                    attrs: { href: "#", "data-toggle": "dropdown" },
+                  },
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(_vm.statusLabel(_vm.task.status || 0)) +
+                        "\n                "
+                    ),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "dropdown-menu" },
+                  _vm._l(_vm.statuses, function (status, code) {
+                    return _c(
+                      "a",
+                      {
+                        staticClass: "dropdown-item",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function ($event) {
+                            _vm.task.status = code
+                            _vm.updateTask()
+                          },
+                        },
+                      },
+                      [
+                        _c(
+                          "span",
+                          { staticClass: "badge", class: status.class },
+                          [_vm._v(_vm._s(status.label))]
+                        ),
+                      ]
+                    )
+                  }),
+                  0
+                ),
+              ]),
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        !_vm.editing
+          ? _c("tasks-delete", {
+              attrs: { task: _vm.task },
+              on: { deleteTask: _vm.deleteTask },
+            })
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.loading
+          ? _c(
+              "div",
+              {
+                staticClass: "card-img-overlay p-0 h-100",
+                staticStyle: { "background-color": "rgba(255, 255, 255, 0.5)" },
+              },
+              [_vm._m(0)]
+            )
+          : _vm._e(),
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _vm.errored
+      ? _c("div", { staticClass: "invalid-feedback d-block" }, [
+          _vm._v("\n        Something went wrong.\n        "),
+          _c(
+            "a",
             {
-              staticClass: "btn btn-sm",
-              attrs: { type: "button" },
+              staticClass: "text-danger",
+              attrs: { href: "#" },
               on: {
                 click: function ($event) {
-                  _vm.name = _vm.task.name
-                  _vm.editing = false
+                  $event.preventDefault()
+                  _vm.errored = false
                 },
               },
             },
-            [_c("i", { staticClass: "far fa-undo" })]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      !_vm.editing
-        ? _c(
-            "span",
-            { staticClass: "flex-grow-1", on: { click: _vm.editMode } },
-            [_vm._v(_vm._s(_vm.task.name))]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      !_vm.editing
-        ? _c("tasks-status", {
-            attrs: { task: _vm.task },
-            on: { updateTask: _vm.updateTask },
-          })
-        : _vm._e(),
-      _vm._v(" "),
-      !_vm.editing
-        ? _c("tasks-delete", {
-            attrs: { task: _vm.task },
-            on: { deleteTask: _vm.deleteTask },
-          })
-        : _vm._e(),
-    ],
-    1
-  )
+            [_vm._v("Try again")]
+          ),
+        ])
+      : _vm._e(),
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "d-flex justify-content-center align-items-center h-100" },
+      [
+        _c("div", {
+          staticClass: "spinner-border",
+          attrs: { role: "status", "aria-hidden": "true" },
+        }),
+      ]
+    )
+  },
+]
 render._withStripped = true
 
 
