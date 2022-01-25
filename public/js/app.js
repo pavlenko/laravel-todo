@@ -2674,12 +2674,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -41068,36 +41062,25 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "col-6 col-sm-4", staticStyle: { padding: "0 7.5px 15px" } },
+    { staticClass: "col-md-4 col-sm-6" },
     [
       _c(
-        "div",
+        "a",
         {
-          staticClass: "card bg-light m-0",
-          staticStyle: { position: "relative", height: "80px" },
-        },
-        [
-          _c(
-            "a",
+          directives: [
             {
-              directives: [
-                {
-                  name: "b-modal",
-                  rawName: "v-b-modal",
-                  value: _vm.uuid,
-                  expression: "uuid",
-                },
-              ],
-              staticClass:
-                "card-body p-2 d-flex justify-content-center align-items-center btn",
-              attrs: { href: "#" },
+              name: "b-modal",
+              rawName: "v-b-modal",
+              value: _vm.uuid,
+              expression: "uuid",
             },
-            [
-              _c("i", { staticClass: "far fa-plus" }),
-              _vm._v(" Create desk\n        "),
-            ]
-          ),
-        ]
+          ],
+          staticClass:
+            "info-box p-2 d-flex justify-content-center align-items-center btn",
+          staticStyle: { "max-height": "80px" },
+          attrs: { href: "#" },
+        },
+        [_vm._m(0)]
       ),
       _vm._v(" "),
       _c(
@@ -41210,7 +41193,17 @@ var render = function () {
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", [
+      _c("i", { staticClass: "far fa-plus" }),
+      _vm._v(" Create desk\n        "),
+    ])
+  },
+]
 render._withStripped = true
 
 
@@ -41243,7 +41236,7 @@ var render = function () {
           expression: "uuid",
         },
       ],
-      staticClass: "btn btn-sm btn-primary",
+      staticClass: "btn btn-sm",
       attrs: { type: "button" },
       on: {
         click: function ($event) {
@@ -41381,63 +41374,39 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "col-6 col-sm-4", staticStyle: { padding: "0 7.5px 15px" } },
-    [
-      _c(
-        "div",
-        {
-          staticClass: "card bg-primary text-white m-0",
-          staticStyle: { position: "relative", height: "80px" },
-        },
-        [
-          _c("div", { staticClass: "card-body p-2" }, [
-            _c(
-              "div",
-              { staticClass: "media" },
-              [
-                _c(
-                  "div",
-                  { staticClass: "media-body" },
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "text-white text-decoration-none",
-                        attrs: {
-                          to: { name: "lists", params: { id: _vm.desk.id } },
-                        },
-                      },
-                      [
-                        _vm._v(
-                          "\n                        " +
-                            _vm._s(_vm.desk.name) +
-                            "\n                    "
-                        ),
-                      ]
-                    ),
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c("desks-update", {
-                  attrs: { desk: _vm.desk },
-                  on: { updateDesk: _vm.updateDesk },
-                }),
-                _vm._v(" "),
-                _c("desks-delete", {
-                  attrs: { desk: _vm.desk },
-                  on: { deleteDesk: _vm.deleteDesk },
-                }),
-              ],
-              1
-            ),
-          ]),
-        ]
-      ),
-    ]
-  )
+  return _c("div", { staticClass: "col-md-4 col-sm-6" }, [
+    _c(
+      "div",
+      {
+        staticClass:
+          "info-box bg-info justify-content-between align-items-start overflow-hidden",
+        staticStyle: { "max-height": "80px" },
+      },
+      [
+        _c(
+          "router-link",
+          {
+            staticClass: "flex-grow-1 text-decoration-none mr-1",
+            attrs: { to: { name: "lists", params: { id: _vm.desk.id } } },
+          },
+          [_vm._v("\n            " + _vm._s(_vm.desk.name) + "\n        ")]
+        ),
+        _vm._v(" "),
+        _c("desks-update", {
+          staticClass: "bg-info",
+          attrs: { desk: _vm.desk },
+          on: { updateDesk: _vm.updateDesk },
+        }),
+        _vm._v(" "),
+        _c("desks-delete", {
+          staticClass: "bg-info",
+          attrs: { desk: _vm.desk },
+          on: { deleteDesk: _vm.deleteDesk },
+        }),
+      ],
+      1
+    ),
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -41472,7 +41441,7 @@ var render = function () {
           expression: "uuid",
         },
       ],
-      staticClass: "btn btn-sm btn-primary",
+      staticClass: "btn btn-sm",
       attrs: { type: "button" },
       on: {
         click: function ($event) {

@@ -1,17 +1,11 @@
 <template>
-    <div class="col-6 col-sm-4" style="padding: 0 7.5px 15px">
-        <div class="card bg-primary text-white m-0" style="position: relative; height: 80px">
-            <div class="card-body p-2">
-                <div class="media">
-                    <div class="media-body">
-                        <router-link class="text-white text-decoration-none" :to="{name: 'lists', params: {id: desk.id}}">
-                            {{ desk.name }}
-                        </router-link>
-                    </div>
-                    <desks-update :desk="desk" @updateDesk="updateDesk"></desks-update>
-                    <desks-delete :desk="desk" @deleteDesk="deleteDesk"></desks-delete>
-                </div>
-            </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="info-box bg-info justify-content-between align-items-start overflow-hidden" style="max-height: 80px;">
+            <router-link class="flex-grow-1 text-decoration-none mr-1" :to="{name: 'lists', params: {id: desk.id}}">
+                {{ desk.name }}
+            </router-link>
+            <desks-update class="bg-info" :desk="desk" @updateDesk="updateDesk"></desks-update>
+            <desks-delete class="bg-info" :desk="desk" @deleteDesk="deleteDesk"></desks-delete>
         </div>
     </div>
 </template>

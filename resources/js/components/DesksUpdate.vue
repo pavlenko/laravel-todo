@@ -1,5 +1,5 @@
 <template>
-    <button type="button" class="btn btn-sm btn-primary" @click.prevent v-b-modal="uuid">
+    <button type="button" class="btn btn-sm" @click.prevent v-b-modal="uuid">
         <i class="fas fa-pencil"></i>
         <b-modal :id="uuid" title="Update Desk" hide-footer>
             <div v-if="errored" class="alert alert-danger p-2" role="alert">

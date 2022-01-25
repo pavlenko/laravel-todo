@@ -1,10 +1,10 @@
 <template>
-    <div class="col-6 col-sm-4" style="padding: 0 7.5px 15px">
-        <div class="card bg-light m-0" style="position: relative; height: 80px">
-            <a class="card-body p-2 d-flex justify-content-center align-items-center btn" href="#" v-b-modal="uuid">
+    <div class="col-md-4 col-sm-6">
+        <a class="info-box p-2 d-flex justify-content-center align-items-center btn" href="#" v-b-modal="uuid" style="max-height: 80px;">
+            <span>
                 <i class="far fa-plus"></i> Create desk
-            </a>
-        </div>
+            </span>
+        </a>
         <b-modal :id="uuid" title="Create Desk" hide-footer>
             <div v-if="errored" class="alert alert-danger p-2" role="alert">
                 <h4 class="alert-heading m-0">
