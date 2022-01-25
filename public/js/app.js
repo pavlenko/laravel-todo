@@ -369,9 +369,11 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _CardsUpdate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CardsUpdate */ "./resources/js/components/CardsUpdate.vue");
-/* harmony import */ var _CardsDelete__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CardsDelete */ "./resources/js/components/CardsDelete.vue");
-/* harmony import */ var _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../DTO/CardDTO */ "./resources/js/DTO/CardDTO.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
+/* harmony import */ var _CardsUpdate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CardsUpdate */ "./resources/js/components/CardsUpdate.vue");
+/* harmony import */ var _CardsDelete__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CardsDelete */ "./resources/js/components/CardsDelete.vue");
+/* harmony import */ var _Tasks__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Tasks */ "./resources/js/components/Tasks.vue");
+/* harmony import */ var _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../DTO/CardDTO */ "./resources/js/DTO/CardDTO.js");
 //
 //
 //
@@ -389,20 +391,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    CardsUpdate: _CardsUpdate__WEBPACK_IMPORTED_MODULE_0__["default"],
-    CardsDelete: _CardsDelete__WEBPACK_IMPORTED_MODULE_1__["default"]
+    CardsUpdate: _CardsUpdate__WEBPACK_IMPORTED_MODULE_1__["default"],
+    CardsDelete: _CardsDelete__WEBPACK_IMPORTED_MODULE_2__["default"],
+    Tasks: _Tasks__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   props: {
-    card: _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_2__["default"]
+    card: _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_4__["default"]
+  },
+  data: function data() {
+    return {
+      uuid: Object(uuid__WEBPACK_IMPORTED_MODULE_0__["v4"])()
+    };
   },
   methods: {
     updateCard: function updateCard(card) {
@@ -792,8 +798,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DesksUpdate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DesksUpdate */ "./resources/js/components/DesksUpdate.vue");
 /* harmony import */ var _DesksDelete__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DesksDelete */ "./resources/js/components/DesksDelete.vue");
 /* harmony import */ var _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../DTO/DeskDTO */ "./resources/js/DTO/DeskDTO.js");
-//
-//
 //
 //
 //
@@ -28006,23 +28010,80 @@ var render = function () {
   return _c(
     "div",
     {
+      directives: [
+        {
+          name: "b-modal",
+          rawName: "v-b-modal",
+          value: _vm.uuid,
+          expression: "uuid",
+        },
+      ],
       staticClass:
         "info-box justify-content-between align-items-start overflow-hidden border-top border-primary",
+      on: {
+        click: function ($event) {
+          $event.preventDefault()
+        },
+      },
     },
     [
       _c("div", { staticClass: "flex-grow-1" }, [
         _vm._v(_vm._s(_vm.card.name)),
       ]),
       _vm._v(" "),
-      _c("cards-update", {
-        attrs: { card: _vm.card },
-        on: { updateCard: _vm.updateCard },
-      }),
-      _vm._v(" "),
       _c("cards-delete", {
         attrs: { card: _vm.card },
         on: { deleteCard: _vm.deleteCard },
       }),
+      _vm._v(" "),
+      _c(
+        "b-modal",
+        {
+          attrs: {
+            id: _vm.uuid,
+            "hide-footer": "",
+            "header-class": "py-1 px-3",
+          },
+          scopedSlots: _vm._u([
+            {
+              key: "modal-header",
+              fn: function () {
+                return [
+                  _c("h5", [
+                    _c("i", { staticClass: "far fa-fw fa-credit-card" }),
+                    _vm._v(" " + _vm._s(_vm.card.name)),
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "close",
+                      attrs: { type: "button", "aria-label": "Close" },
+                    },
+                    [_vm._v("×")]
+                  ),
+                ]
+              },
+              proxy: true,
+            },
+          ]),
+        },
+        [
+          _vm._v(" "),
+          _c("h5", [
+            _c("i", { staticClass: "far fa-fw fa-align-left" }),
+            _vm._v(" Description"),
+          ]),
+          _vm._v(" "),
+          _c("div", {
+            staticClass: "flex-grow-1 ml-2",
+            domProps: { innerHTML: _vm._s(_vm.card.text) },
+          }),
+          _vm._v(" "),
+          _c("tasks", { attrs: { "card-id": _vm.card.id } }),
+        ],
+        1
+      ),
     ],
     1
   )
@@ -28763,39 +28824,40 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col-xl-3 col-md-4 col-sm-6" }, [
-    _c(
-      "div",
-      {
-        staticClass:
-          "info-box bg-info justify-content-between align-items-start overflow-hidden",
-        staticStyle: { "max-height": "80px" },
-      },
-      [
-        _c(
-          "router-link",
-          {
-            staticClass: "flex-grow-1 text-decoration-none mr-1",
-            attrs: { to: { name: "lists", params: { id: _vm.desk.id } } },
-          },
-          [_vm._v("\n            " + _vm._s(_vm.desk.name) + "\n        ")]
-        ),
-        _vm._v(" "),
-        _c("desks-update", {
-          staticClass: "bg-info",
-          attrs: { desk: _vm.desk },
-          on: { updateDesk: _vm.updateDesk },
-        }),
-        _vm._v(" "),
-        _c("desks-delete", {
-          staticClass: "bg-info",
-          attrs: { desk: _vm.desk },
-          on: { deleteDesk: _vm.deleteDesk },
-        }),
-      ],
-      1
-    ),
-  ])
+  return _c(
+    "div",
+    { staticClass: "col-xl-3 col-md-4 col-sm-6" },
+    [
+      _c(
+        "router-link",
+        {
+          staticClass:
+            "info-box bg-info justify-content-between align-items-start overflow-hidden",
+          staticStyle: { "max-height": "80px" },
+          attrs: { to: { name: "lists", params: { id: _vm.desk.id } } },
+        },
+        [
+          _c("div", { staticClass: "flex-grow-1" }, [
+            _vm._v(_vm._s(_vm.desk.name)),
+          ]),
+          _vm._v(" "),
+          _c("desks-update", {
+            staticClass: "bg-info",
+            attrs: { desk: _vm.desk },
+            on: { updateDesk: _vm.updateDesk },
+          }),
+          _vm._v(" "),
+          _c("desks-delete", {
+            staticClass: "bg-info",
+            attrs: { desk: _vm.desk },
+            on: { deleteDesk: _vm.deleteDesk },
+          }),
+        ],
+        1
+      ),
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -29836,7 +29898,7 @@ var render = function () {
   return _c(
     "div",
     [
-      _c("h4", [_vm._v("Tasks")]),
+      _vm._m(0),
       _vm._v(" "),
       _vm.loading
         ? _c("div", { staticClass: "d-flex justify-content-center" }, [
@@ -29851,7 +29913,7 @@ var render = function () {
         ? _c(
             "div",
             { staticClass: "alert alert-danger p-2", attrs: { role: "alert" } },
-            [_vm._m(0)]
+            [_vm._m(1)]
           )
         : _vm._e(),
       _vm._v(" "),
@@ -29896,6 +29958,15 @@ var render = function () {
   )
 }
 var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h5", [
+      _c("i", { staticClass: "far fa-fw fa-tasks" }),
+      _vm._v(" Tasks"),
+    ])
+  },
   function () {
     var _vm = this
     var _h = _vm.$createElement

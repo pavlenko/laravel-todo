@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h4>Tasks</h4>
+        <h5><i class="far fa-fw fa-tasks"></i> Tasks</h5>
         <div v-if="loading" class="d-flex justify-content-center">
             <div class="spinner-border" role="status" aria-hidden="true"></div>
         </div>
