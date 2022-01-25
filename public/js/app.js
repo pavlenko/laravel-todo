@@ -2411,6 +2411,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DesksItem__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DesksItem */ "./resources/js/components/DesksItem.vue");
 /* harmony import */ var _DesksCreate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DesksCreate */ "./resources/js/components/DesksCreate.vue");
+/* harmony import */ var _DTO_Desk__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../DTO/Desk */ "./resources/js/DTO/Desk.js");
 //
 //
 //
@@ -2452,6 +2453,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2476,7 +2478,9 @@ __webpack_require__.r(__webpack_exports__);
       this.loading = true;
       this.errored = false;
       axios.get(__baseURL + '/api/V1/desks').then(function (response) {
-        _this.desks = response.data.data;
+        _this.desks = [].map.call(response.data.data, function (item) {
+          return new _DTO_Desk__WEBPACK_IMPORTED_MODULE_2__["default"](item);
+        });
       })["catch"](function (error) {
         _this.errored = true;
         console.log(error);
@@ -2516,6 +2520,12 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
+/* harmony import */ var _DTO_Desk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/Desk */ "./resources/js/DTO/Desk.js");
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2549,10 +2559,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       uuid: Object(uuid__WEBPACK_IMPORTED_MODULE_0__["v4"])(),
+      desk: new _DTO_Desk__WEBPACK_IMPORTED_MODULE_1__["default"](),
       loading: false,
       errored: false
     };
@@ -2563,8 +2575,8 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/desks', new FormData(event.target)).then(function (response) {
-        _this.$emit('createDesk', response.data.data);
+      axios.post(__baseURL + '/api/V1/desks', this.desk).then(function (response) {
+        _this.$emit('createDesk', new _DTO_Desk__WEBPACK_IMPORTED_MODULE_1__["default"](response.data.data));
 
         _this.$bvModal.hide(_this.uuid);
       })["catch"](function (error) {
@@ -2589,6 +2601,11 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
+/* harmony import */ var _DTO_Desk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/Desk */ "./resources/js/DTO/Desk.js");
+//
+//
+//
+//
 //
 //
 //
@@ -2616,9 +2633,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    desk: Object
+    desk: _DTO_Desk__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
@@ -2709,6 +2727,11 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
+/* harmony import */ var _DTO_Desk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/Desk */ "./resources/js/DTO/Desk.js");
+//
+//
+//
+//
 //
 //
 //
@@ -2739,9 +2762,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    desk: Object
+    desk: _DTO_Desk__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
@@ -2756,8 +2780,11 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/desks/' + this.desk.id, new FormData(event.target)).then(function (response) {
-        _this.$emit('updateDesk', response.data.data);
+      axios //.post(__baseURL + '/api/V1/desks/' + this.desk.id, new FormData(event.target))
+      .post(__baseURL + '/api/V1/desks/' + this.desk.id, Object.assign({
+        _method: 'PUT'
+      }, this.desk)).then(function (response) {
+        _this.$emit('updateDesk', new _DTO_Desk__WEBPACK_IMPORTED_MODULE_1__["default"](response.data.data));
 
         _this.$bvModal.hide(_this.uuid);
       })["catch"](function (error) {
@@ -41085,7 +41112,15 @@ var render = function () {
       _vm._v(" "),
       _c(
         "b-modal",
-        { attrs: { id: _vm.uuid, title: "Create Desk", "hide-footer": "" } },
+        {
+          attrs: {
+            id: _vm.uuid,
+            title: "Create Desk",
+            "hide-footer": "",
+            "header-class": "py-1 px-3",
+            "body-class": "p-0",
+          },
+        },
         [
           _vm.errored
             ? _c(
@@ -41133,21 +41168,51 @@ var render = function () {
               },
             },
             [
-              _c("div", { staticClass: "form-group" }, [
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: {
-                    type: "text",
-                    name: "name",
-                    placeholder: "Enter desk name",
-                  },
-                }),
+              _c("div", { staticClass: "px-3 pt-3" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", [_vm._v("Name")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.desk.name,
+                        expression: "desk.name",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      name: "name",
+                      placeholder: "Enter desk name",
+                    },
+                    domProps: { value: _vm.desk.name },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.desk, "name", $event.target.value)
+                      },
+                    },
+                  }),
+                ]),
               ]),
               _vm._v(" "),
               _c(
-                "button",
-                { staticClass: "btn btn-success", attrs: { type: "submit" } },
-                [_vm._v("Create")]
+                "div",
+                { staticClass: "modal-footer py-1 justify-content-between" },
+                [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-sm btn-success",
+                      attrs: { type: "submit" },
+                    },
+                    [_vm._v("Create")]
+                  ),
+                ]
               ),
               _vm._v(" "),
               _vm.errored
@@ -41249,7 +41314,15 @@ var render = function () {
       _vm._v(" "),
       _c(
         "b-modal",
-        { attrs: { id: _vm.uuid, title: "Delete Desk", "hide-footer": "" } },
+        {
+          attrs: {
+            id: _vm.uuid,
+            title: "Delete Desk",
+            "hide-footer": "",
+            "header-class": "py-1 px-3",
+            "body-class": "p-0",
+          },
+        },
         [
           _vm.errored
             ? _c(
@@ -41297,16 +41370,29 @@ var render = function () {
               },
             },
             [
-              _c("p", { staticClass: "text-danger text-center" }, [
-                _vm._v(
-                  'Are you sure you want delete "' + _vm._s(_vm.desk.name) + '"'
-                ),
+              _c("div", { staticClass: "px-3 pt-3" }, [
+                _c("p", { staticClass: "text-danger text-center" }, [
+                  _vm._v(
+                    'Are you sure you want delete "' +
+                      _vm._s(_vm.desk.name) +
+                      '"'
+                  ),
+                ]),
               ]),
               _vm._v(" "),
               _c(
-                "button",
-                { staticClass: "btn btn-danger", attrs: { type: "submit" } },
-                [_vm._v("Delete")]
+                "div",
+                { staticClass: "modal-footer py-1 justify-content-between" },
+                [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-sm btn-danger",
+                      attrs: { type: "submit" },
+                    },
+                    [_vm._v("Delete")]
+                  ),
+                ]
               ),
               _vm._v(" "),
               _vm.errored
@@ -41454,7 +41540,15 @@ var render = function () {
       _vm._v(" "),
       _c(
         "b-modal",
-        { attrs: { id: _vm.uuid, title: "Update Desk", "hide-footer": "" } },
+        {
+          attrs: {
+            id: _vm.uuid,
+            title: "Update Desk",
+            "hide-footer": "",
+            "header-class": "py-1 px-3",
+            "body-class": "p-0",
+          },
+        },
         [
           _vm.errored
             ? _c(
@@ -41502,26 +41596,51 @@ var render = function () {
               },
             },
             [
-              _c("input", {
-                attrs: { type: "hidden", name: "_method", value: "PUT" },
-              }),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-group" }, [
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: {
-                    type: "text",
-                    name: "name",
-                    placeholder: "Enter desk name",
-                  },
-                  domProps: { value: _vm.desk.name },
-                }),
+              _c("div", { staticClass: "px-3 pt-3" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", [_vm._v("Name")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.desk.name,
+                        expression: "desk.name",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      name: "name",
+                      placeholder: "Enter desk name",
+                    },
+                    domProps: { value: _vm.desk.name },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.desk, "name", $event.target.value)
+                      },
+                    },
+                  }),
+                ]),
               ]),
               _vm._v(" "),
               _c(
-                "button",
-                { staticClass: "btn btn-success", attrs: { type: "submit" } },
-                [_vm._v("Update")]
+                "div",
+                { staticClass: "modal-footer py-1 justify-content-between" },
+                [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-sm btn-success",
+                      attrs: { type: "submit" },
+                    },
+                    [_vm._v("Update")]
+                  ),
+                ]
               ),
               _vm._v(" "),
               _vm.errored
@@ -61367,6 +61486,43 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./resources/js/DTO/Desk.js":
+/*!**********************************!*\
+  !*** ./resources/js/DTO/Desk.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Desk; });
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var Desk = /*#__PURE__*/_createClass(function Desk(data) {
+  _classCallCheck(this, Desk);
+
+  _defineProperty(this, "id", null);
+
+  _defineProperty(this, "name", null);
+
+  _defineProperty(this, "created_at", null);
+
+  _defineProperty(this, "updated_at", null);
+
+  Object.assign(this, data);
+});
+
+
+;
+
+/***/ }),
+
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -61400,7 +61556,16 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(_ckeditor_ckeditor5_vue2__WEBPACK
 
 
 
+ // TODO color styles for bg and other bootstrap components
 
+var colors = {
+  'primary': '#007bff',
+  'secondary': '#6c757d',
+  'info': '#17a2b8',
+  'success': '#28a745',
+  'warning': '#ffc107',
+  'danger': '#dc3545'
+};
 var router = new vue_router_dist_vue_router_min__WEBPACK_IMPORTED_MODULE_1___default.a({
   mode: 'history',
   routes: [{
