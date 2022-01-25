@@ -1,4 +1,4 @@
-export default class Desk {
+export default class DeskDTO {
     id = null;
     name = null;
     created_at = null;

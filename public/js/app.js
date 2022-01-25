@@ -512,7 +512,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DesksItem__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DesksItem */ "./resources/js/components/DesksItem.vue");
 /* harmony import */ var _DesksCreate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DesksCreate */ "./resources/js/components/DesksCreate.vue");
-/* harmony import */ var _DTO_Desk__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../DTO/Desk */ "./resources/js/DTO/Desk.js");
+/* harmony import */ var _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../DTO/DeskDTO */ "./resources/js/DTO/DeskDTO.js");
 //
 //
 //
@@ -580,7 +580,7 @@ __webpack_require__.r(__webpack_exports__);
       this.errored = false;
       axios.get(__baseURL + '/api/V1/desks').then(function (response) {
         _this.desks = [].map.call(response.data.data, function (item) {
-          return new _DTO_Desk__WEBPACK_IMPORTED_MODULE_2__["default"](item);
+          return new _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_2__["default"](item);
         });
       })["catch"](function (error) {
         _this.errored = true;
@@ -621,7 +621,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
-/* harmony import */ var _DTO_Desk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/Desk */ "./resources/js/DTO/Desk.js");
+/* harmony import */ var _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/DeskDTO */ "./resources/js/DTO/DeskDTO.js");
 //
 //
 //
@@ -665,7 +665,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       uuid: Object(uuid__WEBPACK_IMPORTED_MODULE_0__["v4"])(),
-      desk: new _DTO_Desk__WEBPACK_IMPORTED_MODULE_1__["default"](),
+      desk: new _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__["default"](),
       loading: false,
       errored: false
     };
@@ -677,7 +677,7 @@ __webpack_require__.r(__webpack_exports__);
       this.loading = true;
       this.errored = false;
       axios.post(__baseURL + '/api/V1/desks', this.desk).then(function (response) {
-        _this.$emit('createDesk', new _DTO_Desk__WEBPACK_IMPORTED_MODULE_1__["default"](response.data.data));
+        _this.$emit('createDesk', new _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__["default"](response.data.data));
 
         _this.$bvModal.hide(_this.uuid);
       })["catch"](function (error) {
@@ -702,7 +702,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
-/* harmony import */ var _DTO_Desk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/Desk */ "./resources/js/DTO/Desk.js");
+/* harmony import */ var _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/DeskDTO */ "./resources/js/DTO/DeskDTO.js");
 //
 //
 //
@@ -737,7 +737,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    desk: _DTO_Desk__WEBPACK_IMPORTED_MODULE_1__["default"]
+    desk: _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
@@ -781,7 +781,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DesksUpdate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DesksUpdate */ "./resources/js/components/DesksUpdate.vue");
 /* harmony import */ var _DesksDelete__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DesksDelete */ "./resources/js/components/DesksDelete.vue");
-/* harmony import */ var _DTO_Desk__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../DTO/Desk */ "./resources/js/DTO/Desk.js");
+/* harmony import */ var _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../DTO/DeskDTO */ "./resources/js/DTO/DeskDTO.js");
 //
 //
 //
@@ -803,7 +803,7 @@ __webpack_require__.r(__webpack_exports__);
     DesksDelete: _DesksDelete__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   props: {
-    desk: _DTO_Desk__WEBPACK_IMPORTED_MODULE_2__["default"]
+    desk: _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {};
@@ -830,7 +830,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
-/* harmony import */ var _DTO_Desk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/Desk */ "./resources/js/DTO/Desk.js");
+/* harmony import */ var _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/DeskDTO */ "./resources/js/DTO/DeskDTO.js");
 //
 //
 //
@@ -868,7 +868,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    desk: _DTO_Desk__WEBPACK_IMPORTED_MODULE_1__["default"]
+    desk: _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
@@ -883,11 +883,10 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios //.post(__baseURL + '/api/V1/desks/' + this.desk.id, new FormData(event.target))
-      .post(__baseURL + '/api/V1/desks/' + this.desk.id, Object.assign({
+      axios.post(__baseURL + '/api/V1/desks/' + this.desk.id, Object.assign({
         _method: 'PUT'
       }, this.desk)).then(function (response) {
-        _this.$emit('updateDesk', new _DTO_Desk__WEBPACK_IMPORTED_MODULE_1__["default"](response.data.data));
+        _this.$emit('updateDesk', new _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__["default"](response.data.data));
 
         _this.$bvModal.hide(_this.uuid);
       })["catch"](function (error) {
@@ -944,6 +943,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ListsCreate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ListsCreate */ "./resources/js/components/ListsCreate.vue");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.umd.js");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../DTO/ListDTO */ "./resources/js/DTO/ListDTO.js");
+/* harmony import */ var _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../DTO/DeskDTO */ "./resources/js/DTO/DeskDTO.js");
 //
 //
 //
@@ -992,6 +993,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
+
 
 
 
@@ -1016,15 +1019,17 @@ __webpack_require__.r(__webpack_exports__);
     this.loading = true;
     this.errored = false;
     axios.all([axios.get(__baseURL + '/api/V1/desks/' + this.deskId).then(function (response) {
-      _this.desk = response.data.data;
+      _this.desk = new _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_4__["default"](response.data.data);
       console.log(response);
     }), axios.get(__baseURL + '/api/V1/lists/', {
       params: {
         desk_id: this.deskId
       }
     }).then(function (response) {
-      _this.lists = response.data.data;
-      console.log(response);
+      _this.lists = [].map.call(response.data.data, function (item) {
+        return new _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_3__["default"](item);
+      });
+      console.log(_this.lists);
     })])["catch"](function (error) {
       _this.errored = true;
       console.log(error);
@@ -1065,6 +1070,11 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
+/* harmony import */ var _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/ListDTO */ "./resources/js/DTO/ListDTO.js");
+//
+//
+//
+//
 //
 //
 //
@@ -1099,6 +1109,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     deskId: Number
@@ -1106,6 +1117,9 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       uuid: Object(uuid__WEBPACK_IMPORTED_MODULE_0__["v4"])(),
+      list: new _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_1__["default"]({
+        desk_id: this.deskId
+      }),
       loading: false,
       errored: false
     };
@@ -1116,8 +1130,8 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/lists', new FormData(event.target)).then(function (response) {
-        _this.$emit('createList', response.data.data);
+      axios.post(__baseURL + '/api/V1/lists', this.list).then(function (response) {
+        _this.$emit('createList', new _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_1__["default"](response.data.data));
 
         _this.$bvModal.hide(_this.uuid);
       })["catch"](function (error) {
@@ -1142,6 +1156,11 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
+/* harmony import */ var _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/ListDTO */ "./resources/js/DTO/ListDTO.js");
+//
+//
+//
+//
 //
 //
 //
@@ -1169,9 +1188,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    list: Object
+    list: _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
@@ -1267,6 +1287,12 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
+/* harmony import */ var _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/ListDTO */ "./resources/js/DTO/ListDTO.js");
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1297,9 +1323,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    list: Object
+    list: _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
@@ -1314,8 +1341,10 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/lists/' + this.list.id, new FormData(event.target)).then(function (response) {
-        _this.$emit('updateList', response.data.data);
+      axios.post(__baseURL + '/api/V1/lists/' + this.list.id, Object.assign({
+        _method: 'PUT'
+      }, this.list)).then(function (response) {
+        _this.$emit('updateList', new _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_1__["default"](response.data.data));
 
         _this.$bvModal.hide(_this.uuid);
       })["catch"](function (error) {
@@ -29146,7 +29175,15 @@ var render = function () {
       _vm._v(" "),
       _c(
         "b-modal",
-        { attrs: { id: _vm.uuid, title: "Create List", "hide-footer": "" } },
+        {
+          attrs: {
+            id: _vm.uuid,
+            title: "Create List",
+            "hide-footer": "",
+            "header-class": "py-1 px-3",
+            "body-class": "p-0",
+          },
+        },
         [
           _vm.errored
             ? _c(
@@ -29194,26 +29231,51 @@ var render = function () {
               },
             },
             [
-              _c("input", {
-                attrs: { type: "hidden", name: "desk_id" },
-                domProps: { value: _vm.deskId },
-              }),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-group" }, [
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: {
-                    type: "text",
-                    name: "name",
-                    placeholder: "Enter list name",
-                  },
-                }),
+              _c("div", { staticClass: "px-3 pt-3" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", [_vm._v("Name")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.list.name,
+                        expression: "list.name",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      name: "name",
+                      placeholder: "Enter list name",
+                    },
+                    domProps: { value: _vm.list.name },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.list, "name", $event.target.value)
+                      },
+                    },
+                  }),
+                ]),
               ]),
               _vm._v(" "),
               _c(
-                "button",
-                { staticClass: "btn btn-success", attrs: { type: "submit" } },
-                [_vm._v("Create")]
+                "div",
+                { staticClass: "modal-footer py-1 justify-content-between" },
+                [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-sm btn-success",
+                      attrs: { type: "submit" },
+                    },
+                    [_vm._v("Create")]
+                  ),
+                ]
               ),
               _vm._v(" "),
               _vm.errored
@@ -29305,7 +29367,15 @@ var render = function () {
       _vm._v(" "),
       _c(
         "b-modal",
-        { attrs: { id: _vm.uuid, title: "Delete List", "hide-footer": "" } },
+        {
+          attrs: {
+            id: _vm.uuid,
+            title: "Delete List",
+            "hide-footer": "",
+            "header-class": "py-1 px-3",
+            "body-class": "p-0",
+          },
+        },
         [
           _vm.errored
             ? _c(
@@ -29353,16 +29423,29 @@ var render = function () {
               },
             },
             [
-              _c("p", { staticClass: "text-danger text-center" }, [
-                _vm._v(
-                  'Are you sure you want delete "' + _vm._s(_vm.list.name) + '"'
-                ),
+              _c("div", { staticClass: "px-3 pt-3" }, [
+                _c("p", { staticClass: "text-danger text-center" }, [
+                  _vm._v(
+                    'Are you sure you want delete "' +
+                      _vm._s(_vm.list.name) +
+                      '"'
+                  ),
+                ]),
               ]),
               _vm._v(" "),
               _c(
-                "button",
-                { staticClass: "btn btn-danger", attrs: { type: "submit" } },
-                [_vm._v("Delete")]
+                "div",
+                { staticClass: "modal-footer py-1 justify-content-between" },
+                [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-sm btn-danger",
+                      attrs: { type: "submit" },
+                    },
+                    [_vm._v("Delete")]
+                  ),
+                ]
               ),
               _vm._v(" "),
               _vm.errored
@@ -29514,7 +29597,15 @@ var render = function () {
       _vm._v(" "),
       _c(
         "b-modal",
-        { attrs: { id: _vm.uuid, title: "Update List", "hide-footer": "" } },
+        {
+          attrs: {
+            id: _vm.uuid,
+            title: "Update List",
+            "hide-footer": "",
+            "header-class": "py-1 px-3",
+            "body-class": "p-0",
+          },
+        },
         [
           _vm.errored
             ? _c(
@@ -29562,26 +29653,55 @@ var render = function () {
               },
             },
             [
-              _c("input", {
-                attrs: { type: "hidden", name: "_method", value: "PUT" },
-              }),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "px-3 pt-3" }, [
                 _c("input", {
-                  staticClass: "form-control",
-                  attrs: {
-                    type: "text",
-                    name: "name",
-                    placeholder: "Enter desk name",
-                  },
-                  domProps: { value: _vm.list.name },
+                  attrs: { type: "hidden", name: "_method", value: "PUT" },
                 }),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", [_vm._v("Name")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.list.name,
+                        expression: "list.name",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      name: "name",
+                      placeholder: "Enter desk name",
+                    },
+                    domProps: { value: _vm.list.name },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.list, "name", $event.target.value)
+                      },
+                    },
+                  }),
+                ]),
               ]),
               _vm._v(" "),
               _c(
-                "button",
-                { staticClass: "btn btn-success", attrs: { type: "submit" } },
-                [_vm._v("Update")]
+                "div",
+                { staticClass: "modal-footer py-1 justify-content-between" },
+                [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-sm btn-success",
+                      attrs: { type: "submit" },
+                    },
+                    [_vm._v("Update")]
+                  ),
+                ]
               ),
               _vm._v(" "),
               _vm.errored
@@ -36661,16 +36781,16 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ "./resources/js/DTO/Desk.js":
-/*!**********************************!*\
-  !*** ./resources/js/DTO/Desk.js ***!
-  \**********************************/
+/***/ "./resources/js/DTO/DeskDTO.js":
+/*!*************************************!*\
+  !*** ./resources/js/DTO/DeskDTO.js ***!
+  \*************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Desk; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return DeskDTO; });
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
@@ -36679,8 +36799,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var Desk = /*#__PURE__*/_createClass(function Desk(data) {
-  _classCallCheck(this, Desk);
+var DeskDTO = /*#__PURE__*/_createClass(function DeskDTO(data) {
+  _classCallCheck(this, DeskDTO);
 
   _defineProperty(this, "id", null);
 
@@ -36691,6 +36811,51 @@ var Desk = /*#__PURE__*/_createClass(function Desk(data) {
   _defineProperty(this, "updated_at", null);
 
   Object.assign(this, data);
+});
+
+
+;
+
+/***/ }),
+
+/***/ "./resources/js/DTO/ListDTO.js":
+/*!*************************************!*\
+  !*** ./resources/js/DTO/ListDTO.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ListDTO; });
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var ListDTO = /*#__PURE__*/_createClass(function ListDTO(data) {
+  _classCallCheck(this, ListDTO);
+
+  _defineProperty(this, "id", null);
+
+  _defineProperty(this, "desk_id", null);
+
+  _defineProperty(this, "name", null);
+
+  _defineProperty(this, "prev", 0);
+
+  _defineProperty(this, "next", 0);
+
+  _defineProperty(this, "created_at", null);
+
+  _defineProperty(this, "updated_at", null);
+
+  if (data) {
+    Object.assign(this, data);
+  }
 });
 
 

@@ -5,7 +5,7 @@
                 Create List
             </a>
         </div>
-        <b-modal :id="uuid" title="Create List" hide-footer>
+        <b-modal :id="uuid" title="Create List" hide-footer :header-class="'py-1 px-3'" body-class="p-0">
             <div v-if="errored" class="alert alert-danger p-2" role="alert">
                 <h4 class="alert-heading m-0">
                     Something went wrong
@@ -15,11 +15,15 @@
                 </h4>
             </div>
             <form @submit.prevent="createList" style="position: relative">
-                <input type="hidden" name="desk_id" :value="deskId">
-                <div class="form-group">
-                    <input type="text" class="form-control" name="name" placeholder="Enter list name">
+                <div class="px-3 pt-3">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" name="name" v-model="list.name" placeholder="Enter list name">
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-success">Create</button>
+                <div class="modal-footer py-1 justify-content-between">
+                    <button type="submit" class="btn btn-sm btn-success">Create</button>
+                </div>
                 <div v-if="errored" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)"></div>
                 <div v-if="loading" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)">
                     <div class="d-flex justify-content-center align-items-center">
@@ -33,6 +37,7 @@
 
 <script>
 import {v4 as uuid} from "uuid";
+import ListDTO from "../DTO/ListDTO";
 
 export default {
     props: {
@@ -41,6 +46,7 @@ export default {
     data() {
         return {
             uuid: uuid(),
+            list: new ListDTO({desk_id: this.deskId}),
             loading: false,
             errored: false
         };
@@ -50,9 +56,9 @@ export default {
             this.loading = true;
             this.errored = false;
             axios
-                .post(__baseURL + '/api/V1/lists', new FormData(event.target))
+                .post(__baseURL + '/api/V1/lists', this.list)
                 .then(response => {
-                    this.$emit('createList', response.data.data);
+                    this.$emit('createList', new ListDTO(response.data.data));
                     this.$bvModal.hide(this.uuid);
                 })
                 .catch(error => {

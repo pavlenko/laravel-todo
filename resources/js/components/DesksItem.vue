@@ -13,12 +13,12 @@
 <script>
 import DesksUpdate from "./DesksUpdate";
 import DesksDelete from "./DesksDelete";
-import Desk from "../DTO/Desk";
+import DeskDTO from "../DTO/DeskDTO";
 
 export default {
     components: {DesksUpdate, DesksDelete},
     props: {
-        desk: Desk
+        desk: DeskDTO
     },
     data() {
         return {}

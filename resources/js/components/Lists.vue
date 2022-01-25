@@ -50,6 +50,8 @@
 import ListsItem from "./ListsItem";
 import ListsCreate from "./ListsCreate";
 import draggable from "vuedraggable";
+import ListDTO from "../DTO/ListDTO";
+import DeskDTO from "../DTO/DeskDTO";
 
 export default {
     components: {ListsItem, ListsCreate, draggable},
@@ -70,14 +72,14 @@ export default {
                 axios
                     .get(__baseURL + '/api/V1/desks/' + this.deskId)
                     .then(response => {
-                        this.desk = response.data.data;
+                        this.desk = new DeskDTO(response.data.data);
                         console.log(response);
                     }),
                 axios
                     .get(__baseURL + '/api/V1/lists/', {params: {desk_id: this.deskId}})
                     .then(response => {
-                        this.lists = response.data.data;
-                        console.log(response);
+                        this.lists = [].map.call(response.data.data, item => new ListDTO(item));
+                        console.log(this.lists);
                     })
             ])
             .catch(error => { this.errored = true; console.log(error); })

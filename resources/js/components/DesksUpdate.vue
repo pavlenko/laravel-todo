@@ -33,11 +33,11 @@
 
 <script>
 import {v4 as uuid} from "uuid";
-import Desk from "../DTO/Desk";
+import DeskDTO from "../DTO/DeskDTO";
 
 export default {
     props: {
-        desk: Desk
+        desk: DeskDTO
     },
     data() {
         return {
@@ -51,10 +51,9 @@ export default {
             this.loading = true;
             this.errored = false;
             axios
-                //.post(__baseURL + '/api/V1/desks/' + this.desk.id, new FormData(event.target))
                 .post(__baseURL + '/api/V1/desks/' + this.desk.id, Object.assign({_method: 'PUT'}, this.desk))
                 .then(response => {
-                    this.$emit('updateDesk', new Desk(response.data.data));
+                    this.$emit('updateDesk', new DeskDTO(response.data.data));
                     this.$bvModal.hide(this.uuid);
                 })
                 .catch(error => {

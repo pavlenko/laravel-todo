@@ -42,7 +42,7 @@
 <script>
 import DesksItem from "./DesksItem";
 import DesksCreate from "./DesksCreate";
-import Desk from "../DTO/Desk";
+import DeskDTO from "../DTO/DeskDTO";
 
 export default {
     components: {DesksItem, DesksCreate},
@@ -63,7 +63,7 @@ export default {
             axios
                 .get(__baseURL + '/api/V1/desks')
                 .then(response => {
-                    this.desks = [].map.call(response.data.data, item => new Desk(item));
+                    this.desks = [].map.call(response.data.data, item => new DeskDTO(item));
                 })
                 .catch(error => {
                     this.errored = true;

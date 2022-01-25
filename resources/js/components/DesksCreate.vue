@@ -37,13 +37,13 @@
 
 <script>
 import {v4 as uuid} from 'uuid';
-import Desk from "../DTO/Desk";
+import DeskDTO from "../DTO/DeskDTO";
 
 export default {
     data() {
         return {
             uuid: uuid(),
-            desk: new Desk(),
+            desk: new DeskDTO(),
             loading: false,
             errored: false
         };
@@ -55,7 +55,7 @@ export default {
             axios
                 .post(__baseURL + '/api/V1/desks', this.desk)
                 .then(response => {
-                    this.$emit('createDesk', new Desk(response.data.data));
+                    this.$emit('createDesk', new DeskDTO(response.data.data));
                     this.$bvModal.hide(this.uuid);
                 })
                 .catch(error => {

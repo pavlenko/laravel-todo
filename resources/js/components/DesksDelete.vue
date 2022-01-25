@@ -30,11 +30,11 @@
 
 <script>
 import {v4 as uuid} from "uuid";
-import Desk from "../DTO/Desk";
+import DeskDTO from "../DTO/DeskDTO";
 
 export default {
     props: {
-        desk: Desk
+        desk: DeskDTO
     },
     data() {
         return {
