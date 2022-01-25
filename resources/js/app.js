@@ -14,6 +14,16 @@ import Home from "./components/Home";
 import Desks from './components/Desks';
 import Lists from './components/Lists';
 
+// TODO color styles for bg and other bootstrap components
+const colors = {
+    'primary': '#007bff',
+    'secondary': '#6c757d',
+    'info': '#17a2b8',
+    'success': '#28a745',
+    'warning': '#ffc107',
+    'danger': '#dc3545',
+};
+
 const router = new VueRouter({
     mode: 'history',
     routes: [
