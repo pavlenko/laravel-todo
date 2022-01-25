@@ -73,13 +73,11 @@ export default {
                     .get(__baseURL + '/api/V1/desks/' + this.deskId)
                     .then(response => {
                         this.desk = new DeskDTO(response.data.data);
-                        console.log(response);
                     }),
                 axios
                     .get(__baseURL + '/api/V1/lists/', {params: {desk_id: this.deskId}})
                     .then(response => {
                         this.lists = [].map.call(response.data.data, item => new ListDTO(item));
-                        console.log(this.lists);
                     })
             ])
             .catch(error => { this.errored = true; console.log(error); })

@@ -108,6 +108,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CardsCreate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CardsCreate */ "./resources/js/components/CardsCreate.vue");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.umd.js");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../DTO/CardDTO */ "./resources/js/DTO/CardDTO.js");
 //
 //
 //
@@ -126,6 +127,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
@@ -153,8 +155,9 @@ __webpack_require__.r(__webpack_exports__);
         list_id: this.listId
       }
     }).then(function (response) {
-      _this.cards = response.data.data;
-      console.log(response);
+      _this.cards = [].map.call(response.data.data, function (item) {
+        return new _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_3__["default"](item);
+      });
     })["catch"](function (error) {
       console.log(error);
     })["finally"](function () {
@@ -196,6 +199,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
 /* harmony import */ var _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ckeditor/ckeditor5-build-classic */ "./node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js");
 /* harmony import */ var _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../DTO/CardDTO */ "./resources/js/DTO/CardDTO.js");
 //
 //
 //
@@ -232,6 +236,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -241,6 +251,9 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       uuid: Object(uuid__WEBPACK_IMPORTED_MODULE_0__["v4"])(),
+      card: new _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_2__["default"]({
+        list_id: this.listId
+      }),
       loading: false,
       errored: false,
       editor: _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_1___default.a,
@@ -253,8 +266,8 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/cards', new FormData(event.target)).then(function (response) {
-        _this.$emit('createCard', response.data.data);
+      axios.post(__baseURL + '/api/V1/cards', this.card).then(function (response) {
+        _this.$emit('createCard', new _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_2__["default"](response.data.data));
 
         _this.$bvModal.hide(_this.uuid);
       })["catch"](function (error) {
@@ -279,6 +292,11 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
+/* harmony import */ var _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/CardDTO */ "./resources/js/DTO/CardDTO.js");
+//
+//
+//
+//
 //
 //
 //
@@ -306,9 +324,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    card: Object
+    card: _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
@@ -425,6 +444,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ckeditor/ckeditor5-build-classic */ "./node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js");
 /* harmony import */ var _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Tasks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Tasks */ "./resources/js/components/Tasks.vue");
+/* harmony import */ var _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../DTO/CardDTO */ "./resources/js/DTO/CardDTO.js");
 //
 //
 //
@@ -457,6 +477,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+
 
 
 
@@ -465,7 +490,7 @@ __webpack_require__.r(__webpack_exports__);
     Tasks: _Tasks__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   props: {
-    card: Object
+    card: _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   data: function data() {
     return {
@@ -486,7 +511,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.post(__baseURL + '/api/V1/cards/' + this.card.id, Object.assign({
         _method: 'PUT'
       }, this.card)).then(function (response) {
-        _this.$emit('updateCard', response.data.data);
+        _this.$emit('updateCard', new _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_3__["default"](response.data.data));
 
         _this.$bvModal.hide(_this.uuid);
       })["catch"](function (error) {
@@ -1020,7 +1045,6 @@ __webpack_require__.r(__webpack_exports__);
     this.errored = false;
     axios.all([axios.get(__baseURL + '/api/V1/desks/' + this.deskId).then(function (response) {
       _this.desk = new _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_4__["default"](response.data.data);
-      console.log(response);
     }), axios.get(__baseURL + '/api/V1/lists/', {
       params: {
         desk_id: this.deskId
@@ -1029,7 +1053,6 @@ __webpack_require__.r(__webpack_exports__);
       _this.lists = [].map.call(response.data.data, function (item) {
         return new _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_3__["default"](item);
       });
-      console.log(_this.lists);
     })])["catch"](function (error) {
       _this.errored = true;
       console.log(error);
@@ -27637,7 +27660,15 @@ var render = function () {
       _vm._v(" "),
       _c(
         "b-modal",
-        { attrs: { id: _vm.uuid, title: "Create Card", "hide-footer": "" } },
+        {
+          attrs: {
+            id: _vm.uuid,
+            title: "Create Card",
+            "hide-footer": "",
+            "header-class": "py-1 px-3",
+            "body-class": "p-0",
+          },
+        },
         [
           _vm.errored
             ? _c(
@@ -27685,42 +27716,71 @@ var render = function () {
               },
             },
             [
-              _c("input", {
-                attrs: { type: "hidden", name: "list_id" },
-                domProps: { value: _vm.listId },
-              }),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-group" }, [
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: {
-                    type: "text",
-                    name: "name",
-                    placeholder: "Enter Card name",
-                  },
-                }),
+              _c("div", { staticClass: "px-3 pt-3" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", [_vm._v("Name")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.card.name,
+                        expression: "card.name",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      name: "name",
+                      placeholder: "Enter Card name",
+                    },
+                    domProps: { value: _vm.card.name },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.card, "name", $event.target.value)
+                      },
+                    },
+                  }),
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-group" },
+                  [
+                    _c("label", [_vm._v("Text")]),
+                    _vm._v(" "),
+                    _c("ckeditor", {
+                      attrs: { editor: _vm.editor, config: _vm.editorConfig },
+                      model: {
+                        value: _vm.card.text,
+                        callback: function ($$v) {
+                          _vm.$set(_vm.card, "text", $$v)
+                        },
+                        expression: "card.text",
+                      },
+                    }),
+                  ],
+                  1
+                ),
               ]),
               _vm._v(" "),
               _c(
                 "div",
-                { staticClass: "form-group" },
+                { staticClass: "modal-footer py-1 justify-content-between" },
                 [
-                  _c("ckeditor", {
-                    attrs: {
-                      editor: _vm.editor,
-                      "tag-name": "textarea",
-                      name: "text",
-                      config: _vm.editorConfig,
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-sm btn-success",
+                      attrs: { type: "submit" },
                     },
-                  }),
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                { staticClass: "btn btn-success", attrs: { type: "submit" } },
-                [_vm._v("Create")]
+                    [_vm._v("Create")]
+                  ),
+                ]
               ),
               _vm._v(" "),
               _vm.errored
@@ -27812,7 +27872,15 @@ var render = function () {
       _vm._v(" "),
       _c(
         "b-modal",
-        { attrs: { id: _vm.uuid, title: "Delete List", "hide-footer": "" } },
+        {
+          attrs: {
+            id: _vm.uuid,
+            title: "Delete List",
+            "hide-footer": "",
+            "header-class": "py-1 px-3",
+            "body-class": "p-0",
+          },
+        },
         [
           _vm.errored
             ? _c(
@@ -27860,16 +27928,29 @@ var render = function () {
               },
             },
             [
-              _c("p", { staticClass: "text-danger text-center" }, [
-                _vm._v(
-                  'Are you sure you want delete "' + _vm._s(_vm.card.name) + '"'
-                ),
+              _c("div", { staticClass: "px-3 pt-3" }, [
+                _c("p", { staticClass: "text-danger text-center" }, [
+                  _vm._v(
+                    'Are you sure you want delete "' +
+                      _vm._s(_vm.card.name) +
+                      '"'
+                  ),
+                ]),
               ]),
               _vm._v(" "),
               _c(
-                "button",
-                { staticClass: "btn btn-danger", attrs: { type: "submit" } },
-                [_vm._v("Delete")]
+                "div",
+                { staticClass: "modal-footer py-1 justify-content-between" },
+                [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger",
+                      attrs: { type: "submit" },
+                    },
+                    [_vm._v("Delete")]
+                  ),
+                ]
               ),
               _vm._v(" "),
               _vm.errored
@@ -28022,6 +28103,7 @@ var render = function () {
             title: "Update List",
             "hide-footer": "",
             "header-class": "py-1 px-3",
+            "body-class": "p-0",
           },
         },
         [
@@ -28071,61 +28153,67 @@ var render = function () {
               },
             },
             [
-              _c("div", { staticClass: "form-group" }, [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.card.name,
-                      expression: "card.name",
+              _c("div", { staticClass: "px-3 pt-3" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.card.name,
+                        expression: "card.name",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      name: "name",
+                      placeholder: "Enter desk name",
                     },
+                    domProps: { value: _vm.card.name },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.card, "name", $event.target.value)
+                      },
+                    },
+                  }),
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-group" },
+                  [
+                    _c("ckeditor", {
+                      attrs: { editor: _vm.editor, config: _vm.editorConfig },
+                      model: {
+                        value: _vm.card.text,
+                        callback: function ($$v) {
+                          _vm.$set(_vm.card, "text", $$v)
+                        },
+                        expression: "card.text",
+                      },
+                    }),
                   ],
-                  staticClass: "form-control",
-                  attrs: {
-                    type: "text",
-                    name: "name",
-                    placeholder: "Enter desk name",
-                  },
-                  domProps: { value: _vm.card.name },
-                  on: {
-                    input: function ($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.card, "name", $event.target.value)
-                    },
-                  },
-                }),
+                  1
+                ),
               ]),
               _vm._v(" "),
               _c(
                 "div",
-                { staticClass: "form-group" },
+                { staticClass: "modal-footer py-1 justify-content-between" },
                 [
-                  _c("ckeditor", {
-                    attrs: {
-                      editor: _vm.editor,
-                      "tag-name": "textarea",
-                      name: "text",
-                      config: _vm.editorConfig,
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-sm btn-success",
+                      attrs: { type: "submit" },
                     },
-                    model: {
-                      value: _vm.card.text,
-                      callback: function ($$v) {
-                        _vm.$set(_vm.card, "text", $$v)
-                      },
-                      expression: "card.text",
-                    },
-                  }),
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                { staticClass: "btn btn-success", attrs: { type: "submit" } },
-                [_vm._v("Update")]
+                    [_vm._v("Update")]
+                  ),
+                ]
               ),
               _vm._v(" "),
               _vm.errored
@@ -36781,6 +36869,53 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./resources/js/DTO/CardDTO.js":
+/*!*************************************!*\
+  !*** ./resources/js/DTO/CardDTO.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return CardDTO; });
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var CardDTO = /*#__PURE__*/_createClass(function CardDTO(data) {
+  _classCallCheck(this, CardDTO);
+
+  _defineProperty(this, "id", null);
+
+  _defineProperty(this, "list_id", null);
+
+  _defineProperty(this, "name", null);
+
+  _defineProperty(this, "text", null);
+
+  _defineProperty(this, "prev", 0);
+
+  _defineProperty(this, "next", 0);
+
+  _defineProperty(this, "created_at", null);
+
+  _defineProperty(this, "updated_at", null);
+
+  if (data) {
+    Object.assign(this, data);
+  }
+});
+
+
+;
+
+/***/ }),
+
 /***/ "./resources/js/DTO/DeskDTO.js":
 /*!*************************************!*\
   !*** ./resources/js/DTO/DeskDTO.js ***!
@@ -36810,7 +36945,9 @@ var DeskDTO = /*#__PURE__*/_createClass(function DeskDTO(data) {
 
   _defineProperty(this, "updated_at", null);
 
-  Object.assign(this, data);
+  if (data) {
+    Object.assign(this, data);
+  }
 });
 
 

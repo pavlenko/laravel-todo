@@ -5,7 +5,7 @@
                 Create Card
             </a>
         </div>
-        <b-modal :id="uuid" title="Create Card" hide-footer>
+        <b-modal :id="uuid" title="Create Card" hide-footer :header-class="'py-1 px-3'" body-class="p-0">
             <div v-if="errored" class="alert alert-danger p-2" role="alert">
                 <h4 class="alert-heading m-0">
                     Something went wrong
@@ -15,14 +15,19 @@
                 </h4>
             </div>
             <form @submit.prevent="createCard" style="position: relative">
-                <input type="hidden" name="list_id" :value="listId">
-                <div class="form-group">
-                    <input type="text" class="form-control" name="name" placeholder="Enter Card name">
+                <div class="px-3 pt-3">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" name="name" v-model="card.name" placeholder="Enter Card name">
+                    </div>
+                    <div class="form-group">
+                        <label>Text</label>
+                        <ckeditor :editor="editor" :config="editorConfig" v-model="card.text"></ckeditor>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <ckeditor :editor="editor" tag-name="textarea" name="text" :config="editorConfig"></ckeditor>
+                <div class="modal-footer py-1 justify-content-between">
+                    <button type="submit" class="btn btn-sm btn-success">Create</button>
                 </div>
-                <button type="submit" class="btn btn-success">Create</button>
                 <div v-if="errored" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)"></div>
                 <div v-if="loading" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)">
                     <div class="d-flex justify-content-center align-items-center">
@@ -37,6 +42,7 @@
 <script>
 import {v4 as uuid} from "uuid";
 import Editor from '@ckeditor/ckeditor5-build-classic';
+import CardDTO from "../DTO/CardDTO";
 
 export default {
     props: {
@@ -45,6 +51,7 @@ export default {
     data() {
         return {
             uuid: uuid(),
+            card: new CardDTO({list_id: this.listId}),
             loading: false,
             errored: false,
             editor: Editor,
@@ -56,9 +63,9 @@ export default {
             this.loading = true;
             this.errored = false;
             axios
-                .post(__baseURL + '/api/V1/cards', new FormData(event.target))
+                .post(__baseURL + '/api/V1/cards', this.card)
                 .then(response => {
-                    this.$emit('createCard', response.data.data);
+                    this.$emit('createCard', new CardDTO(response.data.data));
                     this.$bvModal.hide(this.uuid);
                 })
                 .catch(error => {

@@ -20,6 +20,7 @@
 import CardsItem from "./CardsItem";
 import CardsCreate from "./CardsCreate";
 import draggable from "vuedraggable";
+import CardDTO from "../DTO/CardDTO";
 
 export default {
     components: {CardsItem, CardsCreate, draggable},
@@ -37,8 +38,7 @@ export default {
         axios
             .get(__baseURL + '/api/V1/cards/', {params: {list_id: this.listId}})
             .then(response => {
-                this.cards = response.data.data;
-                console.log(response);
+                this.cards = [].map.call(response.data.data, item => new CardDTO(item));
             })
             .catch(error => { console.log(error); })
             .finally(() => { this.loading = false; });
