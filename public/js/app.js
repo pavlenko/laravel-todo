@@ -2680,6 +2680,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DesksUpdate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DesksUpdate */ "./resources/js/components/DesksUpdate.vue");
 /* harmony import */ var _DesksDelete__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DesksDelete */ "./resources/js/components/DesksDelete.vue");
+/* harmony import */ var _DTO_Desk__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../DTO/Desk */ "./resources/js/DTO/Desk.js");
 //
 //
 //
@@ -2692,6 +2693,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2700,7 +2702,7 @@ __webpack_require__.r(__webpack_exports__);
     DesksDelete: _DesksDelete__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   props: {
-    desk: Object
+    desk: _DTO_Desk__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {};
@@ -41089,7 +41091,7 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "col-md-4 col-sm-6" },
+    { staticClass: "col-xl-3 col-md-4 col-sm-6" },
     [
       _c(
         "a",
@@ -41460,7 +41462,7 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col-md-4 col-sm-6" }, [
+  return _c("div", { staticClass: "col-xl-3 col-md-4 col-sm-6" }, [
     _c(
       "div",
       {

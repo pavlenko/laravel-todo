@@ -1,5 +1,5 @@
 <template>
-    <div class="col-md-4 col-sm-6">
+    <div class="col-xl-3 col-md-4 col-sm-6">
         <a class="info-box p-2 d-flex justify-content-center align-items-center btn" href="#" v-b-modal="uuid" style="max-height: 80px;">
             <span>
                 <i class="far fa-plus"></i> Create desk

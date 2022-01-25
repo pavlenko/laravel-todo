@@ -1,5 +1,5 @@
 <template>
-    <div class="col-md-4 col-sm-6">
+    <div class="col-xl-3 col-md-4 col-sm-6">
         <div class="info-box bg-info justify-content-between align-items-start overflow-hidden" style="max-height: 80px;">
             <router-link class="flex-grow-1 text-decoration-none mr-1" :to="{name: 'lists', params: {id: desk.id}}">
                 {{ desk.name }}
@@ -13,11 +13,12 @@
 <script>
 import DesksUpdate from "./DesksUpdate";
 import DesksDelete from "./DesksDelete";
+import Desk from "../DTO/Desk";
 
 export default {
     components: {DesksUpdate, DesksDelete},
     props: {
-        desk: Object
+        desk: Desk
     },
     data() {
         return {}
