@@ -11,6 +11,8 @@ const Visualizer = require('webpack-visualizer-plugin');
  |
  */
 
+mix.extract(['vue', 'jquery', 'axios']);
+
 mix
     .js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
