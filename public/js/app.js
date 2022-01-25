@@ -371,6 +371,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CardsUpdate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CardsUpdate */ "./resources/js/components/CardsUpdate.vue");
 /* harmony import */ var _CardsDelete__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CardsDelete */ "./resources/js/components/CardsDelete.vue");
+/* harmony import */ var _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../DTO/CardDTO */ "./resources/js/DTO/CardDTO.js");
 //
 //
 //
@@ -392,23 +393,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -417,7 +402,7 @@ __webpack_require__.r(__webpack_exports__);
     CardsDelete: _CardsDelete__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   props: {
-    card: Object
+    card: _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   methods: {
     updateCard: function updateCard(card) {
@@ -28018,38 +28003,29 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "card card-info card-outline" }, [
-    _c("div", { staticClass: "card-header" }, [
-      _c("h5", { staticClass: "card-title" }, [_vm._v(_vm._s(_vm.card.name))]),
+  return _c(
+    "div",
+    {
+      staticClass:
+        "info-box justify-content-between align-items-start overflow-hidden border-top border-primary",
+    },
+    [
+      _c("div", { staticClass: "flex-grow-1" }, [
+        _vm._v(_vm._s(_vm.card.name)),
+      ]),
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "card-tools" },
-        [
-          _c(
-            "a",
-            { staticClass: "btn btn-tool btn-link", attrs: { href: "#" } },
-            [_vm._v("#3")]
-          ),
-          _vm._v(" "),
-          _c("cards-update", {
-            attrs: { card: _vm.card },
-            on: { updateCard: _vm.updateCard },
-          }),
-          _vm._v(" "),
-          _c("cards-delete", {
-            attrs: { card: _vm.card },
-            on: { deleteCard: _vm.deleteCard },
-          }),
-        ],
-        1
-      ),
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "card-body" }, [
-      _vm._v("\n        TODO content\n        "),
-    ]),
-  ])
+      _c("cards-update", {
+        attrs: { card: _vm.card },
+        on: { updateCard: _vm.updateCard },
+      }),
+      _vm._v(" "),
+      _c("cards-delete", {
+        attrs: { card: _vm.card },
+        on: { deleteCard: _vm.deleteCard },
+      }),
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
