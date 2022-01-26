@@ -22,7 +22,7 @@
                     </div>
                     <div class="form-group">
                         <label>Text</label>
-                        <ckeditor :editor="editor" :config="editorConfig" v-model="card.text"></ckeditor>
+<!--                        <ckeditor :editor="editor" :config="editorConfig" v-model="card.text"></ckeditor>-->
                     </div>
                 </div>
                 <div class="modal-footer py-1 justify-content-between">
@@ -41,7 +41,7 @@
 
 <script>
 import {v4 as uuid} from "uuid";
-import Editor from '@ckeditor/ckeditor5-build-classic';
+//import Editor from '@ckeditor/ckeditor5-build-classic';
 import CardDTO from "../DTO/CardDTO";
 
 export default {
@@ -54,7 +54,8 @@ export default {
             card: new CardDTO({list_id: this.listId}),
             loading: false,
             errored: false,
-            editor: Editor,
+            //editor: Editor,
+            editor: null,
             editorConfig: {}
         };
     },

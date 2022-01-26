@@ -16,7 +16,7 @@
                         <input type="text" class="form-control" name="name" v-model="card.name" placeholder="Enter desk name">
                     </div>
                     <div class="form-group">
-                        <ckeditor :editor="editor" :config="editorConfig" v-model="card.text"></ckeditor>
+<!--                        <ckeditor :editor="editor" :config="editorConfig" v-model="card.text"></ckeditor>-->
                     </div>
                 </div>
                 <div class="modal-footer py-1 justify-content-between">
@@ -36,7 +36,7 @@
 
 <script>
 import {v4 as uuid} from "uuid";
-import Editor from '@ckeditor/ckeditor5-build-classic';
+//import Editor from '@ckeditor/ckeditor5-build-classic';
 import Tasks from "./Tasks";
 import CardDTO from "../DTO/CardDTO";
 
@@ -50,7 +50,8 @@ export default {
             uuid: uuid(),
             loading: false,
             errored: false,
-            editor: Editor,
+            //editor: Editor,
+            editor: null,
             editorData: 'AAA',
             editorConfig: {}
         };
