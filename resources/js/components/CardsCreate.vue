@@ -20,10 +20,6 @@
                         <label>Name</label>
                         <input type="text" class="form-control" name="name" v-model="card.name" placeholder="Enter Card name">
                     </div>
-                    <div class="form-group">
-                        <label>Text</label>
-<!--                        <ckeditor :editor="editor" :config="editorConfig" v-model="card.text"></ckeditor>-->
-                    </div>
                 </div>
                 <div class="modal-footer py-1 justify-content-between">
                     <button type="submit" class="btn btn-sm btn-success">Create</button>
@@ -41,7 +37,6 @@
 
 <script>
 import {v4 as uuid} from "uuid";
-//import Editor from '@ckeditor/ckeditor5-build-classic';
 import CardDTO from "../DTO/CardDTO";
 
 export default {
@@ -53,10 +48,7 @@ export default {
             uuid: uuid(),
             card: new CardDTO({list_id: this.listId}),
             loading: false,
-            errored: false,
-            //editor: Editor,
-            editor: null,
-            editorConfig: {}
+            errored: false
         };
     },
     methods: {

@@ -203,11 +203,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
- //import Editor from '@ckeditor/ckeditor5-build-classic';
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -221,10 +216,7 @@ __webpack_require__.r(__webpack_exports__);
         list_id: this.listId
       }),
       loading: false,
-      errored: false,
-      //editor: Editor,
-      editor: null,
-      editorConfig: {}
+      errored: false
     };
   },
   methods: {
@@ -27608,7 +27600,7 @@ var render = function () {
               staticClass: "card-body p-1 d-flex btn",
               attrs: { href: "#" },
             },
-            [_vm._v("\n                Create Card\n            ")]
+            [_vm._v("\n            Create Card\n        ")]
           ),
         ]
       ),
@@ -27635,7 +27627,7 @@ var render = function () {
                 [
                   _c("h4", { staticClass: "alert-heading m-0" }, [
                     _vm._v(
-                      "\n                    Something went wrong\n                    "
+                      "\n                Something went wrong\n                "
                     ),
                     _c(
                       "button",
@@ -27650,7 +27642,7 @@ var render = function () {
                       },
                       [
                         _vm._v(
-                          "\n                        Try again\n                    "
+                          "\n                    Try again\n                "
                         ),
                       ]
                     ),
@@ -27700,10 +27692,6 @@ var render = function () {
                       },
                     },
                   }),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", [_vm._v("Text")]),
                 ]),
               ]),
               _vm._v(" "),
