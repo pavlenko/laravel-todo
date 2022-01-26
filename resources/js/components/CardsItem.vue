@@ -3,13 +3,10 @@
         <div class="flex-grow-1">{{ card.name }}</div>
 <!--        <cards-update :card="card" @updateCard="updateCard"></cards-update>-->
         <cards-delete :card="card" @deleteCard="deleteCard"></cards-delete>
-        <b-modal :id="uuid" hide-footer :header-class="'py-1 px-3'">
-            <template #modal-header>
-                <h5><i class="far fa-fw fa-credit-card"></i> {{ card.name }}</h5>
-                <button type="button" aria-label="Close" class="close">×</button>
-            </template>
+        <b-modal :id="uuid" title="Edit Card" hide-footer :header-class="'py-1 px-3'">
+            <h5><i class="far fa-fw fa-credit-card"></i> {{ card.name }}</h5>
             <h5><i class="far fa-fw fa-align-left"></i> Description</h5>
-            <div class="flex-grow-1 ml-2" v-html="card.text"></div>
+            <div class="flex-grow-1 ml-2" v-html="card.text" ref="text" @click="editText"></div>
             <tasks :card-id="card.id"></tasks>
         </b-modal>
     </div>
@@ -22,6 +19,17 @@ import CardsDelete from "./CardsDelete";
 import Tasks from "./Tasks";
 import CardDTO from "../DTO/CardDTO";
 
+//import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
+// Import this component
+//import Trumbowyg from 'vue-trumbowyg';
+
+// Import editor css
+//import 'trumbowyg/dist/ui/trumbowyg.css';
+
+import 'summernote/dist/summernote-bs4.min';
+import 'summernote/dist/summernote-bs4.min.css';
+
 export default {
     components: {CardsUpdate, CardsDelete, Tasks},
     props: {
@@ -29,10 +37,49 @@ export default {
     },
     data() {
         return {
-            uuid: uuid()
+            uuid: uuid(),
+            editor: null
         };
     },
     methods: {
+        editText() {
+            //TODO optimize usage
+            $(this.$refs.text)
+                .summernote({
+                    dialogsInBody: true,
+                    callbacks: {
+                        onBlur: function() {
+                            console.log('Editable area loses focus');
+                            //this.viewText();
+                        }.bind(this)
+                    }
+                })
+                .summernote('focus');
+
+            // this.editor = ClassicEditor
+            //     .create(this.$refs.text)
+            //     .then(editor => {
+            //         editor.editing.view.focus();
+            //         editor.ui.focusTracker.on('change:isFocused', (evt, name, isFocused) => {
+            //             if (!isFocused) {
+            //                 // Do whatever you want with current editor data:
+            //                 console.log(editor.getData());
+            //                 editor.destroy();
+            //                 //TODO call save only if changed content
+            //             }
+            //         });
+            //         this.editor = editor;
+            //     })
+            //     .catch(error => { console.error(error); });
+        },
+        viewText() {
+            $(this.$refs.text)
+                .summernote('destroy');
+            //TODO destroy editor
+            // if (this.editor) {
+            //     this.editor.destroy();
+            // }
+        },
         updateCard(card) { this.$emit('updateCard', card); },
         deleteCard(card) { this.$emit('deleteCard', card); }
     }

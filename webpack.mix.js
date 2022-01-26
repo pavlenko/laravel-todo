@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const webpack = require('webpack');
 const Visualizer = require('webpack-visualizer-plugin');
 /*
  |--------------------------------------------------------------------------
@@ -17,6 +18,17 @@ mix
     .js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .webpackConfig({
-        plugins: [new Visualizer()],
+        resolve: {
+            alias: {
+                jQuery: path.resolve(__dirname, 'node_modules/jquery/dist/jquery.js')
+            }
+        },
+        plugins: [
+            new webpack.ProvidePlugin({
+                $: "jquery",
+                jQuery: "jquery"
+            }),
+            new Visualizer()
+        ],
     })
 ;
