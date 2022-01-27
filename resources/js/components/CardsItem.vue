@@ -21,15 +21,6 @@ import CardDTO from "../DTO/CardDTO";
 
 //import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-// Import this component
-//import Trumbowyg from 'vue-trumbowyg';
-
-// Import editor css
-//import 'trumbowyg/dist/ui/trumbowyg.css';
-
-import 'summernote/dist/summernote-bs4.min';
-import 'summernote/dist/summernote-bs4.min.css';
-
 export default {
     components: {CardsUpdate, CardsDelete, Tasks},
     props: {
@@ -44,18 +35,6 @@ export default {
     methods: {
         editText() {
             //TODO optimize usage
-            $(this.$refs.text)
-                .summernote({
-                    dialogsInBody: true,
-                    callbacks: {
-                        onBlur: function() {
-                            console.log('Editable area loses focus');
-                            //this.viewText();
-                        }.bind(this)
-                    }
-                })
-                .summernote('focus');
-
             // this.editor = ClassicEditor
             //     .create(this.$refs.text)
             //     .then(editor => {
@@ -73,8 +52,6 @@ export default {
             //     .catch(error => { console.error(error); });
         },
         viewText() {
-            $(this.$refs.text)
-                .summernote('destroy');
             //TODO destroy editor
             // if (this.editor) {
             //     this.editor.destroy();
