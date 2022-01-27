@@ -12,7 +12,7 @@ const Visualizer = require('webpack-visualizer-plugin');
  |
  */
 
-mix.extract(['vue', 'jquery', 'axios']);
+mix.extract(['vue', 'jquery', 'bootstrap', 'axios']);
 
 mix
     .js('resources/js/app.js', 'public/js')
