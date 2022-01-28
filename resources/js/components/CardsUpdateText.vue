@@ -4,8 +4,6 @@
         <div class="form-group flex-grow-1">
             <h5>Description</h5>
             <div v-html="value" ref="text" @click="onFocus"></div>
-<!--            <textarea v-if="editing" v-model="value"></textarea>-->
-<!--            <editor v-model="card.text" @blur="editing = false"></editor>-->
         </div>
     </div>
 </template>

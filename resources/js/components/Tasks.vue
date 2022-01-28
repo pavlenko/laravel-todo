@@ -1,28 +1,31 @@
 <template>
-    <div>
-        <h5><i class="far fa-fw fa-tasks"></i> Tasks</h5>
-        <div v-if="loading" class="d-flex justify-content-center">
-            <div class="spinner-border" role="status" aria-hidden="true"></div>
+    <div class="d-flex justify-content-between">
+        <h5 class="mr-3"><i class="far fa-fw fa-tasks"></i></h5>
+        <div class="flex-grow-1">
+            <h5>Tasks</h5>
+            <div v-if="loading" class="d-flex justify-content-center">
+                <div class="spinner-border" role="status" aria-hidden="true"></div>
+            </div>
+            <div v-if="errored" class="alert alert-danger p-2" role="alert">
+                <h4 class="alert-heading m-0">
+                    Something went wrong
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" TODO-click="load">
+                        Try again
+                    </button>
+                </h4>
+            </div>
+            <draggable
+                v-model="tasks"
+                :forceFallback="true"
+                @start="dragging = true"
+                @end="dragging = false"
+                tag="ul"
+                class="list-group"
+                :class="{'mb-3': tasks.length > 0}">
+                <tasks-item v-for="task in tasks" :key="task.id" :task="task" @updateTask="updateTask" @deleteTask="deleteTask"></tasks-item>
+            </draggable>
+            <tasks-create :card-id="cardId" @createTask="createTask"></tasks-create>
         </div>
-        <div v-if="errored" class="alert alert-danger p-2" role="alert">
-            <h4 class="alert-heading m-0">
-                Something went wrong
-                <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" TODO-click="load">
-                    Try again
-                </button>
-            </h4>
-        </div>
-        <draggable
-            v-model="tasks"
-            :forceFallback="true"
-            @start="dragging = true"
-            @end="dragging = false"
-            tag="ul"
-            class="list-group"
-            :class="{'mb-3': tasks.length > 0}">
-            <tasks-item v-for="task in tasks" :key="task.id" :task="task" @updateTask="updateTask" @deleteTask="deleteTask"></tasks-item>
-        </draggable>
-        <tasks-create :card-id="cardId" @createTask="createTask"></tasks-create>
     </div>
 </template>
 
