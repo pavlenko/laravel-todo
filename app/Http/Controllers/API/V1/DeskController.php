@@ -6,6 +6,7 @@ use App\Models\DeskModel;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeskRequest;
 use App\Http\Resources\DeskResource;
+use App\Services\Desks;
 use Illuminate\Http\Response;
 use function response;
 
@@ -13,7 +14,8 @@ class DeskController extends Controller
 {
     public function index()
     {
-        return DeskResource::collection(DeskModel::orderBy('created_at', 'desc')->get());
+        $desks = (new Desks())->fetchAll();
+        return DeskResource::collection($desks);
     }
 
     public function store(DeskRequest $request)

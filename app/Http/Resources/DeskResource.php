@@ -9,6 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property $id
  * @property $name
  * @property $created_at
+ * @property $updated_at
  */
 class DeskResource extends JsonResource
 {
@@ -24,6 +25,7 @@ class DeskResource extends JsonResource
             'id'         => $this->id,
             'name'       => $this->name,
             'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }
