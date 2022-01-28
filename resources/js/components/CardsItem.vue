@@ -4,7 +4,10 @@
 <!--        <cards-update :card="card" @updateCard="updateCard"></cards-update>-->
         <cards-delete :card="card" @deleteCard="deleteCard"></cards-delete>
         <b-modal :id="uuid" title="Edit Card" hide-footer :header-class="'py-1 px-3'">
-            <h5><i class="far fa-fw fa-credit-card"></i> {{ card.name }}</h5>
+<!--            <h5><i class="far fa-fw fa-credit-card"></i> {{ card.name }}</h5>-->
+
+            <cards-update-name :card="card"></cards-update-name>
+
             <h5><i class="far fa-fw fa-align-left"></i> Description</h5>
             <div class="flex-grow-1 ml-2" v-html="card.text" ref="text" @click="editText"></div>
             <tasks :card-id="card.id"></tasks>
@@ -18,11 +21,12 @@ import CardsUpdate from "./CardsUpdate";
 import CardsDelete from "./CardsDelete";
 import Tasks from "./Tasks";
 import CardDTO from "../DTO/CardDTO";
+import CardsUpdateName from "./CardsUpdateName";
 
 //import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default {
-    components: {CardsUpdate, CardsDelete, Tasks},
+    components: {CardsUpdateName, CardsUpdate, CardsDelete, Tasks},
     props: {
         card: CardDTO
     },
