@@ -78,7 +78,22 @@ final class Desks
     }
 
     public function updateList(ListDTO $list): void
-    {}
+    {
+        ListModel::query()->whereKey($list->id)->update($list->getAttributes());
+
+        //TODO how to resolve valid logic for update sort
+
+        // Update old position
+        $srcPrev = (int) $list->getOldValue('prev');
+        $srcNext = (int) $list->getOldValue('next');
+
+        ListModel::query()->whereKey($srcPrev)->update(['next' => $srcNext]);
+        ListModel::query()->whereKey($srcNext)->update(['next' => $srcPrev]);
+
+        // Update new position
+        ListModel::query()->whereKey($list->prev)->update(['next' => $list->id]);
+        ListModel::query()->whereKey($list->next)->update(['prev' => $list->id]);
+    }
 
     public function deleteList(ListDTO $list): void
     {

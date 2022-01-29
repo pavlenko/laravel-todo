@@ -21,7 +21,7 @@
             </div>
         </section>
         <section class="content pb-3">
-            <div v-if="errored" class="alert alert-danger p-2" role="alert">
+            <div v-if="errored" class="alert alert-danger p-2 mx-2" role="alert">
                 <h4 class="alert-heading m-0">
                     Something went wrong
                     <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" TODO-click="load">
@@ -32,16 +32,15 @@
             <div v-if="loading" class="d-flex justify-content-center">
                 <div class="spinner-border" role="status" aria-hidden="true"></div>
             </div>
-            <div v-if="!loading && !errored" class="container-fluid h-100" style="min-width: 100%">
-                <draggable
-                    v-model="lists"
-                    :forceFallback="true"
-                    @start="dragging = true"
-                    @end="dragging = false" class="container-fluid h-100">
-                    <lists-item v-for="list in lists" :key="list.id" :list="list" @updateList="updateList" @deleteList="deleteList"></lists-item>
-                </draggable>
-                <lists-create :desk-id="desk.id" :prev-id="prevID" @createList="createList"></lists-create>
-            </div>
+            <draggable
+                ref="sortable"
+                v-model="lists"
+                :forceFallback="true"
+                @update="resort"
+                class="container-fluid h-100" style="min-width: 100%">
+                <lists-item v-for="(list, index) in lists" :key="index" :list="list" @updateList="updateList" @deleteList="deleteList"></lists-item>
+                <lists-create #footer :desk-id="desk.id" :prev-id="prevID" @createList="createList"></lists-create>
+            </draggable>
         </section>
     </div>
 </template>
@@ -90,7 +89,37 @@ export default {
             .finally(() => { this.loading = false; });
     },
     methods: {
+        resort(event) {
+            if (event.newIndex !== event.oldIndex) {
+                let list = this.lists[event.newIndex];
+                let prev = this.lists[event.newIndex - 1] ? this.lists[event.newIndex - 1].id : 0;
+                let next = this.lists[event.newIndex + 1] ? this.lists[event.newIndex + 1].id : 0;
+
+                this.loading = true;
+                this.errored = false;
+                axios
+                    .post(
+                        __baseURL + '/api/V1/lists/' + list.id,
+                        Object.assign({_method: 'PUT'}, list, {prev: prev, next: next})
+                    )
+                    .then(response => {
+                        this.updateList(new ListDTO(response.data.data));
+                        //TODO move somewhere outside
+                        this.lists.forEach((list, index) => {
+                            list.prev = this.lists[index - 1] ? this.lists[index - 1].id : 0;
+                            list.next = this.lists[index + 1] ? this.lists[index + 1].id : 0;
+                        })
+                    })
+                    .catch(error => {
+                        this.lists.splice(event.oldIndex, 0, this.lists[event.newIndex]);
+                        this.errored = true;
+                        console.log(error);
+                    })
+                    .finally(() => { this.loading = false; });
+            }
+        },
         resortList(list) {
+            //TODO remove & use loop version
             let prev = this.lists.find(item => Number(item.id) === Number(list.prev));
             if (prev) {
                 prev.next = list.id;

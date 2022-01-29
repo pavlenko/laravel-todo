@@ -42,8 +42,18 @@ class ListController extends Controller
         return new ListResource($list);
     }
 
-    public function update(ListRequest $request, ListModel $list)
+    public function update(ListRequest $request, $id)
     {
+        $request->validate([]);
+
+        $desks = new Desks();
+
+        $dto = $desks->getList($id);
+        $dto->setAttributes($request->input());
+
+        $desks->updateList($dto);
+
+        return new JsonResource($dto);
         $list->update($request->validated());
         return new ListResource($list);
     }

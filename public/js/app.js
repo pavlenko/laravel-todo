@@ -1051,7 +1051,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -1101,7 +1100,40 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
+    resort: function resort(event) {
+      var _this2 = this;
+
+      if (event.newIndex !== event.oldIndex) {
+        var list = this.lists[event.newIndex];
+        var prev = this.lists[event.newIndex - 1] ? this.lists[event.newIndex - 1].id : 0;
+        var next = this.lists[event.newIndex + 1] ? this.lists[event.newIndex + 1].id : 0;
+        this.loading = true;
+        this.errored = false;
+        axios.post(__baseURL + '/api/V1/lists/' + list.id, Object.assign({
+          _method: 'PUT'
+        }, list, {
+          prev: prev,
+          next: next
+        })).then(function (response) {
+          _this2.updateList(new _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_3__["default"](response.data.data)); //TODO move somewhere outside
+
+
+          _this2.lists.forEach(function (list, index) {
+            list.prev = _this2.lists[index - 1] ? _this2.lists[index - 1].id : 0;
+            list.next = _this2.lists[index + 1] ? _this2.lists[index + 1].id : 0;
+          });
+        })["catch"](function (error) {
+          _this2.lists.splice(event.oldIndex, 0, _this2.lists[event.newIndex]);
+
+          _this2.errored = true;
+          console.log(error);
+        })["finally"](function () {
+          _this2.loading = false;
+        });
+      }
+    },
     resortList: function resortList(list) {
+      //TODO remove & use loop version
       var prev = this.lists.find(function (item) {
         return Number(item.id) === Number(list.prev);
       });
@@ -8161,75 +8193,74 @@ var render = function () {
       ]),
     ]),
     _vm._v(" "),
-    _c("section", { staticClass: "content pb-3" }, [
-      _vm.errored
-        ? _c(
-            "div",
-            { staticClass: "alert alert-danger p-2", attrs: { role: "alert" } },
-            [_vm._m(0)]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.loading
-        ? _c("div", { staticClass: "d-flex justify-content-center" }, [
-            _c("div", {
-              staticClass: "spinner-border",
-              attrs: { role: "status", "aria-hidden": "true" },
-            }),
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      !_vm.loading && !_vm.errored
-        ? _c(
-            "div",
-            {
-              staticClass: "container-fluid h-100",
-              staticStyle: { "min-width": "100%" },
-            },
-            [
-              _c(
-                "draggable",
-                {
-                  staticClass: "container-fluid h-100",
-                  attrs: { forceFallback: true },
-                  on: {
-                    start: function ($event) {
-                      _vm.dragging = true
-                    },
-                    end: function ($event) {
-                      _vm.dragging = false
-                    },
-                  },
-                  model: {
-                    value: _vm.lists,
-                    callback: function ($$v) {
-                      _vm.lists = $$v
-                    },
-                    expression: "lists",
-                  },
-                },
-                _vm._l(_vm.lists, function (list) {
-                  return _c("lists-item", {
-                    key: list.id,
-                    attrs: { list: list },
-                    on: {
-                      updateList: _vm.updateList,
-                      deleteList: _vm.deleteList,
-                    },
-                  })
-                }),
-                1
-              ),
-              _vm._v(" "),
-              _c("lists-create", {
-                attrs: { "desk-id": _vm.desk.id, "prev-id": _vm.prevID },
-                on: { createList: _vm.createList },
+    _c(
+      "section",
+      { staticClass: "content pb-3" },
+      [
+        _vm.errored
+          ? _c(
+              "div",
+              {
+                staticClass: "alert alert-danger p-2 mx-2",
+                attrs: { role: "alert" },
+              },
+              [_vm._m(0)]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.loading
+          ? _c("div", { staticClass: "d-flex justify-content-center" }, [
+              _c("div", {
+                staticClass: "spinner-border",
+                attrs: { role: "status", "aria-hidden": "true" },
               }),
-            ],
-            1
-          )
-        : _vm._e(),
-    ]),
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c(
+          "draggable",
+          {
+            ref: "sortable",
+            staticClass: "container-fluid h-100",
+            staticStyle: { "min-width": "100%" },
+            attrs: { forceFallback: true },
+            on: { update: _vm.resort },
+            model: {
+              value: _vm.lists,
+              callback: function ($$v) {
+                _vm.lists = $$v
+              },
+              expression: "lists",
+            },
+          },
+          [
+            _vm._l(_vm.lists, function (list, index) {
+              return _c("lists-item", {
+                key: index,
+                attrs: { list: list },
+                on: { updateList: _vm.updateList, deleteList: _vm.deleteList },
+              })
+            }),
+            _vm._v(" "),
+            _c("lists-create", {
+              attrs: { "desk-id": _vm.desk.id, "prev-id": _vm.prevID },
+              on: { createList: _vm.createList },
+              scopedSlots: _vm._u([
+                {
+                  key: "footer",
+                  fn: function () {
+                    return undefined
+                  },
+                  proxy: true,
+                },
+              ]),
+            }),
+          ],
+          2
+        ),
+      ],
+      1
+    ),
   ])
 }
 var staticRenderFns = [

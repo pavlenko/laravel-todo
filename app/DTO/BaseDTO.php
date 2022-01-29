@@ -81,6 +81,15 @@ abstract class BaseDTO
         return $attributes;
     }
 
+    public function getOldValue(string $name)
+    {
+        if (!in_array($name, $this->attributes())) {
+            return null;
+        }
+
+        return $this->oldAttributes[$name] ?? null;
+    }
+
     public function __get(string $name)
     {
         if (!in_array($name, $this->attributes())) {
