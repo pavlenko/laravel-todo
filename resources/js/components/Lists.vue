@@ -90,15 +90,20 @@ export default {
             .finally(() => { this.loading = false; });
     },
     methods: {
-        createList(list) {
-            this.lists.push(list);
-
+        resortList(list) {
             let prev = this.lists.find(item => Number(item.id) === Number(list.prev));
             if (prev) {
                 prev.next = list.id;
             }
 
-            console.log(this.lists);
+            let next = this.lists.find(item => Number(item.id) === Number(list.next));
+            if (next) {
+                next.prev = list.id;
+            }
+        },
+        createList(list) {
+            this.lists.push(list);
+            this.resortList(list);
         },
         updateList(list) {
             let index = this.lists.findIndex(item => String(item.id) === String(list.id));
@@ -108,6 +113,18 @@ export default {
         },
         deleteList(list) {
             this.lists = this.lists.filter(item => String(item.id) !== String(list.id));
+
+            let prev = this.lists.find(item => Number(item.id) === Number(list.prev));
+            let next = this.lists.find(item => Number(item.id) === Number(list.next));
+
+            if (prev) {
+                prev.next = next ? next.id : 0;
+            }
+            if (next) {
+                next.prev = prev ? prev.id : 0;
+            }
+
+            console.log(this.lists);
         }
     }
 }

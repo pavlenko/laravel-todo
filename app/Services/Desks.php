@@ -62,6 +62,12 @@ final class Desks
         return $this->sortByPrevNext($data);
     }
 
+    public function getList(int $listID): ?ListDTO
+    {
+        $data = ListModel::query()->find($listID);
+        return null !== $data ? new ListDTO($data->getAttributes()) : null;
+    }
+
     public function createList(ListDTO $list): void
     {
         $data = ListModel::query()->create($list->getAttributes());
@@ -69,6 +75,17 @@ final class Desks
 
         // Update prev record if any
         ListModel::query()->whereKey($list->prev)->update(['next' => $list->id]);
+    }
+
+    public function updateList(ListDTO $list): void
+    {}
+
+    public function deleteList(ListDTO $list): void
+    {
+        ListModel::query()->whereKey($list->id)->delete();
+
+        ListModel::query()->whereKey($list->prev)->update(['next' => $list->next ?? 0]);
+        ListModel::query()->whereKey($list->next)->update(['prev' => $list->prev ?? 0]);
     }
 
     protected function sortByPrevNext(array $data): array

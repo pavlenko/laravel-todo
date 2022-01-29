@@ -22,10 +22,6 @@ class ListController extends Controller
 
         $lists = (new Desks())->getLists($request->desk_id);
         return JsonResource::collection($lists);
-
-        return ListResource::collection(
-            ListModel::orderBy('created_at', 'desc')->where('desk_id', $request->desk_id)->get()
-        );
     }
 
     public function store(ListRequest $request)
@@ -39,7 +35,6 @@ class ListController extends Controller
 
         $desks->createList($dto);
         return new JsonResource($dto);
-        return new ListResource(ListModel::create($request->input()));
     }
 
     public function show(ListModel $list)
@@ -53,9 +48,12 @@ class ListController extends Controller
         return new ListResource($list);
     }
 
-    public function destroy(ListModel $list)
+    public function destroy($id)
     {
-        $list->delete();
+        $desks = new Desks();
+        $dto   = $desks->getList($id);
+
+        $desks->deleteList($dto);
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }

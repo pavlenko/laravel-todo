@@ -1101,8 +1101,7 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
-    createList: function createList(list) {
-      this.lists.push(list);
+    resortList: function resortList(list) {
       var prev = this.lists.find(function (item) {
         return Number(item.id) === Number(list.prev);
       });
@@ -1111,7 +1110,17 @@ __webpack_require__.r(__webpack_exports__);
         prev.next = list.id;
       }
 
-      console.log(this.lists);
+      var next = this.lists.find(function (item) {
+        return Number(item.id) === Number(list.next);
+      });
+
+      if (next) {
+        next.prev = list.id;
+      }
+    },
+    createList: function createList(list) {
+      this.lists.push(list);
+      this.resortList(list);
     },
     updateList: function updateList(list) {
       var index = this.lists.findIndex(function (item) {
@@ -1126,6 +1135,22 @@ __webpack_require__.r(__webpack_exports__);
       this.lists = this.lists.filter(function (item) {
         return String(item.id) !== String(list.id);
       });
+      var prev = this.lists.find(function (item) {
+        return Number(item.id) === Number(list.prev);
+      });
+      var next = this.lists.find(function (item) {
+        return Number(item.id) === Number(list.next);
+      });
+
+      if (prev) {
+        prev.next = next ? next.id : 0;
+      }
+
+      if (next) {
+        next.prev = prev ? prev.id : 0;
+      }
+
+      console.log(this.lists);
     }
   }
 });
