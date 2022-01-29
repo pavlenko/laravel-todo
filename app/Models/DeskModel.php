@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property $created_at
  * @property $updated_at
  */
-class DeskModel extends Model
+final class DeskModel extends Model
 {
     protected $fillable = ['name'];
 

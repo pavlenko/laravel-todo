@@ -2,17 +2,22 @@
 
 namespace App\DTO;
 
-abstract class BaseDTO implements \JsonSerializable
+abstract class BaseDTO
 {
-    //private array $oldAttributes = [];
-    //private array $newAttributes = [];
+    private array $oldAttributes = [];
+    private array $newAttributes = [];
 
     public function __construct(array $values)
     {
-        $this->setAttributes($values);
+        foreach ($this->attributes() as $attribute) {
+            $this->oldAttributes[$attribute] = $values[$attribute] ?? null;
+            $this->newAttributes[$attribute] = $values[$attribute] ?? null;
+        }
     }
 
-    public function attributes(): array
+    abstract public function attributes(): array;
+
+    /*public function attributes(): array
     {
         $class = new \ReflectionClass($this);
         $names = [];
@@ -23,13 +28,13 @@ abstract class BaseDTO implements \JsonSerializable
         }
 
         return $names;
-    }
+    }*/
 
     public function getAttributes(): array
     {
         $values = [];
-        foreach ($this->attributes() as $name) {
-            $values[$name] = $this->$name;
+        foreach ($this->attributes() as $attribute) {
+            $values[$attribute] = $this->{$attribute};
         }
         return $values;
     }
@@ -43,169 +48,92 @@ abstract class BaseDTO implements \JsonSerializable
         }
     }
 
+    public function isChanged(string $name, bool $identical = true): bool
+    {
+        if (isset($this->newAttributes[$name], $this->oldAttributes[$name])) {
+            if ($identical) {
+                return $this->newAttributes[$name] !== $this->oldAttributes[$name];
+            }
 
-    /**
-     * Returns the value of a component property.
-     *
-     * This method will check in the following order and act accordingly:
-     *
-     *  - a property defined by a getter: return the getter result
-     *  - a property of a behavior: return the behavior property value
-     *
-     * Do not call this method directly as it is a PHP magic method that
-     * will be implicitly called when executing `$value = $component->property;`.
-     * @param string $name the property name
-     * @return mixed the property value or the value of a behavior's property
-     * @throws UnknownPropertyException if the property is not defined
-     * @throws InvalidCallException if the property is write-only.
-     * @see __set()
-     */
+            return $this->newAttributes[$name] != $this->oldAttributes[$name];
+        }
+
+        return isset($this->newAttributes[$name]) || isset($this->oldAttributes[$name]);
+    }
+
+    public function hasChanges(): bool
+    {
+        return count($this->getChanges()) > 0;
+    }
+
+    public function getChanges(): array
+    {
+        $names = $this->attributes();
+        $names = array_flip($names);
+
+        $attributes = [];
+        foreach ($this->newAttributes as $name => $value) {
+            if (isset($names[$name]) && (!array_key_exists($name, $this->oldAttributes) || $value !== $this->oldAttributes[$name])) {
+                $attributes[$name] = $value;
+            }
+        }
+
+        return $attributes;
+    }
+
     public function __get(string $name)
     {
+        if (!in_array($name, $this->attributes())) {
+            return null;
+        }
+
         $getter = 'get' . $name;
         if (method_exists($this, $getter)) {
             // read property, e.g. getName()
-            return $this->$getter();
+            return $this->{$getter}();
         }
 
-        // behavior property
-        $this->ensureBehaviors();
-        foreach ($this->_behaviors as $behavior) {
-            if ($behavior->canGetProperty($name)) {
-                return $behavior->$name;
-            }
-        }
-
-        if (method_exists($this, 'set' . $name)) {
-            throw new InvalidCallException('Getting write-only property: ' . get_class($this) . '::' . $name);
-        }
-
-        throw new UnknownPropertyException('Getting unknown property: ' . get_class($this) . '::' . $name);
+        return $this->newAttributes[$name] ?? null;
     }
 
-    /**
-     * Sets the value of a component property.
-     *
-     * This method will check in the following order and act accordingly:
-     *
-     *  - a property defined by a setter: set the property value
-     *  - an event in the format of "on xyz": attach the handler to the event "xyz"
-     *  - a behavior in the format of "as xyz": attach the behavior named as "xyz"
-     *  - a property of a behavior: set the behavior property value
-     *
-     * Do not call this method directly as it is a PHP magic method that
-     * will be implicitly called when executing `$component->property = $value;`.
-     * @param string $name the property name or the event name
-     * @param mixed $value the property value
-     * @throws UnknownPropertyException if the property is not defined
-     * @throws InvalidCallException if the property is read-only.
-     * @see __get()
-     */
-    public function __set($name, $value)
+    public function __set(string $name, $value): void
     {
+        if (!in_array($name, $this->attributes())) {
+            return;
+        }
+
         $setter = 'set' . $name;
         if (method_exists($this, $setter)) {
             // set property
-            $this->$setter($value);
-
-            return;
-        } elseif (strncmp($name, 'on ', 3) === 0) {
-            // on event: attach event handler
-            $this->on(trim(substr($name, 3)), $value);
-
-            return;
-        } elseif (strncmp($name, 'as ', 3) === 0) {
-            // as behavior: attach behavior
-            $name = trim(substr($name, 3));
-            $this->attachBehavior($name, $value instanceof Behavior ? $value : Yii::createObject($value));
-
+            $this->{$setter}($value);
             return;
         }
 
-        // behavior property
-        $this->ensureBehaviors();
-        foreach ($this->_behaviors as $behavior) {
-            if ($behavior->canSetProperty($name)) {
-                $behavior->$name = $value;
-                return;
-            }
-        }
-
-        if (method_exists($this, 'get' . $name)) {
-            throw new InvalidCallException('Setting read-only property: ' . get_class($this) . '::' . $name);
-        }
-
-        throw new UnknownPropertyException('Setting unknown property: ' . get_class($this) . '::' . $name);
+        $this->newAttributes[$name] = $value;
     }
 
-    /**
-     * Checks if a property is set, i.e. defined and not null.
-     *
-     * This method will check in the following order and act accordingly:
-     *
-     *  - a property defined by a setter: return whether the property is set
-     *  - a property of a behavior: return whether the property is set
-     *  - return `false` for non existing properties
-     *
-     * Do not call this method directly as it is a PHP magic method that
-     * will be implicitly called when executing `isset($component->property)`.
-     * @param string $name the property name or the event name
-     * @return bool whether the named property is set
-     * @see https://www.php.net/manual/en/function.isset.php
-     */
-    public function __isset($name)
+    public function __isset(string $name): bool
     {
         $getter = 'get' . $name;
         if (method_exists($this, $getter)) {
-            return $this->$getter() !== null;
+            return $this->{$getter}() !== null;
         }
 
-        // behavior property
-        $this->ensureBehaviors();
-        foreach ($this->_behaviors as $behavior) {
-            if ($behavior->canGetProperty($name)) {
-                return $behavior->$name !== null;
-            }
-        }
-
-        return false;
+        return $this->newAttributes[$name] !== null;
     }
 
-    /**
-     * Sets a component property to be null.
-     *
-     * This method will check in the following order and act accordingly:
-     *
-     *  - a property defined by a setter: set the property value to be null
-     *  - a property of a behavior: set the property value to be null
-     *
-     * Do not call this method directly as it is a PHP magic method that
-     * will be implicitly called when executing `unset($component->property)`.
-     * @param string $name the property name
-     * @throws InvalidCallException if the property is read only.
-     * @see https://www.php.net/manual/en/function.unset.php
-     */
-    public function __unset($name)
+    public function __unset(string $name): void
     {
         $setter = 'set' . $name;
         if (method_exists($this, $setter)) {
-            $this->$setter(null);
+            $this->{$setter}(null);
             return;
         }
 
-        // behavior property
-        $this->ensureBehaviors();
-        foreach ($this->_behaviors as $behavior) {
-            if ($behavior->canSetProperty($name)) {
-                $behavior->$name = null;
-                return;
-            }
-        }
-
-        throw new InvalidCallException('Unsetting an unknown or read-only property: ' . get_class($this) . '::' . $name);
+        $this->newAttributes[$name] = null;
     }
 
-    public function jsonSerialize()
+    public function toArray(): array
     {
         return $this->getAttributes();
     }

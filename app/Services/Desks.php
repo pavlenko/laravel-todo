@@ -20,4 +20,10 @@ final class Desks
 
         return $data;
     }
+
+    public function createDesk(DeskDTO $desk): void
+    {
+        $data = DeskModel::query()->create($desk->getAttributes());
+        $desk->setAttributes($data->getAttributes());
+    }
 }
