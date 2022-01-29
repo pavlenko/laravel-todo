@@ -37,4 +37,9 @@ final class Desks
         $data = DeskModel::query()->create($desk->getAttributes());
         $desk->setAttributes($data->getAttributes());
     }
+
+    public function updateDesk(DeskDTO $desk): void
+    {
+        DeskModel::query()->whereKey($desk->id)->update($desk->getAttributes());
+    }
 }

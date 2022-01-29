@@ -38,15 +38,18 @@ class DeskController extends Controller
         return new JsonResource($dto);
     }
 
-    /*public function show(DeskModel $desk)
+    public function update(DeskRequest $request, $id)
     {
-        return new DeskResource($desk);
-    }*/
+        $request->validate([]);
 
-    public function update(DeskRequest $request, DeskModel $desk)
-    {
-        $desk->update($request->validated());
-        return new DeskResource($desk);
+        $desks = new Desks();
+
+        $dto = $desks->fetchRow($id);
+        $dto->setAttributes($request->input());
+
+        $desks->updateDesk($dto);
+
+        return new JsonResource($dto);
     }
 
     public function destroy(DeskModel $desk)
