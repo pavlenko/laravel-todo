@@ -32,10 +32,16 @@ class DeskController extends Controller
         return new JsonResource($dto);
     }
 
-    public function show(DeskModel $desk)
+    public function show($id)
+    {
+        $dto = (new Desks())->fetchRow($id);
+        return new JsonResource($dto);
+    }
+
+    /*public function show(DeskModel $desk)
     {
         return new DeskResource($desk);
-    }
+    }*/
 
     public function update(DeskRequest $request, DeskModel $desk)
     {

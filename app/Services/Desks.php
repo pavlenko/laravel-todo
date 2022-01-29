@@ -21,6 +21,17 @@ final class Desks
         return $data;
     }
 
+    public function fetchRow($params): ?DeskDTO
+    {
+        if (!is_array($params)) {
+            $data = DeskModel::query()->find($params);
+        } else {
+            $data = DeskModel::query()->where($params)->first();
+        }
+
+        return null !== $data ? new DeskDTO($data->getAttributes()) : null;
+    }
+
     public function createDesk(DeskDTO $desk): void
     {
         $data = DeskModel::query()->create($desk->getAttributes());
