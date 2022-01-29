@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\DTO\DeskDTO;
-use App\Models\DeskModel;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeskRequest;
-use App\Http\Resources\DeskResource;
 use App\Services\Desks;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
@@ -52,9 +50,13 @@ class DeskController extends Controller
         return new JsonResource($dto);
     }
 
-    public function destroy(DeskModel $desk)
+    public function destroy($id)
     {
-        $desk->delete();
+        $desks = new Desks();
+        $dto   = $desks->fetchRow($id);
+
+        $desks->deleteDesk($dto);
+
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }

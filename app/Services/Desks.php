@@ -42,4 +42,9 @@ final class Desks
     {
         DeskModel::query()->whereKey($desk->id)->update($desk->getAttributes());
     }
+
+    public function deleteDesk(DeskDTO $desk): void
+    {
+        DeskModel::query()->whereKey($desk->id)->delete();
+    }
 }
