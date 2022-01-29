@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ListRequest;
 use App\Http\Resources\ListResource;
 use App\Models\ListModel;
+use App\Services\Desks;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 
 class ListController extends Controller
@@ -16,6 +18,9 @@ class ListController extends Controller
         $request->validate([
             'desk_id' => 'required|integer|exists:desks,id'
         ]);
+
+        $lists = (new Desks())->getLists($request->desk_id);
+        return JsonResource::collection($lists);
 
         return ListResource::collection(
             ListModel::orderBy('created_at', 'desc')->where('desk_id', $request->desk_id)->get()

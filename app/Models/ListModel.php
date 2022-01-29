@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property $created_at
  * @property $updated_at
  */
-class ListModel extends Model
+final class ListModel extends Model
 {
     protected $fillable = ['desk_id', 'prev', 'next', 'name'];
 

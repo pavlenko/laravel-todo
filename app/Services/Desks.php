@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\DTO\DeskDTO;
+use App\DTO\ListDTO;
 use App\Models\DeskModel;
+use App\Models\ListModel;
 
 final class Desks
 {
@@ -46,5 +48,39 @@ final class Desks
     public function deleteDesk(DeskDTO $desk): void
     {
         DeskModel::query()->whereKey($desk->id)->delete();
+    }
+
+    public function getLists(int $deskID): array
+    {
+        $rows = ListModel::query()->where('desk_id', $deskID)->get();
+        $data = [];
+
+        foreach ($rows as $row) {
+            $data[] = new ListDTO($row->getAttributes());
+        }
+
+        return $this->sortByPrevNext($data);
+    }
+
+    protected function sortByPrevNext(array $data): array
+    {
+        if (empty($data)) {
+            return [];
+        }
+
+        $first  = current(array_filter($data, fn($item) => $item->prev == 0));
+        $result = [$first];
+
+        $findByID = function(array $data, int $id) {
+            return current(array_filter($data, fn($item) => $item->id == $id)) ?: null;
+        };
+
+        $id = $first->id;
+        while ($item = $findByID($data, $id)) {
+            $result[] = $item;
+            $id = $item->next;
+        }
+
+        return $result;
     }
 }
