@@ -1072,6 +1072,12 @@ __webpack_require__.r(__webpack_exports__);
       errored: false
     };
   },
+  computed: {
+    prevID: function prevID() {
+      var item = this.lists[this.lists.length - 1];
+      return item ? item.id : 0;
+    }
+  },
   mounted: function mounted() {
     var _this = this;
 
@@ -1097,6 +1103,15 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     createList: function createList(list) {
       this.lists.push(list);
+      var prev = this.lists.find(function (item) {
+        return Number(item.id) === Number(list.prev);
+      });
+
+      if (prev) {
+        prev.next = list.id;
+      }
+
+      console.log(this.lists);
     },
     updateList: function updateList(list) {
       var index = this.lists.findIndex(function (item) {
@@ -1169,13 +1184,15 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    deskId: Number
+    deskId: Number,
+    prevId: Number
   },
   data: function data() {
     return {
       uuid: Object(uuid__WEBPACK_IMPORTED_MODULE_0__["v4"])(),
       list: new _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_1__["default"]({
-        desk_id: this.deskId
+        desk_id: this.deskId,
+        prev: this.prevId
       }),
       loading: false,
       errored: false
@@ -8180,7 +8197,7 @@ var render = function () {
               ),
               _vm._v(" "),
               _c("lists-create", {
-                attrs: { "desk-id": _vm.desk.id },
+                attrs: { "desk-id": _vm.desk.id, "prev-id": _vm.prevID },
                 on: { createList: _vm.createList },
               }),
             ],

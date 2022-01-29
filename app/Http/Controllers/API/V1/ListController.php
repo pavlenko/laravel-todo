@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\DTO\ListDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ListRequest;
 use App\Http\Resources\ListResource;
@@ -33,6 +34,11 @@ class ListController extends Controller
             'desk_id' => 'required|integer|exists:desks,id'
         ]);
 
+        $desks = new Desks();
+        $dto   = new ListDTO($request->input());
+
+        $desks->createList($dto);
+        return new JsonResource($dto);
         return new ListResource(ListModel::create($request->input()));
     }
 

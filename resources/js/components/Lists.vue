@@ -40,7 +40,7 @@
                     @end="dragging = false" class="container-fluid h-100">
                     <lists-item v-for="list in lists" :key="list.id" :list="list" @updateList="updateList" @deleteList="deleteList"></lists-item>
                 </draggable>
-                <lists-create :desk-id="desk.id" @createList="createList"></lists-create>
+                <lists-create :desk-id="desk.id" :prev-id="prevID" @createList="createList"></lists-create>
             </div>
         </section>
     </div>
@@ -64,6 +64,12 @@ export default {
             errored: false
         };
     },
+    computed: {
+        prevID() {
+            const item = this.lists[this.lists.length - 1];
+            return item ? item.id : 0;
+        }
+    },
     mounted() {
         this.loading = true;
         this.errored = false;
@@ -86,6 +92,13 @@ export default {
     methods: {
         createList(list) {
             this.lists.push(list);
+
+            let prev = this.lists.find(item => Number(item.id) === Number(list.prev));
+            if (prev) {
+                prev.next = list.id;
+            }
+
+            console.log(this.lists);
         },
         updateList(list) {
             let index = this.lists.findIndex(item => String(item.id) === String(list.id));

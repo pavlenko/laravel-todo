@@ -41,12 +41,13 @@ import ListDTO from "../DTO/ListDTO";
 
 export default {
     props: {
-        deskId: Number
+        deskId: Number,
+        prevId: Number
     },
     data() {
         return {
             uuid: uuid(),
-            list: new ListDTO({desk_id: this.deskId}),
+            list: new ListDTO({desk_id: this.deskId, prev: this.prevId}),
             loading: false,
             errored: false
         };
