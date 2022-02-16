@@ -149,6 +149,14 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
+    onAdd: function onAdd(event) {
+      console.log('onAdd', event); // Update list ID when add from other list
+
+      this.cards[event.newIndex].list_id = this.listId;
+    },
+    onEnd: function onEnd(event) {
+      console.log('onEnd', event);
+    },
     createCard: function createCard(card) {
       this.cards.push(card);
     },
@@ -6739,14 +6747,7 @@ var render = function () {
         {
           class: { "mb-3": _vm.cards.length > 0 },
           attrs: { forceFallback: true, group: "cards" },
-          on: {
-            start: function ($event) {
-              _vm.dragging = true
-            },
-            end: function ($event) {
-              _vm.dragging = false
-            },
-          },
+          on: { add: _vm.onAdd, end: _vm.onEnd },
           model: {
             value: _vm.cards,
             callback: function ($$v) {

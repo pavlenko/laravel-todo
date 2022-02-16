@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @property $id
+ * @property $list_id
  * @property $name
  * @property $text
  * @property $created_at
@@ -23,6 +24,7 @@ class CardResource extends JsonResource
     {
         return [
             'id'         => $this->id,
+            'list_id'    => $this->list_id,
             'name'       => $this->name,
             'text'       => $this->text,
             'created_at' => $this->created_at,

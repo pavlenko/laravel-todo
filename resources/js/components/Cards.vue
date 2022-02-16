@@ -4,8 +4,8 @@
             v-model="cards"
             :forceFallback="true"
             group="cards"
-            @start="dragging = true"
-            @end="dragging = false"
+            @add="onAdd"
+            @end="onEnd"
             :class="{'mb-3': cards.length > 0}">
             <cards-item v-for="card in cards" :key="card.id" :card="card" @updateCard="updateCard" @deleteCard="deleteCard"></cards-item>
         </draggable>
@@ -44,6 +44,14 @@ export default {
             .finally(() => { this.loading = false; });
     },
     methods: {
+        onAdd(event) {
+            console.log('onAdd', event);
+            // Update list ID when add from other list
+            this.cards[event.newIndex].list_id = this.listId;
+        },
+        onEnd(event) {
+            console.log('onEnd', event);
+        },
         createCard(card) {
             this.cards.push(card);
         },
