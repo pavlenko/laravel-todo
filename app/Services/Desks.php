@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\DTO\BaseDTO;
 use App\DTO\DeskDTO;
 use App\DTO\ListDTO;
 use App\Models\DeskModel;
 use App\Models\ListModel;
+use Illuminate\Database\Eloquent\Model;
 
 final class Desks
 {
@@ -72,35 +74,19 @@ final class Desks
     {
         $data = ListModel::query()->create($list->getAttributes());
         $list->setAttributes($data->getAttributes());
-
-        // Update prev record if any
-        ListModel::query()->whereKey($list->prev)->update(['next' => $list->id]);
+        $this->onCreateSortable($list, new ListModel());
     }
 
     public function updateList(ListDTO $list): void
     {
         ListModel::query()->whereKey($list->id)->update($list->getAttributes());
-
-        //TODO how to resolve valid logic for update sort
-
-        // Update old position
-        $srcPrev = (int) $list->getOldValue('prev');
-        $srcNext = (int) $list->getOldValue('next');
-
-        ListModel::query()->whereKey($srcPrev)->update(['next' => $srcNext]);
-        ListModel::query()->whereKey($srcNext)->update(['prev' => $srcPrev]);
-
-        // Update new position
-        ListModel::query()->whereKey($list->prev)->update(['next' => $list->id]);
-        ListModel::query()->whereKey($list->next)->update(['prev' => $list->id]);
+        $this->onUpdateSortable($list, new ListModel());
     }
 
     public function deleteList(ListDTO $list): void
     {
         ListModel::query()->whereKey($list->id)->delete();
-
-        ListModel::query()->whereKey($list->prev)->update(['next' => $list->next ?? 0]);
-        ListModel::query()->whereKey($list->next)->update(['prev' => $list->prev ?? 0]);
+        $this->onDeleteSortable($list, new ListModel());
     }
 
     protected function sortByPrevNext(array $data): array
@@ -123,5 +109,37 @@ final class Desks
         }
 
         return $result;
+    }
+
+    private function onCreateSortable(BaseDTO $dto, Model $model): void
+    {
+        // Update new position
+        $model::query()->whereKey($dto->prev)->update(['next' => $dto->id]);
+    }
+
+    private function onUpdateSortable(BaseDTO $dto, Model $model): void
+    {
+        // Skip if not changed
+        if (!$dto->isChanged('prev') && !$dto->isChanged('next')) {
+            return;
+        }
+
+        // Update old position
+        $srcPrev = (int) $dto->getOldValue('prev');
+        $srcNext = (int) $dto->getOldValue('next');
+
+        $model::query()->whereKey($srcPrev)->update(['next' => $srcNext]);
+        $model::query()->whereKey($srcNext)->update(['prev' => $srcPrev]);
+
+        // Update new position
+        $model::query()->whereKey($dto->prev)->update(['next' => $dto->id]);
+        $model::query()->whereKey($dto->next)->update(['prev' => $dto->id]);
+    }
+
+    private function onDeleteSortable(BaseDTO $dto, Model $model): void
+    {
+        // Update old position
+        $model::query()->whereKey($dto->prev)->update(['next' => $dto->next ?? 0]);
+        $model::query()->whereKey($dto->next)->update(['prev' => $dto->prev ?? 0]);
     }
 }
