@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        factory(DeskModel::class, 5)->create()->each(function(DeskModel $desk) {
+        factory(DeskModel::class, 1)->create()->each(function(DeskModel $desk) {
             $lists = factory(ListModel::class, 5)->create(['desk_id' => $desk->id]);
             $lists->each(function(ListModel $list, $key) use ($lists) {
                 $list->prev = ($lists[$key - 1] ?? null)->id ?? 0;

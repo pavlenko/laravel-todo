@@ -88,7 +88,7 @@ final class Desks
         $srcNext = (int) $list->getOldValue('next');
 
         ListModel::query()->whereKey($srcPrev)->update(['next' => $srcNext]);
-        ListModel::query()->whereKey($srcNext)->update(['next' => $srcPrev]);
+        ListModel::query()->whereKey($srcNext)->update(['prev' => $srcPrev]);
 
         // Update new position
         ListModel::query()->whereKey($list->prev)->update(['next' => $list->id]);
