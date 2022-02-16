@@ -45,11 +45,16 @@ export default {
     },
     methods: {
         onAdd(event) {
+            // Called in target list
             console.log('onAdd', event);
             // Update list ID when add from other list
             this.cards[event.newIndex].list_id = this.listId;
+            // TODO update card ajax
         },
         onEnd(event) {
+            // Called in source list
+            // TODO if event.pullMode === true - card moved to other list
+            // TODO else update card ajax
             console.log('onEnd', event);
         },
         createCard(card) {

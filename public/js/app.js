@@ -150,11 +150,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     onAdd: function onAdd(event) {
+      // Called in target list
       console.log('onAdd', event); // Update list ID when add from other list
 
       this.cards[event.newIndex].list_id = this.listId;
     },
     onEnd: function onEnd(event) {
+      // Called in source list
       console.log('onEnd', event);
     },
     createCard: function createCard(card) {
