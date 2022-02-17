@@ -4,12 +4,12 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskRequest;
-use App\Http\Resources\TaskResource;
-use App\Models\TaskModel;
+use App\Services\Desks;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 
-class TaskController extends Controller
+final class TaskController extends Controller
 {
     public function index(Request $request)
     {
@@ -17,9 +17,8 @@ class TaskController extends Controller
             'card_id' => 'required|integer|exists:cards,id'
         ]);
 
-        return TaskResource::collection(
-            TaskModel::orderBy('created_at', 'asc')->where('card_id', $request->card_id)->get()
-        );
+        $tasks = (new Desks())->getAllTask($request->card_id);
+        return JsonResource::collection($tasks);
     }
 
     public function store(TaskRequest $request)
@@ -28,18 +27,36 @@ class TaskController extends Controller
             'card_id' => 'required|integer|exists:cards,id'
         ]);
 
-        return new TaskResource(TaskModel::create($request->input()));
+        $desks = new Desks();
+        $dto   = $desks->createTask($request->input());
+
+        $desks->insertTask($dto);
+        return new JsonResource($dto);
     }
 
-    public function update(TaskRequest $request, TaskModel $task)
+    public function show($id)
     {
-        $task->update($request->validated());
-        return new TaskResource($task);
+        return new JsonResource((new Desks())->getOneTask($id));
     }
 
-    public function destroy(TaskModel $task)
+    public function update(TaskRequest $request, $id)
     {
-        $task->delete();
+        $desks = new Desks();
+
+        $dto = $desks->getOneTask($id);
+        $dto->setAttributes($request->input());
+
+        $desks->updateTask($dto);
+
+        return new JsonResource($dto);
+    }
+
+    public function destroy($id)
+    {
+        $desks = new Desks();
+        $dto   = $desks->getOneTask($id);
+
+        $desks->deleteTask($dto);
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }
