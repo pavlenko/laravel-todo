@@ -7192,28 +7192,33 @@ var render = function () {
   return _c(
     "div",
     {
-      directives: [
-        {
-          name: "b-modal",
-          rawName: "v-b-modal",
-          value: _vm.uuid,
-          expression: "uuid",
-        },
-      ],
       staticClass:
-        "info-box justify-content-between align-items-start overflow-hidden border-top border-primary",
-      on: {
-        click: function ($event) {
-          $event.preventDefault()
-        },
-      },
+        "info-box justify-content-between align-items-stretch overflow-hidden border-top border-primary",
     },
     [
-      _c("div", { staticClass: "flex-grow-1" }, [
-        _vm._v(_vm._s(_vm.card.name)),
-      ]),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "b-modal",
+              rawName: "v-b-modal",
+              value: _vm.uuid,
+              expression: "uuid",
+            },
+          ],
+          staticClass: "flex-grow-1",
+          on: {
+            click: function ($event) {
+              $event.preventDefault()
+            },
+          },
+        },
+        [_vm._v(_vm._s(_vm.card.name))]
+      ),
       _vm._v(" "),
       _c("cards-delete", {
+        staticClass: "align-self-start",
         attrs: { card: _vm.card },
         on: { deleteCard: _vm.deleteCard },
       }),
