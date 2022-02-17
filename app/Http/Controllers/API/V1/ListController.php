@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use App\DTO\ListDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ListRequest;
 use App\Services\Desks;
@@ -18,7 +17,7 @@ final class ListController extends Controller
             'desk_id' => 'required|integer|exists:desks,id'
         ]);
 
-        $lists = (new Desks())->getLists($request->desk_id);
+        $lists = (new Desks())->getAllList($request->desk_id);
         return JsonResource::collection($lists);
     }
 
@@ -29,15 +28,15 @@ final class ListController extends Controller
         ]);
 
         $desks = new Desks();
-        $dto   = new ListDTO($request->input());
+        $dto   = $desks->createList($request->input());
 
-        $desks->createList($dto);
+        $desks->insertList($dto);
         return new JsonResource($dto);
     }
 
     public function show($id)
     {
-        return new JsonResource((new Desks())->getList($id));
+        return new JsonResource((new Desks())->getOneList($id));
     }
 
     public function update(ListRequest $request, $id)
@@ -46,7 +45,7 @@ final class ListController extends Controller
 
         $desks = new Desks();
 
-        $dto = $desks->getList($id);
+        $dto = $desks->getOneList($id);
         $dto->setAttributes($request->input());
 
         $desks->updateList($dto);
@@ -57,7 +56,7 @@ final class ListController extends Controller
     public function destroy($id)
     {
         $desks = new Desks();
-        $dto   = $desks->getList($id);
+        $dto   = $desks->getOneList($id);
 
         $desks->deleteList($dto);
         return response(null, Response::HTTP_NO_CONTENT);

@@ -18,18 +18,18 @@ final class Desks
     /**
      * @return array<DeskDTO>
      */
-    public function fetchAll(): array
+    public function getAllDesk(): array
     {
         $rows = DeskModel::query()->orderBy('updated_at', 'desc')->get();
         $data = [];
         foreach ($rows as $row) {
-            $data[] = new DeskDTO($row->getAttributes());
+            $data[] = $this->createDesk($row->getAttributes());
         }
 
         return $data;
     }
 
-    public function fetchRow($params): ?DeskDTO
+    public function getOneDesk($params): ?DeskDTO
     {
         if (!is_array($params)) {
             $data = DeskModel::query()->find($params);
@@ -37,10 +37,15 @@ final class Desks
             $data = DeskModel::query()->where($params)->first();
         }
 
-        return null !== $data ? new DeskDTO($data->getAttributes()) : null;
+        return null !== $data ? $this->createDesk($data->getAttributes()) : null;
     }
 
-    public function createDesk(DeskDTO $desk): void
+    public function createDesk(array $attributes): DeskDTO
+    {
+        return new DeskDTO($attributes);
+    }
+
+    public function insertDesk(DeskDTO $desk): void
     {
         $data = DeskModel::query()->create($desk->getAttributes());
         $desk->setAttributes($data->getAttributes());
@@ -56,25 +61,30 @@ final class Desks
         DeskModel::query()->whereKey($desk->id)->delete();
     }
 
-    public function getLists(int $deskID): array
+    public function getAllList(int $deskID): array
     {
         $rows = ListModel::query()->where('desk_id', $deskID)->get();
         $data = [];
 
         foreach ($rows as $row) {
-            $data[] = new ListDTO($row->getAttributes());
+            $data[] = $this->createList($row->getAttributes());
         }
 
         return $this->sortByPrevNext($data);
     }
 
-    public function getList(int $listID): ?ListDTO
+    public function getOneList(int $listID): ?ListDTO
     {
         $data = ListModel::query()->find($listID);
-        return null !== $data ? new ListDTO($data->getAttributes()) : null;
+        return null !== $data ? $this->createList($data->getAttributes()) : null;
     }
 
-    public function createList(ListDTO $list): void
+    public function createList(array $attributes): ListDTO
+    {
+        return new ListDTO($attributes);
+    }
+
+    public function insertList(ListDTO $list): void
     {
         $data = ListModel::query()->create($list->getAttributes());
         $list->setAttributes($data->getAttributes());
@@ -108,11 +118,15 @@ final class Desks
     public function getOneCard(int $cardID): ?CardDTO
     {
         $card = CardModel::query()->whereKey($cardID)->first();
-        return null !== $card ? new CardDTO($card->getAttributes()) : null;
+        return null !== $card ? $this->createCard($card->getAttributes()) : null;
     }
 
-    //TODO rename to insertCard and createCard must instantiate dto from attributes
-    public function createCard(CardDTO $card): void
+    public function createCard(array $attributes): CardDTO
+    {
+        return new CardDTO($attributes);
+    }
+
+    public function insertCard(CardDTO $card): void
     {
         $data = CardModel::query()->create($card->getAttributes());
         $card->setAttributes($data->getAttributes());

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use App\DTO\CardDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CardRequest;
 use App\Services\Desks;
@@ -31,9 +30,9 @@ final class CardController extends Controller
         ]);
 
         $desks = new Desks();
-        $dto   = new CardDTO($request->input());
+        $dto   = $desks->createCard($request->input());
 
-        $desks->createCard($dto);
+        $desks->insertCard($dto);
         return new JsonResource($dto);
     }
 
