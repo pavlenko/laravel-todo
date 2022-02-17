@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CardRequest extends FormRequest
+final class CardRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -16,6 +16,8 @@ class CardRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'text' => 'nullable|string',
+            'prev' => 'nullable|integer',
+            'next' => 'nullable|integer',
         ];
     }
 }

@@ -53,11 +53,14 @@ export default {
         };
     },
     methods: {
-        createList(event) {
+        createList() {
             this.loading = true;
             this.errored = false;
             axios
-                .post(__baseURL + '/api/V1/lists', this.list)
+                .post(
+                    __baseURL + '/api/V1/lists',
+                    Object.assign({}, this.list, {prev: this.prevId})
+                )
                 .then(response => {
                     this.$emit('createList', new ListDTO(response.data.data));
                     this.$bvModal.hide(this.uuid);

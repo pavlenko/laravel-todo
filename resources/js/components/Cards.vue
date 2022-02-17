@@ -9,7 +9,7 @@
             :class="{'mb-3': cards.length > 0}">
             <cards-item v-for="card in cards" :key="card.id" :card="card" @updateCard="updateCard" @deleteCard="deleteCard"></cards-item>
         </draggable>
-        <cards-create :listId="listId" @createCard="createCard"></cards-create>
+        <cards-create :list-id="listId" :prev-id="cards.length > 0 ? cards[cards.length - 1].id : 0" @createCard="createCard"></cards-create>
         <div v-if="loading" class="d-flex justify-content-center">
             <div class="spinner-border" role="status" aria-hidden="true"></div>
         </div>

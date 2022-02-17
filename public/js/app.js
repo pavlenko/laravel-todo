@@ -111,7 +111,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -150,9 +149,6 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
-    onDel: function onDel(event) {
-      console.log(arguments);
-    },
     onAdd: function onAdd(event) {
       // Called in target list
       console.log('onAdd', this.listId, event); // Update list ID when add from other list
@@ -246,7 +242,8 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    listId: Number
+    listId: Number,
+    prevId: Number
   },
   data: function data() {
     return {
@@ -259,12 +256,14 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    createCard: function createCard(event) {
+    createCard: function createCard() {
       var _this = this;
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/cards', this.card).then(function (response) {
+      axios.post(__baseURL + '/api/V1/cards', Object.assign({}, this.card, {
+        prev: this.prevId
+      })).then(function (response) {
         _this.$emit('createCard', new _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_1__["default"](response.data.data));
 
         _this.$bvModal.hide(_this.uuid);
@@ -1094,12 +1093,6 @@ __webpack_require__.r(__webpack_exports__);
       errored: false
     };
   },
-  computed: {
-    prevID: function prevID() {
-      var item = this.lists[this.lists.length - 1];
-      return item ? item.id : 0;
-    }
-  },
   mounted: function mounted() {
     var _this = this;
 
@@ -1279,12 +1272,14 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    createList: function createList(event) {
+    createList: function createList() {
       var _this = this;
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/lists', this.list).then(function (response) {
+      axios.post(__baseURL + '/api/V1/lists', Object.assign({}, this.list, {
+        prev: this.prevId
+      })).then(function (response) {
         _this.$emit('createList', new _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_1__["default"](response.data.data));
 
         _this.$bvModal.hide(_this.uuid);
@@ -6762,7 +6757,7 @@ var render = function () {
         {
           class: { "mb-3": _vm.cards.length > 0 },
           attrs: { forceFallback: true, group: "cards" },
-          on: { add: _vm.onAdd, remove: _vm.onDel, end: _vm.onEnd },
+          on: { add: _vm.onAdd, end: _vm.onEnd },
           model: {
             value: _vm.cards,
             callback: function ($$v) {
@@ -6782,7 +6777,11 @@ var render = function () {
       ),
       _vm._v(" "),
       _c("cards-create", {
-        attrs: { listId: _vm.listId },
+        attrs: {
+          "list-id": _vm.listId,
+          "prev-id":
+            _vm.cards.length > 0 ? _vm.cards[_vm.cards.length - 1].id : 0,
+        },
         on: { createCard: _vm.createCard },
       }),
       _vm._v(" "),
@@ -8259,7 +8258,11 @@ var render = function () {
             }),
             _vm._v(" "),
             _c("lists-create", {
-              attrs: { "desk-id": _vm.desk.id, "prev-id": _vm.prevID },
+              attrs: {
+                "desk-id": _vm.desk.id,
+                "prev-id":
+                  _vm.lists.length > 0 ? _vm.lists[_vm.lists.length - 1].id : 0,
+              },
               on: { createList: _vm.createList },
               scopedSlots: _vm._u([
                 {

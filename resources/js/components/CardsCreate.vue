@@ -41,7 +41,8 @@ import CardDTO from "../DTO/CardDTO";
 
 export default {
     props: {
-        listId: Number
+        listId: Number,
+        prevId: Number
     },
     data() {
         return {
@@ -52,11 +53,14 @@ export default {
         };
     },
     methods: {
-        createCard(event) {
+        createCard() {
             this.loading = true;
             this.errored = false;
             axios
-                .post(__baseURL + '/api/V1/cards', this.card)
+                .post(
+                    __baseURL + '/api/V1/cards',
+                    Object.assign({}, this.card, {prev: this.prevId})
+                )
                 .then(response => {
                     this.$emit('createCard', new CardDTO(response.data.data));
                     this.$bvModal.hide(this.uuid);

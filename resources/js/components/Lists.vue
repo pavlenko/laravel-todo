@@ -39,7 +39,7 @@
                 @update="resort"
                 class="container-fluid h-100" style="min-width: 100%">
                 <lists-item v-for="(list, index) in lists" :key="index" :list="list" @updateList="updateList" @deleteList="deleteList"></lists-item>
-                <lists-create #footer :desk-id="desk.id" :prev-id="prevID" @createList="createList"></lists-create>
+                <lists-create #footer :desk-id="desk.id" :prev-id="lists.length > 0 ? lists[lists.length - 1].id : 0" @createList="createList"></lists-create>
             </draggable>
         </section>
     </div>
@@ -62,12 +62,6 @@ export default {
             loading: false,
             errored: false
         };
-    },
-    computed: {
-        prevID() {
-            const item = this.lists[this.lists.length - 1];
-            return item ? item.id : 0;
-        }
     },
     mounted() {
         this.loading = true;
