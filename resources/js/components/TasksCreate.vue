@@ -11,7 +11,7 @@
         <form @submit.prevent="createTask" style="position: relative">
             <input type="hidden" name="card_id" :value="cardId">
             <div class="d-flex align-items-center">
-                <input class="form-control form-control-sm" name="name">
+                <input class="form-control form-control-sm" name="name" v-model="task.name">
                 <button type="submit" class="btn btn-sm btn-success text-nowrap ml-2">Add Task</button>
             </div>
             <div v-if="errored" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)"></div>
@@ -25,12 +25,16 @@
 </template>
 
 <script>
+import TaskDTO from "../DTO/TaskDTO";
+
 export default {
     props: {
-        cardId: Number
+        cardId: Number,
+        prevId: Number
     },
     data() {
         return {
+            task: new TaskDTO({card_id: this.cardId}),
             loading: false,
             errored: false
         };
@@ -40,9 +44,12 @@ export default {
             this.loading = true;
             this.errored = false;
             axios
-                .post(__baseURL + '/api/V1/tasks', new FormData(event.target))
+                .post(
+                    __baseURL + '/api/V1/tasks',
+                    Object.assign({}, this.task, {prev: this.prevId})
+                )
                 .then(response => {
-                    this.$emit('createTask', response.data.data);
+                    this.$emit('createTask', new TaskDTO(response.data.data));
                     event.target.reset();
                 })
                 .catch(error => {

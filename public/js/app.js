@@ -1625,6 +1625,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../DTO/TaskDTO */ "./resources/js/DTO/TaskDTO.js");
 //
 //
 //
@@ -1651,12 +1652,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    cardId: Number
+    cardId: Number,
+    prevId: Number
   },
   data: function data() {
     return {
+      task: new _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_0__["default"]({
+        card_id: this.cardId
+      }),
       loading: false,
       errored: false
     };
@@ -1667,8 +1673,10 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/tasks', new FormData(event.target)).then(function (response) {
-        _this.$emit('createTask', response.data.data);
+      axios.post(__baseURL + '/api/V1/tasks', Object.assign({}, this.task, {
+        prev: this.prevId
+      })).then(function (response) {
+        _this.$emit('createTask', new _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_0__["default"](response.data.data));
 
         event.target.reset();
       })["catch"](function (error) {
@@ -9016,7 +9024,11 @@ var render = function () {
         ),
         _vm._v(" "),
         _c("tasks-create", {
-          attrs: { "card-id": _vm.cardId },
+          attrs: {
+            "card-id": _vm.cardId,
+            "prev-id":
+              _vm.tasks.length > 0 ? _vm.tasks[_vm.tasks.length - 1].id : 0,
+          },
           on: { createTask: _vm.createTask },
         }),
       ],
@@ -9118,7 +9130,38 @@ var render = function () {
           domProps: { value: _vm.cardId },
         }),
         _vm._v(" "),
-        _vm._m(0),
+        _c("div", { staticClass: "d-flex align-items-center" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.task.name,
+                expression: "task.name",
+              },
+            ],
+            staticClass: "form-control form-control-sm",
+            attrs: { name: "name" },
+            domProps: { value: _vm.task.name },
+            on: {
+              input: function ($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.task, "name", $event.target.value)
+              },
+            },
+          }),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-sm btn-success text-nowrap ml-2",
+              attrs: { type: "submit" },
+            },
+            [_vm._v("Add Task")]
+          ),
+        ]),
         _vm._v(" "),
         _vm.errored
           ? _c("div", {
@@ -9134,7 +9177,7 @@ var render = function () {
                 staticClass: "card-img-overlay p-0 h-100",
                 staticStyle: { "background-color": "rgba(255, 255, 255, 0.5)" },
               },
-              [_vm._m(1)]
+              [_vm._m(0)]
             )
           : _vm._e(),
       ]
@@ -9142,26 +9185,6 @@ var render = function () {
   ])
 }
 var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "d-flex align-items-center" }, [
-      _c("input", {
-        staticClass: "form-control form-control-sm",
-        attrs: { name: "name" },
-      }),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-sm btn-success text-nowrap ml-2",
-          attrs: { type: "submit" },
-        },
-        [_vm._v("Add Task")]
-      ),
-    ])
-  },
   function () {
     var _vm = this
     var _h = _vm.$createElement

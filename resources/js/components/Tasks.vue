@@ -22,7 +22,7 @@
                 :class="{'mb-3': tasks.length > 0}">
                 <tasks-item v-for="task in tasks" :key="task.id" :task="task" @updateTask="updateTask" @deleteTask="deleteTask"></tasks-item>
             </draggable>
-            <tasks-create :card-id="cardId" @createTask="createTask"></tasks-create>
+            <tasks-create :card-id="cardId" :prev-id="tasks.length > 0 ? tasks[tasks.length - 1].id : 0" @createTask="createTask"></tasks-create>
         </div>
     </div>
 </template>
