@@ -111,6 +111,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -149,15 +150,27 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
+    onDel: function onDel(event) {
+      console.log(arguments);
+    },
     onAdd: function onAdd(event) {
       // Called in target list
-      console.log('onAdd', event); // Update list ID when add from other list
+      console.log('onAdd', this.listId, event); // Update list ID when add from other list
 
-      this.cards[event.newIndex].list_id = this.listId;
+      this.cards[event.newIndex].list_id = this.listId; // TODO update card ajax
+      // TODO need to pass ref to list from
+
+      console.log('rollback in two lists');
     },
     onEnd: function onEnd(event) {
       // Called in source list
-      console.log('onEnd', event);
+      // TODO if event.pullMode === true - card moved to other list
+      // TODO else update card ajax
+      console.log('onEnd', this.listId, event);
+
+      if (event.pullMode !== true) {
+        console.log('rollback in one list');
+      }
     },
     createCard: function createCard(card) {
       this.cards.push(card);
@@ -6749,7 +6762,7 @@ var render = function () {
         {
           class: { "mb-3": _vm.cards.length > 0 },
           attrs: { forceFallback: true, group: "cards" },
-          on: { add: _vm.onAdd, end: _vm.onEnd },
+          on: { add: _vm.onAdd, remove: _vm.onDel, end: _vm.onEnd },
           model: {
             value: _vm.cards,
             callback: function ($$v) {

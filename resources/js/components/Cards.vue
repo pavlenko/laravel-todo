@@ -46,16 +46,21 @@ export default {
     methods: {
         onAdd(event) {
             // Called in target list
-            console.log('onAdd', event);
+            console.log('onAdd', this.listId, event);
             // Update list ID when add from other list
             this.cards[event.newIndex].list_id = this.listId;
             // TODO update card ajax
+            // TODO need to pass ref to list from
+            console.log('rollback in two lists')
         },
         onEnd(event) {
             // Called in source list
             // TODO if event.pullMode === true - card moved to other list
             // TODO else update card ajax
-            console.log('onEnd', event);
+            console.log('onEnd', this.listId, event);
+            if (event.pullMode !== true) {
+                console.log('rollback in one list')
+            }
         },
         createCard(card) {
             this.cards.push(card);
