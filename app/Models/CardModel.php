@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property $created_at
  * @property $updated_at
  */
-class CardModel extends Model
+final class CardModel extends Model
 {
     protected $fillable = ['list_id', 'name', 'text'];
 

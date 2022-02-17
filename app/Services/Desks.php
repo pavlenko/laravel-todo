@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\DTO\BaseDTO;
+use App\DTO\CardDTO;
 use App\DTO\DeskDTO;
 use App\DTO\ListDTO;
+use App\Models\CardModel;
 use App\Models\DeskModel;
 use App\Models\ListModel;
 use Illuminate\Database\Eloquent\Model;
@@ -87,6 +89,44 @@ final class Desks
     {
         ListModel::query()->whereKey($list->id)->delete();
         $this->onDeleteSortable($list, new ListModel());
+    }
+
+    public function getAllCard(int $listID): array
+    {
+        $rows = CardModel::query()->where('list_id', $listID)->get();
+        $data = [];
+
+        foreach ($rows as $row) {
+            $data[] = new CardDTO($row->getAttributes());
+        }
+
+        return $this->sortByPrevNext($data);
+    }
+
+    public function getOneCard(int $cardID): ?CardDTO
+    {
+        $card = CardModel::query()->whereKey($cardID)->first();
+        return null !== $card ? new CardDTO($card->getAttributes()) : null;
+    }
+
+    //TODO rename to insertCard and createCard must instantiate dto from attributes
+    public function createCard(CardDTO $card): void
+    {
+        $data = CardModel::query()->create($card->getAttributes());
+        $card->setAttributes($data->getAttributes());
+        $this->onCreateSortable($card, new CardModel());
+    }
+
+    public function updateCard(CardDTO $card): void
+    {
+        CardModel::query()->whereKey($card->id)->update($card->getAttributes());
+        $this->onUpdateSortable($card, new CardModel());
+    }
+
+    public function deleteCard(CardDTO $card): void
+    {
+        CardModel::query()->whereKey($card->id)->delete();
+        $this->onDeleteSortable($card, new CardModel());
     }
 
     protected function sortByPrevNext(array $data): array
