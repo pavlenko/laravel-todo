@@ -5,8 +5,6 @@ namespace App\Http\Controllers\API\V1;
 use App\DTO\ListDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ListRequest;
-use App\Http\Resources\ListResource;
-use App\Models\ListModel;
 use App\Services\Desks;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -37,9 +35,9 @@ final class ListController extends Controller
         return new JsonResource($dto);
     }
 
-    public function show(ListModel $list)
+    public function show($id)
     {
-        return new ListResource($list);
+        return new JsonResource((new Desks())->getList($id));
     }
 
     public function update(ListRequest $request, $id)
@@ -54,8 +52,6 @@ final class ListController extends Controller
         $desks->updateList($dto);
 
         return new JsonResource($dto);
-        $list->update($request->validated());
-        return new ListResource($list);
     }
 
     public function destroy($id)

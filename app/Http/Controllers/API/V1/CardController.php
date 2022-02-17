@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\DTO\CardDTO;
-use App\Models\CardModel;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CardRequest;
-use App\Http\Resources\CardResource;
 use App\Services\Desks;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -56,8 +54,6 @@ final class CardController extends Controller
         $desks->updateCard($dto);
 
         return new JsonResource($dto);
-        $card->update($request->validated());
-        return new CardResource($card);
     }
 
     public function destroy($id)
