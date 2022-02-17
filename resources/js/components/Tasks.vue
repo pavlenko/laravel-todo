@@ -19,6 +19,7 @@
                 :forceFallback="true"
                 tag="ul"
                 class="list-group"
+                @end="resortTask"
                 :class="{'mb-3': tasks.length > 0}">
                 <tasks-item v-for="task in tasks" :key="task.id" :task="task" @updateTask="updateTask" @deleteTask="deleteTask"></tasks-item>
             </draggable>
@@ -32,6 +33,7 @@ import TasksCreate from "./TasksCreate";
 import TasksItem from "./TasksItem";
 import draggable from "vuedraggable";
 import TaskDTO from "../DTO/TaskDTO";
+import ListDTO from "../DTO/ListDTO";
 
 export default {
     components: {TasksItem, TasksCreate, draggable},
@@ -52,7 +54,6 @@ export default {
         axios
             .get(__baseURL + '/api/V1/tasks', {params: {card_id: this.cardId}})
             .then(response => {
-                this.tasks = response.data.data;
                 this.tasks = [].map.call(response.data.data, item => new TaskDTO(item));
             })
             .catch(error => {
@@ -62,6 +63,35 @@ export default {
             .finally(() => { this.loading = false; });
     },
     methods: {
+        resortTask(event) {
+            if (event.newIndex !== event.oldIndex) {
+                let task = this.tasks[event.newIndex];
+                let prev = this.tasks[event.newIndex - 1] ? this.tasks[event.newIndex - 1].id : 0;
+                let next = this.tasks[event.newIndex + 1] ? this.tasks[event.newIndex + 1].id : 0;
+
+                this.loading = true;
+                this.errored = false;
+                axios
+                    .post(
+                        __baseURL + '/api/V1/tasks/' + task.id,
+                        Object.assign({_method: 'PUT'}, task, {prev: prev, next: next})
+                    )
+                    .then(response => {
+                        this.updateTask(new TaskDTO(response.data.data));
+                        //TODO move somewhere outside
+                        this.tasks.forEach((item, index) => {
+                            item.prev = this.tasks[index - 1] ? this.tasks[index - 1].id : 0;
+                            item.next = this.tasks[index + 1] ? this.tasks[index + 1].id : 0;
+                        })
+                    })
+                    .catch(error => {
+                        this.tasks.splice(event.oldIndex, 0, this.tasks[event.newIndex]);
+                        this.errored = true;
+                        console.log(error);
+                    })
+                    .finally(() => { this.loading = false; });
+            }
+        },
         createTask(task) {
             this.tasks.push(task);
         },

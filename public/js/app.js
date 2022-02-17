@@ -1522,6 +1522,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.umd.js");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../DTO/TaskDTO */ "./resources/js/DTO/TaskDTO.js");
+/* harmony import */ var _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../DTO/ListDTO */ "./resources/js/DTO/ListDTO.js");
 //
 //
 //
@@ -1551,6 +1552,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
 
 
 
@@ -1581,7 +1584,6 @@ __webpack_require__.r(__webpack_exports__);
         card_id: this.cardId
       }
     }).then(function (response) {
-      _this.tasks = response.data.data;
       _this.tasks = [].map.call(response.data.data, function (item) {
         return new _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_3__["default"](item);
       });
@@ -1593,6 +1595,38 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
+    resortTask: function resortTask(event) {
+      var _this2 = this;
+
+      if (event.newIndex !== event.oldIndex) {
+        var task = this.tasks[event.newIndex];
+        var prev = this.tasks[event.newIndex - 1] ? this.tasks[event.newIndex - 1].id : 0;
+        var next = this.tasks[event.newIndex + 1] ? this.tasks[event.newIndex + 1].id : 0;
+        this.loading = true;
+        this.errored = false;
+        axios.post(__baseURL + '/api/V1/tasks/' + task.id, Object.assign({
+          _method: 'PUT'
+        }, task, {
+          prev: prev,
+          next: next
+        })).then(function (response) {
+          _this2.updateTask(new _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_3__["default"](response.data.data)); //TODO move somewhere outside
+
+
+          _this2.tasks.forEach(function (item, index) {
+            item.prev = _this2.tasks[index - 1] ? _this2.tasks[index - 1].id : 0;
+            item.next = _this2.tasks[index + 1] ? _this2.tasks[index + 1].id : 0;
+          });
+        })["catch"](function (error) {
+          _this2.tasks.splice(event.oldIndex, 0, _this2.tasks[event.newIndex]);
+
+          _this2.errored = true;
+          console.log(error);
+        })["finally"](function () {
+          _this2.loading = false;
+        });
+      }
+    },
     createTask: function createTask(task) {
       this.tasks.push(task);
     },
@@ -9005,6 +9039,7 @@ var render = function () {
             staticClass: "list-group",
             class: { "mb-3": _vm.tasks.length > 0 },
             attrs: { forceFallback: true, tag: "ul" },
+            on: { end: _vm.resortTask },
             model: {
               value: _vm.tasks,
               callback: function ($$v) {
