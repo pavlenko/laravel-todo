@@ -19,11 +19,12 @@
 import ListsUpdate from "./ListsUpdate";
 import ListsDelete from "./ListsDelete";
 import Cards from "./Cards";
+import ListDTO from "../DTO/ListDTO";
 
 export default {
     components: {ListsUpdate, ListsDelete, Cards},
     props: {
-        list: Object
+        list: ListDTO
     },
     methods: {
         updateList(list) { this.$emit('updateList', list); },
