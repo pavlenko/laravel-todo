@@ -1521,6 +1521,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TasksItem__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TasksItem */ "./resources/js/components/TasksItem.vue");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.umd.js");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../DTO/TaskDTO */ "./resources/js/DTO/TaskDTO.js");
 //
 //
 //
@@ -1550,8 +1551,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
+
 
 
 
@@ -1582,7 +1582,9 @@ __webpack_require__.r(__webpack_exports__);
       }
     }).then(function (response) {
       _this.tasks = response.data.data;
-      console.log(response);
+      _this.tasks = [].map.call(response.data.data, function (item) {
+        return new _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_3__["default"](item);
+      });
     })["catch"](function (error) {
       _this.errored = true;
       console.log(error);
@@ -1764,6 +1766,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TasksDelete__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TasksDelete */ "./resources/js/components/TasksDelete.vue");
 /* harmony import */ var _TasksStatus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TasksStatus */ "./resources/js/components/TasksStatus.vue");
+/* harmony import */ var _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../DTO/TaskDTO */ "./resources/js/DTO/TaskDTO.js");
 //
 //
 //
@@ -1803,6 +1806,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1811,7 +1815,7 @@ __webpack_require__.r(__webpack_exports__);
     TasksDelete: _TasksDelete__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   props: {
-    task: Object
+    task: _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
@@ -1892,6 +1896,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../DTO/TaskDTO */ "./resources/js/DTO/TaskDTO.js");
 //
 //
 //
@@ -1907,9 +1912,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    task: Object
+    task: _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   data: function data() {
     return {
@@ -1937,12 +1943,12 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/tasks/' + this.task.id, {
-        _method: 'PUT',
-        name: this.task.name,
+      axios.post(__baseURL + '/api/V1/tasks/' + this.task.id, Object.assign({
+        _method: 'PUT'
+      }, this.task, {
         status: code
-      }).then(function (response) {
-        _this.$emit('updateTask', response.data.data);
+      })).then(function (response) {
+        _this.$emit('updateTask', new _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_0__["default"](response.data.data));
 
         _this.$bvModal.hide(_this.uuid);
       })["catch"](function (error) {
@@ -8991,14 +8997,6 @@ var render = function () {
             staticClass: "list-group",
             class: { "mb-3": _vm.tasks.length > 0 },
             attrs: { forceFallback: true, tag: "ul" },
-            on: {
-              start: function ($event) {
-                _vm.dragging = true
-              },
-              end: function ($event) {
-                _vm.dragging = false
-              },
-            },
             model: {
               value: _vm.tasks,
               callback: function ($$v) {
@@ -16063,6 +16061,53 @@ var ListDTO = /*#__PURE__*/_createClass(function ListDTO(data) {
   _defineProperty(this, "desk_id", null);
 
   _defineProperty(this, "name", null);
+
+  _defineProperty(this, "prev", 0);
+
+  _defineProperty(this, "next", 0);
+
+  _defineProperty(this, "created_at", null);
+
+  _defineProperty(this, "updated_at", null);
+
+  if (data) {
+    Object.assign(this, data);
+  }
+});
+
+
+;
+
+/***/ }),
+
+/***/ "./resources/js/DTO/TaskDTO.js":
+/*!*************************************!*\
+  !*** ./resources/js/DTO/TaskDTO.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TaskDTO; });
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var TaskDTO = /*#__PURE__*/_createClass(function TaskDTO(data) {
+  _classCallCheck(this, TaskDTO);
+
+  _defineProperty(this, "id", null);
+
+  _defineProperty(this, "card_id", null);
+
+  _defineProperty(this, "name", null);
+
+  _defineProperty(this, "status", 0);
 
   _defineProperty(this, "prev", 0);
 

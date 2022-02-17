@@ -14,9 +14,11 @@
 </template>
 
 <script>
+import TaskDTO from "../DTO/TaskDTO";
+
 export default {
     props: {
-        task: Object
+        task: TaskDTO
     },
     data() {
         return {
@@ -38,9 +40,12 @@ export default {
             this.loading = true;
             this.errored = false;
             axios
-                .post(__baseURL + '/api/V1/tasks/' + this.task.id, {_method: 'PUT', name: this.task.name, status: code})
+                .post(
+                    __baseURL + '/api/V1/tasks/' + this.task.id,
+                    Object.assign({_method: 'PUT'}, this.task, {status: code})
+                )
                 .then(response => {
-                    this.$emit('updateTask', response.data.data);
+                    this.$emit('updateTask', new TaskDTO(response.data.data));
                     this.$bvModal.hide(this.uuid);
                 })
                 .catch(error => {

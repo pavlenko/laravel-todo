@@ -17,8 +17,6 @@
             <draggable
                 v-model="tasks"
                 :forceFallback="true"
-                @start="dragging = true"
-                @end="dragging = false"
                 tag="ul"
                 class="list-group"
                 :class="{'mb-3': tasks.length > 0}">
@@ -33,6 +31,7 @@
 import TasksCreate from "./TasksCreate";
 import TasksItem from "./TasksItem";
 import draggable from "vuedraggable";
+import TaskDTO from "../DTO/TaskDTO";
 
 export default {
     components: {TasksItem, TasksCreate, draggable},
@@ -54,7 +53,7 @@ export default {
             .get(__baseURL + '/api/V1/tasks', {params: {card_id: this.cardId}})
             .then(response => {
                 this.tasks = response.data.data;
-                console.log(response);
+                this.tasks = [].map.call(response.data.data, item => new TaskDTO(item));
             })
             .catch(error => {
                 this.errored = true;

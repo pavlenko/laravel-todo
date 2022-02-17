@@ -40,11 +40,12 @@
 <script>
 import TasksDelete from "./TasksDelete";
 import TasksStatus from "./TasksStatus";
+import TaskDTO from "../DTO/TaskDTO";
 
 export default {
     components: {TasksStatus, TasksDelete},
     props: {
-        task: Object
+        task: TaskDTO
     },
     data() {
         return {
