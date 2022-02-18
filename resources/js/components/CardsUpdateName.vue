@@ -51,11 +51,14 @@ export default {
                 this.card.name = this.value;
                 this.loading = true;
                 this.errored = false;
-                console.log(this.card);
+
                 axios
-                    .post(__baseURL + '/api/V1/cards/' + this.card.id, Object.assign({_method: 'PUT'}, this.card))
+                    .post(
+                        __baseURL + '/api/V1/cards/' + this.card.id,
+                        Object.assign({_method: 'PUT'}, this.card)
+                    )
                     .then(response => {
-                        this.$emit('updateCard', new CardDTO(response.data.data));
+                        this.$emit('updateCard', this.card.setAttributes(response.data.data));
                     })
                     .catch(error => {
                         this.errored = true;

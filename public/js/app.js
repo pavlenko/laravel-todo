@@ -93,6 +93,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.umd.js");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../DTO/CardDTO */ "./resources/js/DTO/CardDTO.js");
+/* harmony import */ var _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../DTO/ListDTO */ "./resources/js/DTO/ListDTO.js");
 //
 //
 //
@@ -111,6 +112,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
@@ -150,22 +152,63 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     onAdd: function onAdd(event) {
+      var _this2 = this;
+
       // Called in target list
-      console.log('onAdd', this.listId, event); // Update list ID when add from other list
+      //console.log('onAdd', this.listId, event);
+      var card = this.cards[event.newIndex];
+      var prev = this.cards[event.newIndex - 1] ? this.cards[event.newIndex - 1].id : 0;
+      var next = this.cards[event.newIndex + 1] ? this.cards[event.newIndex + 1].id : 0;
+      axios.post(__baseURL + '/api/V1/cards/' + card.id, Object.assign({
+        _method: 'PUT'
+      }, card, {
+        list_id: this.listId,
+        prev: prev,
+        next: next
+      })).then(function (response) {
+        _this2.updateCard(new _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_3__["default"](response.data.data)); //TODO move somewhere outside
 
-      this.cards[event.newIndex].list_id = this.listId; // TODO update card ajax
-      // TODO need to pass ref to list from
 
-      console.log('rollback in two lists');
+        _this2.cards.forEach(function (item, index) {
+          item.prev = _this2.cards[index - 1] ? _this2.cards[index - 1].id : 0;
+          item.next = _this2.cards[index + 1] ? _this2.cards[index + 1].id : 0;
+        });
+      })["catch"](function (error) {
+        _this2.cards.splice(event.newIndex, 1);
+
+        event.from.__vue__.$options.propsData.value.splice(event.oldIndex, 0, card);
+
+        console.log(error);
+      })["finally"](function () {});
     },
     onEnd: function onEnd(event) {
-      // Called in source list
-      // TODO if event.pullMode === true - card moved to other list
-      // TODO else update card ajax
-      console.log('onEnd', this.listId, event);
+      var _this3 = this;
 
+      // Called in source list
+      //console.log('onEnd', this.listId, event);
       if (event.pullMode !== true) {
-        console.log('rollback in one list');
+        var card = this.cards[event.newIndex];
+        var prev = this.cards[event.newIndex - 1] ? this.cards[event.newIndex - 1].id : 0;
+        var next = this.cards[event.newIndex + 1] ? this.cards[event.newIndex + 1].id : 0;
+        axios.post(__baseURL + '/api/V1/cards/' + card.id, Object.assign({
+          _method: 'PUT'
+        }, card, {
+          list_id: this.listId,
+          prev: prev,
+          next: next
+        })).then(function (response) {
+          _this3.updateCard(new _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_3__["default"](response.data.data)); //TODO move somewhere outside
+
+
+          _this3.cards.forEach(function (item, index) {
+            item.prev = _this3.cards[index - 1] ? _this3.cards[index - 1].id : 0;
+            item.next = _this3.cards[index + 1] ? _this3.cards[index + 1].id : 0;
+          });
+        })["catch"](function (error) {
+          _this3.cards.splice(event.oldIndex, 0, _this3.cards[event.newIndex]);
+
+          console.log(error);
+        })["finally"](function () {});
       }
     },
     createCard: function createCard(card) {
@@ -482,11 +525,10 @@ __webpack_require__.r(__webpack_exports__);
         this.card.name = this.value;
         this.loading = true;
         this.errored = false;
-        console.log(this.card);
         axios.post(__baseURL + '/api/V1/cards/' + this.card.id, Object.assign({
           _method: 'PUT'
         }, this.card)).then(function (response) {
-          _this.$emit('updateCard', new _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_0__["default"](response.data.data));
+          _this.$emit('updateCard', _this.card.setAttributes(response.data.data));
         })["catch"](function (error) {
           _this.errored = true;
           console.log(error);
@@ -1385,6 +1427,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ListsUpdate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ListsUpdate */ "./resources/js/components/ListsUpdate.vue");
 /* harmony import */ var _ListsDelete__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ListsDelete */ "./resources/js/components/ListsDelete.vue");
 /* harmony import */ var _Cards__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Cards */ "./resources/js/components/Cards.vue");
+/* harmony import */ var _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../DTO/ListDTO */ "./resources/js/DTO/ListDTO.js");
 //
 //
 //
@@ -1402,6 +1445,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
@@ -1412,7 +1456,7 @@ __webpack_require__.r(__webpack_exports__);
     Cards: _Cards__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   props: {
-    list: Object
+    list: _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   methods: {
     updateList: function updateList(list) {

@@ -21,6 +21,7 @@ import CardsItem from "./CardsItem";
 import CardsCreate from "./CardsCreate";
 import draggable from "vuedraggable";
 import CardDTO from "../DTO/CardDTO";
+import ListDTO from "../DTO/ListDTO";
 
 export default {
     components: {CardsItem, CardsCreate, draggable},
@@ -46,20 +47,56 @@ export default {
     methods: {
         onAdd(event) {
             // Called in target list
-            console.log('onAdd', this.listId, event);
-            // Update list ID when add from other list
-            this.cards[event.newIndex].list_id = this.listId;
-            // TODO update card ajax
-            // TODO need to pass ref to list from
-            console.log('rollback in two lists')
+            //console.log('onAdd', this.listId, event);
+
+            let card = this.cards[event.newIndex];
+            let prev = this.cards[event.newIndex - 1] ? this.cards[event.newIndex - 1].id : 0;
+            let next = this.cards[event.newIndex + 1] ? this.cards[event.newIndex + 1].id : 0;
+            axios
+                .post(
+                    __baseURL + '/api/V1/cards/' + card.id,
+                    Object.assign({_method: 'PUT'}, card, {list_id: this.listId, prev: prev, next: next})
+                )
+                .then(response => {
+                    this.updateCard(new CardDTO(response.data.data));
+                    //TODO move somewhere outside
+                    this.cards.forEach((item, index) => {
+                        item.prev = this.cards[index - 1] ? this.cards[index - 1].id : 0;
+                        item.next = this.cards[index + 1] ? this.cards[index + 1].id : 0;
+                    })
+                })
+                .catch(error => {
+                    this.cards.splice(event.newIndex, 1);
+                    event.from.__vue__.$options.propsData.value.splice(event.oldIndex, 0, card);
+                    console.log(error);
+                })
+                .finally(() => {  });
         },
         onEnd(event) {
             // Called in source list
-            // TODO if event.pullMode === true - card moved to other list
-            // TODO else update card ajax
-            console.log('onEnd', this.listId, event);
+            //console.log('onEnd', this.listId, event);
             if (event.pullMode !== true) {
-                console.log('rollback in one list')
+                let card = this.cards[event.newIndex];
+                let prev = this.cards[event.newIndex - 1] ? this.cards[event.newIndex - 1].id : 0;
+                let next = this.cards[event.newIndex + 1] ? this.cards[event.newIndex + 1].id : 0;
+                axios
+                    .post(
+                        __baseURL + '/api/V1/cards/' + card.id,
+                        Object.assign({_method: 'PUT'}, card, {list_id: this.listId, prev: prev, next: next})
+                    )
+                    .then(response => {
+                        this.updateCard(new CardDTO(response.data.data));
+                        //TODO move somewhere outside
+                        this.cards.forEach((item, index) => {
+                            item.prev = this.cards[index - 1] ? this.cards[index - 1].id : 0;
+                            item.next = this.cards[index + 1] ? this.cards[index + 1].id : 0;
+                        })
+                    })
+                    .catch(error => {
+                        this.cards.splice(event.oldIndex, 0, this.cards[event.newIndex]);
+                        console.log(error);
+                    })
+                    .finally(() => {  });
             }
         },
         createCard(card) {
