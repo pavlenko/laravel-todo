@@ -51,6 +51,7 @@ import ListsCreate from "./ListsCreate";
 import draggable from "vuedraggable";
 import ListDTO from "../DTO/ListDTO";
 import DeskDTO from "../DTO/DeskDTO";
+import DesksAPI from "../api/DesksAPI";
 
 export default {
     components: {ListsItem, ListsCreate, draggable},
@@ -66,21 +67,14 @@ export default {
     mounted() {
         this.loading = true;
         this.errored = false;
-        axios
+
+        Promise
             .all([
-                axios
-                    .get(__baseURL + '/api/V1/desks/' + this.deskId)
-                    .then(response => {
-                        this.desk = new DeskDTO(response.data.data);
-                    }),
-                axios
-                    .get(__baseURL + '/api/V1/lists/', {params: {desk_id: this.deskId}})
-                    .then(response => {
-                        this.lists = [].map.call(response.data.data, item => new ListDTO(item));
-                    })
+                DesksAPI.getOneDesk(this.deskId).then(desk => this.desk = desk),
+                DesksAPI.getAllList(this.deskId).then(lists => this.lists = lists)
             ])
-            .catch(error => { this.errored = true; console.log(error); })
-            .finally(() => { this.loading = false; });
+            .catch(() => this.errored = true)
+            .finally(() => this.loading = false);
     },
     methods: {
         resort(event) {
@@ -91,13 +85,10 @@ export default {
 
                 this.loading = true;
                 this.errored = false;
-                axios
-                    .post(
-                        __baseURL + '/api/V1/lists/' + list.id,
-                        Object.assign({_method: 'PUT'}, list, {prev: prev, next: next})
-                    )
-                    .then(response => {
-                        this.updateList(new ListDTO(response.data.data));
+
+                DesksAPI.updateList(list, {prev: prev, next: next})
+                    .then(list => {
+                        this.updateList(list);
                         //TODO move somewhere outside
                         this.lists.forEach((list, index) => {
                             list.prev = this.lists[index - 1] ? this.lists[index - 1].id : 0;

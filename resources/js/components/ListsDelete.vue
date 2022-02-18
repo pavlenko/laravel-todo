@@ -31,6 +31,7 @@
 <script>
 import {v4 as uuid} from "uuid";
 import ListDTO from "../DTO/ListDTO";
+import DesksAPI from "../api/DesksAPI";
 
 export default {
     props: {
@@ -47,17 +48,14 @@ export default {
         deleteList() {
             this.loading = true;
             this.errored = false;
-            axios
-                .post(__baseURL + '/api/V1/lists/' + this.list.id, {_method: 'DELETE'})
-                .then(response => {
+
+            DesksAPI.deleteList(this.list)
+                .then(() => {
                     this.$emit('deleteList', this.list);
                     this.$bvModal.hide(this.uuid);
                 })
-                .catch(error => {
-                    this.errored = true;
-                    console.log(error);
-                })
-                .finally(() => { this.loading = false; });
+                .catch(() => this.errored = true)
+                .finally(() => this.loading = false);
         }
     }
 }

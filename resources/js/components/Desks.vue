@@ -42,7 +42,7 @@
 <script>
 import DesksItem from "./DesksItem";
 import DesksCreate from "./DesksCreate";
-import DeskDTO from "../DTO/DeskDTO";
+import DesksAPI from "../api/DesksAPI";
 
 export default {
     components: {DesksItem, DesksCreate},
@@ -60,16 +60,11 @@ export default {
         load() {
             this.loading = true;
             this.errored = false;
-            axios
-                .get(__baseURL + '/api/V1/desks')
-                .then(response => {
-                    this.desks = [].map.call(response.data.data, item => new DeskDTO(item));
-                })
-                .catch(error => {
-                    this.errored = true;
-                    console.log(error);
-                })
-                .finally(() => { this.loading = false; });
+
+            DesksAPI.getAllDesk()
+                .then(desks => this.desks = desks)
+                .catch(() => this.errored = true)
+                .finally(() => this.loading = false);
         },
         createDesk(desk) {
             this.desks.unshift(desk);

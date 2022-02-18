@@ -637,7 +637,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DesksItem__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DesksItem */ "./resources/js/components/DesksItem.vue");
 /* harmony import */ var _DesksCreate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DesksCreate */ "./resources/js/components/DesksCreate.vue");
-/* harmony import */ var _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../DTO/DeskDTO */ "./resources/js/DTO/DeskDTO.js");
+/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -703,15 +703,12 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.get(__baseURL + '/api/V1/desks').then(function (response) {
-        _this.desks = [].map.call(response.data.data, function (item) {
-          return new _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_2__["default"](item);
-        });
-      })["catch"](function (error) {
-        _this.errored = true;
-        console.log(error);
+      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__["default"].getAllDesk().then(function (desks) {
+        return _this.desks = desks;
+      })["catch"](function () {
+        return _this.errored = true;
       })["finally"](function () {
-        _this.loading = false;
+        return _this.loading = false;
       });
     },
     createDesk: function createDesk(desk) {
@@ -747,6 +744,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
 /* harmony import */ var _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/DeskDTO */ "./resources/js/DTO/DeskDTO.js");
+/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -784,6 +782,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -801,15 +800,14 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/desks', this.desk).then(function (response) {
-        _this.$emit('createDesk', new _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__["default"](response.data.data));
+      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__["default"].createDesk(this.desk).then(function (desk) {
+        _this.$emit('createDesk', desk);
 
         _this.$bvModal.hide(_this.uuid);
-      })["catch"](function (error) {
-        _this.errored = true;
-        console.log(error);
+      })["catch"](function () {
+        return _this.errored = true;
       })["finally"](function () {
-        _this.loading = false;
+        return _this.loading = false;
       });
     }
   }
@@ -828,6 +826,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
 /* harmony import */ var _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/DeskDTO */ "./resources/js/DTO/DeskDTO.js");
+/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -858,6 +857,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -877,17 +877,14 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/desks/' + this.desk.id, {
-        _method: 'DELETE'
-      }).then(function (response) {
+      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__["default"].deleteDesk(this.desk).then(function () {
         _this.$emit('deleteDesk', _this.desk);
 
         _this.$bvModal.hide(_this.uuid);
-      })["catch"](function (error) {
-        _this.errored = true;
-        console.log(error);
+      })["catch"](function () {
+        return _this.errored = true;
       })["finally"](function () {
-        _this.loading = false;
+        return _this.loading = false;
       });
     }
   }
@@ -954,6 +951,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
 /* harmony import */ var _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/DeskDTO */ "./resources/js/DTO/DeskDTO.js");
+/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -987,6 +985,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1001,22 +1000,19 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    updateDesk: function updateDesk(event) {
+    updateDesk: function updateDesk() {
       var _this = this;
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/desks/' + this.desk.id, Object.assign({
-        _method: 'PUT'
-      }, this.desk)).then(function (response) {
-        _this.$emit('updateDesk', new _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__["default"](response.data.data));
+      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__["default"].updateDesk(this.desk).then(function (desk) {
+        _this.$emit('updateDesk', desk);
 
         _this.$bvModal.hide(_this.uuid);
-      })["catch"](function (error) {
-        _this.errored = true;
-        console.log(error);
+      })["catch"](function () {
+        return _this.errored = true;
       })["finally"](function () {
-        _this.loading = false;
+        return _this.loading = false;
       });
     }
   }
@@ -1068,6 +1064,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../DTO/ListDTO */ "./resources/js/DTO/ListDTO.js");
 /* harmony import */ var _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../DTO/DeskDTO */ "./resources/js/DTO/DeskDTO.js");
+/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -1115,6 +1112,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
@@ -1140,21 +1138,14 @@ __webpack_require__.r(__webpack_exports__);
 
     this.loading = true;
     this.errored = false;
-    axios.all([axios.get(__baseURL + '/api/V1/desks/' + this.deskId).then(function (response) {
-      _this.desk = new _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_4__["default"](response.data.data);
-    }), axios.get(__baseURL + '/api/V1/lists/', {
-      params: {
-        desk_id: this.deskId
-      }
-    }).then(function (response) {
-      _this.lists = [].map.call(response.data.data, function (item) {
-        return new _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_3__["default"](item);
-      });
-    })])["catch"](function (error) {
-      _this.errored = true;
-      console.log(error);
+    Promise.all([_api_DesksAPI__WEBPACK_IMPORTED_MODULE_5__["default"].getOneDesk(this.deskId).then(function (desk) {
+      return _this.desk = desk;
+    }), _api_DesksAPI__WEBPACK_IMPORTED_MODULE_5__["default"].getAllList(this.deskId).then(function (lists) {
+      return _this.lists = lists;
+    })])["catch"](function () {
+      return _this.errored = true;
     })["finally"](function () {
-      _this.loading = false;
+      return _this.loading = false;
     });
   },
   methods: {
@@ -1258,6 +1249,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
 /* harmony import */ var _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/ListDTO */ "./resources/js/DTO/ListDTO.js");
+/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -1295,6 +1287,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1319,15 +1312,14 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/lists', Object.assign({}, this.list, {
+      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__["default"].createList(this.list, {
         prev: this.prevId
-      })).then(function (response) {
-        _this.$emit('createList', new _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_1__["default"](response.data.data));
+      }).then(function (list) {
+        _this.$emit('createList', list);
 
         _this.$bvModal.hide(_this.uuid);
-      })["catch"](function (error) {
-        _this.errored = true;
-        console.log(error);
+      })["catch"](function () {
+        return _this.errored = true;
       })["finally"](function () {
         _this.loading = false;
       });
@@ -1348,6 +1340,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
 /* harmony import */ var _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/ListDTO */ "./resources/js/DTO/ListDTO.js");
+/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -1378,6 +1371,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1397,17 +1391,14 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/lists/' + this.list.id, {
-        _method: 'DELETE'
-      }).then(function (response) {
+      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__["default"].deleteList(this.list).then(function () {
         _this.$emit('deleteList', _this.list);
 
         _this.$bvModal.hide(_this.uuid);
-      })["catch"](function (error) {
-        _this.errored = true;
-        console.log(error);
+      })["catch"](function () {
+        return _this.errored = true;
       })["finally"](function () {
-        _this.loading = false;
+        return _this.loading = false;
       });
     }
   }
@@ -1481,6 +1472,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
 /* harmony import */ var _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/ListDTO */ "./resources/js/DTO/ListDTO.js");
+/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -1515,6 +1507,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1534,17 +1527,14 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/lists/' + this.list.id, Object.assign({
-        _method: 'PUT'
-      }, this.list)).then(function (response) {
-        _this.$emit('updateList', new _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_1__["default"](response.data.data));
+      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__["default"].updateList(this.list).then(function (list) {
+        _this.$emit('updateList', list);
 
         _this.$bvModal.hide(_this.uuid);
-      })["catch"](function (error) {
-        _this.errored = true;
-        console.log(error);
+      })["catch"](function () {
+        return _this.errored = true;
       })["finally"](function () {
-        _this.loading = false;
+        return _this.loading = false;
       });
     }
   }
@@ -1946,7 +1936,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_3__["default"].updateTask(this.task, {}).then(function (task) {
+      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_3__["default"].updateTask(this.task).then(function (task) {
         return _this3.$emit('updateTask', task);
       })["catch"](function () {
         return _this3.errored = true;
@@ -16227,11 +16217,15 @@ var TaskDTO = /*#__PURE__*/_createClass(function TaskDTO(data) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../DTO/TaskDTO */ "./resources/js/DTO/TaskDTO.js");
+/* harmony import */ var _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/DeskDTO */ "./resources/js/DTO/DeskDTO.js");
+/* harmony import */ var _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../DTO/ListDTO */ "./resources/js/DTO/ListDTO.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+
 
 
 var ENDPOINT = __baseURL + '/api/V1/';
@@ -16242,13 +16236,158 @@ var DesksAPI = /*#__PURE__*/function () {
   }
 
   _createClass(DesksAPI, [{
-    key: "getAllTask",
+    key: "getAllDesk",
     value:
+    /**
+     * @returns {Promise<Array.<DeskDTO>>}
+     */
+    function getAllDesk() {
+      return axios.get(ENDPOINT + 'desks').then(function (response) {
+        return [].map.call(response.data.data, function (item) {
+          return new _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__["default"](item);
+        });
+      }, function (error) {
+        return console.log(error);
+      });
+    }
+    /**
+     * @param {Number} deskID
+     * @returns {Promise<DeskDTO>}
+     */
+
+  }, {
+    key: "getOneDesk",
+    value: function getOneDesk(deskID) {
+      return axios.get(ENDPOINT + 'desks/' + deskID).then(function (response) {
+        return new _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__["default"](response.data.data);
+      }, function (error) {
+        return console.log(error);
+      });
+    }
+    /**
+     * @param {DeskDTO} desk
+     * @param {Object} [params]
+     * @returns {Promise<DeskDTO>}
+     */
+
+  }, {
+    key: "createDesk",
+    value: function createDesk(desk, params) {
+      params = params || {};
+      return axios.post(ENDPOINT + 'desks', Object.assign({}, desk, params)).then(function (response) {
+        return new _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__["default"](response.data.data);
+      }, function (error) {
+        return console.log(error);
+      });
+    }
+    /**
+     * @param {DeskDTO} desk
+     * @param {Object} [params]
+     * @returns {Promise<DeskDTO>}
+     */
+
+  }, {
+    key: "updateDesk",
+    value: function updateDesk(desk, params) {
+      params = params || {};
+      return axios.post(ENDPOINT + 'desks/' + desk.id, Object.assign({
+        _method: 'PUT'
+      }, desk, params)).then(function (response) {
+        return new _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__["default"](response.data.data);
+      }, function (error) {
+        return console.log(error);
+      });
+    }
+    /**
+     * @param {DeskDTO} desk
+     * @returns {Promise}
+     */
+
+  }, {
+    key: "deleteDesk",
+    value: function deleteDesk(desk) {
+      return axios.post(ENDPOINT + 'desks/' + desk.id, {
+        _method: 'DELETE'
+      }).then(null, function (error) {
+        return console.log(error);
+      });
+    }
+    /**
+     * @param {Number} deskID
+     * @returns {Promise<Array.<ListDTO>>}
+     */
+
+  }, {
+    key: "getAllList",
+    value: function getAllList(deskID) {
+      return axios.get(ENDPOINT + 'lists', {
+        params: {
+          desk_id: deskID
+        }
+      }).then(function (response) {
+        return [].map.call(response.data.data, function (item) {
+          return new _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_2__["default"](item);
+        });
+      }, function (error) {
+        return console.log(error);
+      });
+    }
+    /**
+     * @param {ListDTO} list
+     * @param {Object} [params]
+     * @returns {Promise<ListDTO>}
+     */
+
+  }, {
+    key: "createList",
+    value: function createList(list, params) {
+      params = params || {};
+      return axios.post(ENDPOINT + 'lists', Object.assign({}, list, params)).then(function (response) {
+        return new _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_2__["default"](response.data.data);
+      }, function (error) {
+        return console.log(error);
+      });
+    }
+    /**
+     * @param {ListDTO} list
+     * @param {Object} [params]
+     * @returns {Promise<ListDTO>}
+     */
+
+  }, {
+    key: "updateList",
+    value: function updateList(list, params) {
+      params = params || {};
+      return axios.post(ENDPOINT + 'lists/' + list.id, Object.assign({
+        _method: 'PUT'
+      }, list, params)).then(function (response) {
+        return new _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_2__["default"](response.data.data);
+      }, function (error) {
+        return console.log(error);
+      });
+    }
+    /**
+     * @param {ListDTO} list
+     * @returns {Promise}
+     */
+
+  }, {
+    key: "deleteList",
+    value: function deleteList(list) {
+      return axios.post(ENDPOINT + 'lists/' + list.id, {
+        _method: 'DELETE'
+      }).then(null, function (error) {
+        return console.log(error);
+      });
+    }
     /**
      * @param {Number} cardID
      * @returns {Promise<Array.<TaskDTO>>}
      */
-    function getAllTask(cardID) {
+
+  }, {
+    key: "getAllTask",
+    value: function getAllTask(cardID) {
       return axios.get(ENDPOINT + 'tasks', {
         params: {
           card_id: cardID
@@ -16263,7 +16402,7 @@ var DesksAPI = /*#__PURE__*/function () {
     }
     /**
      * @param {TaskDTO} task
-     * @param {Object} params
+     * @param {Object} [params]
      * @returns {Promise<TaskDTO>}
      */
 
@@ -16277,7 +16416,7 @@ var DesksAPI = /*#__PURE__*/function () {
     }
     /**
      * @param {TaskDTO} task
-     * @param {Object} params
+     * @param {Object} [params]
      * @returns {Promise<TaskDTO>}
      */
 
@@ -16301,6 +16440,8 @@ var DesksAPI = /*#__PURE__*/function () {
     value: function deleteTask(task) {
       return axios.post(ENDPOINT + 'tasks/' + task.id, {
         _method: 'DELETE'
+      }).then(null, function (error) {
+        return console.log(error);
       });
     }
   }]);

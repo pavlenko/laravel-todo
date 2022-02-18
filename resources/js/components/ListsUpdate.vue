@@ -35,6 +35,7 @@
 <script>
 import {v4 as uuid} from "uuid";
 import ListDTO from "../DTO/ListDTO";
+import DesksAPI from "../api/DesksAPI";
 
 export default {
     props: {
@@ -51,17 +52,14 @@ export default {
         updateList(event) {
             this.loading = true;
             this.errored = false;
-            axios
-                .post(__baseURL + '/api/V1/lists/' + this.list.id, Object.assign({_method: 'PUT'}, this.list))
-                .then(response => {
-                    this.$emit('updateList', new ListDTO(response.data.data));
+
+            DesksAPI.updateList(this.list)
+                .then(list => {
+                    this.$emit('updateList', list);
                     this.$bvModal.hide(this.uuid);
                 })
-                .catch(error => {
-                    this.errored = true;
-                    console.log(error);
-                })
-                .finally(() => { this.loading = false; });
+                .catch(() => this.errored = true)
+                .finally(() => this.loading = false);
         }
     }
 }

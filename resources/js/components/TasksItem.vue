@@ -89,7 +89,7 @@ export default {
             this.loading = true;
             this.errored = false;
 
-            DesksAPI.updateTask(this.task, {})
+            DesksAPI.updateTask(this.task)
                 .then(task => this.$emit('updateTask', task))
                 .catch(() => this.errored = true)
                 .finally(() => this.loading = false);

@@ -38,6 +38,7 @@
 <script>
 import {v4 as uuid} from 'uuid';
 import DeskDTO from "../DTO/DeskDTO";
+import DesksAPI from "../api/DesksAPI";
 
 export default {
     data() {
@@ -52,17 +53,14 @@ export default {
         createDesk(event) {
             this.loading = true;
             this.errored = false;
-            axios
-                .post(__baseURL + '/api/V1/desks', this.desk)
-                .then(response => {
-                    this.$emit('createDesk', new DeskDTO(response.data.data));
+
+            DesksAPI.createDesk(this.desk)
+                .then(desk => {
+                    this.$emit('createDesk', desk);
                     this.$bvModal.hide(this.uuid);
                 })
-                .catch(error => {
-                    this.errored = true;
-                    console.log(error);
-                })
-                .finally(() => { this.loading = false; });
+                .catch(() => this.errored = true)
+                .finally(() => this.loading = false);
         }
     }
 }
