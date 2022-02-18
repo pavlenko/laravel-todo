@@ -26,6 +26,7 @@
 
 <script>
 import TaskDTO from "../DTO/TaskDTO";
+import DesksAPI from "../api/DesksAPI";
 
 export default {
     props: {
@@ -43,20 +44,14 @@ export default {
         createTask(event) {
             this.loading = true;
             this.errored = false;
-            axios
-                .post(
-                    __baseURL + '/api/V1/tasks',
-                    Object.assign({}, this.task, {prev: this.prevId})
-                )
-                .then(response => {
-                    this.$emit('createTask', new TaskDTO(response.data.data));
+
+            DesksAPI.createTask(this.task, {prev: this.prevId})
+                .then(task => {
+                    this.$emit('createTask', task);
                     event.target.reset();
                 })
-                .catch(error => {
-                    this.errored = true;
-                    console.log(error);
-                })
-                .finally(() => { this.loading = false; });
+                .catch(() => this.errored = true)
+                .finally(() => this.loading = false);
         }
     }
 }

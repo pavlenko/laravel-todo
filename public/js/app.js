@@ -1565,8 +1565,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TasksItem__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TasksItem */ "./resources/js/components/TasksItem.vue");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.umd.js");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../DTO/TaskDTO */ "./resources/js/DTO/TaskDTO.js");
-/* harmony import */ var _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../DTO/ListDTO */ "./resources/js/DTO/ListDTO.js");
+/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -1597,7 +1596,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 
 
 
@@ -1623,19 +1621,12 @@ __webpack_require__.r(__webpack_exports__);
 
     this.loading = true;
     this.errored = false;
-    axios.get(__baseURL + '/api/V1/tasks', {
-      params: {
-        card_id: this.cardId
-      }
-    }).then(function (response) {
-      _this.tasks = [].map.call(response.data.data, function (item) {
-        return new _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_3__["default"](item);
-      });
-    })["catch"](function (error) {
-      _this.errored = true;
-      console.log(error);
+    _api_DesksAPI__WEBPACK_IMPORTED_MODULE_3__["default"].getAllTask(this.cardId).then(function (tasks) {
+      return _this.tasks = tasks;
+    })["catch"](function () {
+      return _this.errored = true;
     })["finally"](function () {
-      _this.loading = false;
+      return _this.loading = false;
     });
   },
   methods: {
@@ -1648,13 +1639,11 @@ __webpack_require__.r(__webpack_exports__);
         var next = this.tasks[event.newIndex + 1] ? this.tasks[event.newIndex + 1].id : 0;
         this.loading = true;
         this.errored = false;
-        axios.post(__baseURL + '/api/V1/tasks/' + task.id, Object.assign({
-          _method: 'PUT'
-        }, task, {
+        _api_DesksAPI__WEBPACK_IMPORTED_MODULE_3__["default"].updateTask(task, {
           prev: prev,
           next: next
-        })).then(function (response) {
-          _this2.updateTask(new _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_3__["default"](response.data.data)); //TODO move somewhere outside
+        }).then(function (task) {
+          _this2.updateTask(task); //TODO move somewhere outside
 
 
           _this2.tasks.forEach(function (item, index) {
@@ -1665,9 +1654,8 @@ __webpack_require__.r(__webpack_exports__);
           _this2.tasks.splice(event.oldIndex, 0, _this2.tasks[event.newIndex]);
 
           _this2.errored = true;
-          console.log(error);
         })["finally"](function () {
-          _this2.loading = false;
+          return _this2.loading = false;
         });
       }
     },
@@ -1704,6 +1692,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../DTO/TaskDTO */ "./resources/js/DTO/TaskDTO.js");
+/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -1730,6 +1719,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -1751,17 +1741,16 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/tasks', Object.assign({}, this.task, {
+      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_1__["default"].createTask(this.task, {
         prev: this.prevId
-      })).then(function (response) {
-        _this.$emit('createTask', new _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_0__["default"](response.data.data));
+      }).then(function (task) {
+        _this.$emit('createTask', task);
 
         event.target.reset();
-      })["catch"](function (error) {
-        _this.errored = true;
-        console.log(error);
+      })["catch"](function () {
+        return _this.errored = true;
       })["finally"](function () {
-        _this.loading = false;
+        return _this.loading = false;
       });
     }
   }
@@ -1779,79 +1768,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    task: Object
-  },
-  data: function data() {
-    return {
-      uuid: Object(uuid__WEBPACK_IMPORTED_MODULE_0__["v4"])(),
-      loading: false,
-      errored: false
-    };
-  },
-  methods: {
-    deleteTask: function deleteTask() {
-      var _this = this;
-
-      this.loading = true;
-      this.errored = false;
-      axios.post(__baseURL + '/api/V1/tasks/' + this.task.id, {
-        _method: 'DELETE'
-      }).then(function () {
-        _this.$emit('deleteTask', _this.task);
-
-        _this.$bvModal.hide(_this.uuid);
-      })["catch"](function (error) {
-        _this.errored = true;
-        console.log(error);
-      })["finally"](function () {
-        _this.loading = false;
-      });
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TasksItem.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TasksItem.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _TasksDelete__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TasksDelete */ "./resources/js/components/TasksDelete.vue");
-/* harmony import */ var _TasksStatus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TasksStatus */ "./resources/js/components/TasksStatus.vue");
+/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 /* harmony import */ var _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../DTO/TaskDTO */ "./resources/js/DTO/TaskDTO.js");
 //
 //
@@ -1879,6 +1796,54 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    task: _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
+  data: function data() {
+    return {
+      uuid: Object(uuid__WEBPACK_IMPORTED_MODULE_0__["v4"])(),
+      loading: false,
+      errored: false
+    };
+  },
+  methods: {
+    deleteTask: function deleteTask() {
+      var _this = this;
+
+      this.loading = true;
+      this.errored = false;
+      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_1__["default"].deleteTask(this.task).then(function () {
+        _this.$emit('deleteTask', _this.task);
+
+        _this.$bvModal.hide(_this.uuid);
+      })["catch"](function () {
+        return _this.errored = true;
+      })["finally"](function () {
+        return _this.loading = false;
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TasksItem.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TasksItem.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _TasksDelete__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TasksDelete */ "./resources/js/components/TasksDelete.vue");
+/* harmony import */ var _TasksStatus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TasksStatus */ "./resources/js/components/TasksStatus.vue");
+/* harmony import */ var _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../DTO/TaskDTO */ "./resources/js/DTO/TaskDTO.js");
+/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -1892,6 +1857,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -1954,15 +1946,12 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/tasks/' + this.task.id, Object.assign({
-        _method: 'PUT'
-      }, this.task)).then(function (response) {
-        _this3.$emit('updateTask', response.data.data);
-      })["catch"](function (error) {
-        _this3.errored = true;
-        console.log(error);
+      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_3__["default"].updateTask(this.task, {}).then(function (task) {
+        return _this3.$emit('updateTask', task);
+      })["catch"](function () {
+        return _this3.errored = true;
       })["finally"](function () {
-        _this3.loading = false;
+        return _this3.loading = false;
       });
     },
     deleteTask: function deleteTask(task) {
@@ -1983,6 +1972,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../DTO/TaskDTO */ "./resources/js/DTO/TaskDTO.js");
+/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -1998,6 +1988,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2029,19 +2020,16 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/tasks/' + this.task.id, Object.assign({
-        _method: 'PUT'
-      }, this.task, {
+      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_1__["default"].updateTask(this.task, {
         status: code
-      })).then(function (response) {
-        _this.$emit('updateTask', new _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_0__["default"](response.data.data));
+      }).then(function (task) {
+        _this.$emit('updateTask', task);
 
         _this.$bvModal.hide(_this.uuid);
-      })["catch"](function (error) {
-        _this.errored = true;
-        console.log(error);
+      })["catch"](function () {
+        return _this.errored = true;
       })["finally"](function () {
-        _this.loading = false;
+        return _this.loading = false;
       });
     }
   }
@@ -16226,6 +16214,101 @@ var TaskDTO = /*#__PURE__*/_createClass(function TaskDTO(data) {
 
 
 ;
+
+/***/ }),
+
+/***/ "./resources/js/api/DesksAPI.js":
+/*!**************************************!*\
+  !*** ./resources/js/api/DesksAPI.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../DTO/TaskDTO */ "./resources/js/DTO/TaskDTO.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+
+var ENDPOINT = __baseURL + '/api/V1/';
+
+var DesksAPI = /*#__PURE__*/function () {
+  function DesksAPI() {
+    _classCallCheck(this, DesksAPI);
+  }
+
+  _createClass(DesksAPI, [{
+    key: "getAllTask",
+    value:
+    /**
+     * @param {Number} cardID
+     * @returns {Promise<Array.<TaskDTO>>}
+     */
+    function getAllTask(cardID) {
+      return axios.get(ENDPOINT + 'tasks', {
+        params: {
+          card_id: cardID
+        }
+      }).then(function (response) {
+        return [].map.call(response.data.data, function (item) {
+          return new _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_0__["default"](item);
+        });
+      }, function (error) {
+        return console.log(error);
+      });
+    }
+    /**
+     * @param {TaskDTO} task
+     * @param {Object} params
+     * @returns {Promise<TaskDTO>}
+     */
+
+  }, {
+    key: "createTask",
+    value: function createTask(task, params) {
+      params = params || {};
+      return axios.post(ENDPOINT + 'tasks', Object.assign({}, task, params)).then(function (response) {
+        return new _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_0__["default"](response.data.data);
+      });
+    }
+    /**
+     * @param {TaskDTO} task
+     * @param {Object} params
+     * @returns {Promise<TaskDTO>}
+     */
+
+  }, {
+    key: "updateTask",
+    value: function updateTask(task, params) {
+      params = params || {};
+      return axios.post(ENDPOINT + 'tasks/' + task.id, Object.assign({
+        _method: 'PUT'
+      }, task, params)).then(function (response) {
+        return new _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_0__["default"](response.data.data);
+      });
+    }
+    /**
+     * @param {TaskDTO} task
+     * @returns {Promise}
+     */
+
+  }, {
+    key: "deleteTask",
+    value: function deleteTask(task) {
+      return axios.post(ENDPOINT + 'tasks/' + task.id, {
+        _method: 'DELETE'
+      });
+    }
+  }]);
+
+  return DesksAPI;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (new DesksAPI());
 
 /***/ }),
 

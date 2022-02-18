@@ -26,10 +26,12 @@
 
 <script>
 import {v4 as uuid} from "uuid";
+import DesksAPI from "../api/DesksAPI";
+import TaskDTO from "../DTO/TaskDTO";
 
 export default {
     props: {
-        task: Object
+        task: TaskDTO
     },
     data() {
         return {
@@ -42,17 +44,14 @@ export default {
         deleteTask() {
             this.loading = true;
             this.errored = false;
-            axios
-                .post(__baseURL + '/api/V1/tasks/' + this.task.id, {_method: 'DELETE'})
+
+            DesksAPI.deleteTask(this.task)
                 .then(() => {
                     this.$emit('deleteTask', this.task);
                     this.$bvModal.hide(this.uuid);
                 })
-                .catch(error => {
-                    this.errored = true;
-                    console.log(error);
-                })
-                .finally(() => { this.loading = false; });
+                .catch(() => this.errored = true)
+                .finally(() => this.loading = false);
         }
     }
 }

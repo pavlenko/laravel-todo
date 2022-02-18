@@ -41,6 +41,7 @@
 import TasksDelete from "./TasksDelete";
 import TasksStatus from "./TasksStatus";
 import TaskDTO from "../DTO/TaskDTO";
+import DesksAPI from "../api/DesksAPI";
 
 export default {
     components: {TasksStatus, TasksDelete},
@@ -87,19 +88,11 @@ export default {
         updateTask() {
             this.loading = true;
             this.errored = false;
-            axios
-                .post(
-                    __baseURL + '/api/V1/tasks/' + this.task.id,
-                    Object.assign({_method: 'PUT'}, this.task)
-                )
-                .then(response => {
-                    this.$emit('updateTask', response.data.data);
-                })
-                .catch(error => {
-                    this.errored = true;
-                    console.log(error);
-                })
-                .finally(() => { this.loading = false; });
+
+            DesksAPI.updateTask(this.task, {})
+                .then(task => this.$emit('updateTask', task))
+                .catch(() => this.errored = true)
+                .finally(() => this.loading = false);
         },
         deleteTask(task) { this.$emit('deleteTask', task); }
     }

@@ -15,6 +15,7 @@
 
 <script>
 import TaskDTO from "../DTO/TaskDTO";
+import DesksAPI from "../api/DesksAPI";
 
 export default {
     props: {
@@ -39,20 +40,14 @@ export default {
         updateTask(code) {
             this.loading = true;
             this.errored = false;
-            axios
-                .post(
-                    __baseURL + '/api/V1/tasks/' + this.task.id,
-                    Object.assign({_method: 'PUT'}, this.task, {status: code})
-                )
-                .then(response => {
-                    this.$emit('updateTask', new TaskDTO(response.data.data));
+
+            DesksAPI.updateTask(this.task, {status: code})
+                .then(task => {
+                    this.$emit('updateTask', task);
                     this.$bvModal.hide(this.uuid);
                 })
-                .catch(error => {
-                    this.errored = true;
-                    console.log(error);
-                })
-                .finally(() => { this.loading = false; });
+                .catch(() => this.errored = true)
+                .finally(() => this.loading = false);
         }
     }
 }

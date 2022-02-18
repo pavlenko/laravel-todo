@@ -32,8 +32,7 @@
 import TasksCreate from "./TasksCreate";
 import TasksItem from "./TasksItem";
 import draggable from "vuedraggable";
-import TaskDTO from "../DTO/TaskDTO";
-import ListDTO from "../DTO/ListDTO";
+import DesksAPI from "../api/DesksAPI";
 
 export default {
     components: {TasksItem, TasksCreate, draggable},
@@ -51,16 +50,10 @@ export default {
         this.loading = true;
         this.errored = false;
 
-        axios
-            .get(__baseURL + '/api/V1/tasks', {params: {card_id: this.cardId}})
-            .then(response => {
-                this.tasks = [].map.call(response.data.data, item => new TaskDTO(item));
-            })
-            .catch(error => {
-                this.errored = true;
-                console.log(error);
-            })
-            .finally(() => { this.loading = false; });
+        DesksAPI.getAllTask(this.cardId)
+            .then(tasks => this.tasks = tasks)
+            .catch(() => this.errored = true)
+            .finally(() => this.loading = false);
     },
     methods: {
         resortTask(event) {
@@ -71,13 +64,10 @@ export default {
 
                 this.loading = true;
                 this.errored = false;
-                axios
-                    .post(
-                        __baseURL + '/api/V1/tasks/' + task.id,
-                        Object.assign({_method: 'PUT'}, task, {prev: prev, next: next})
-                    )
-                    .then(response => {
-                        this.updateTask(new TaskDTO(response.data.data));
+
+                DesksAPI.updateTask(task, {prev: prev, next: next})
+                    .then(task => {
+                        this.updateTask(task);
                         //TODO move somewhere outside
                         this.tasks.forEach((item, index) => {
                             item.prev = this.tasks[index - 1] ? this.tasks[index - 1].id : 0;
@@ -87,9 +77,8 @@ export default {
                     .catch(error => {
                         this.tasks.splice(event.oldIndex, 0, this.tasks[event.newIndex]);
                         this.errored = true;
-                        console.log(error);
                     })
-                    .finally(() => { this.loading = false; });
+                    .finally(() => this.loading = false);
             }
         },
         createTask(task) {
