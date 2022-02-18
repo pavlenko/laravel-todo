@@ -31,6 +31,7 @@
 <script>
 import {v4 as uuid} from "uuid";
 import CardDTO from "../DTO/CardDTO";
+import DesksAPI from "../api/DesksAPI";
 
 export default {
     props: {
@@ -47,17 +48,14 @@ export default {
         deleteCard() {
             this.loading = true;
             this.errored = false;
-            axios
-                .post(__baseURL + '/api/V1/cards/' + this.card.id, {_method: 'DELETE'})
-                .then(response => {
+
+            DesksAPI.deleteCard(this.card)
+                .then(() => {
                     this.$emit('deleteCard', this.card);
                     this.$bvModal.hide(this.uuid);
                 })
-                .catch(error => {
-                    this.errored = true;
-                    console.log(error);
-                })
-                .finally(() => { this.loading = false; });
+                .catch(() => this.errored = true)
+                .finally(() => this.loading = false);
         }
     }
 }

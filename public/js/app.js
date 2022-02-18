@@ -92,8 +92,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CardsCreate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CardsCreate */ "./resources/js/components/CardsCreate.vue");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.umd.js");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../DTO/CardDTO */ "./resources/js/DTO/CardDTO.js");
-/* harmony import */ var _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../DTO/ListDTO */ "./resources/js/DTO/ListDTO.js");
+/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -112,7 +111,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 
 
 
@@ -136,18 +134,12 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.loading = true;
-    axios.get(__baseURL + '/api/V1/cards/', {
-      params: {
-        list_id: this.listId
-      }
-    }).then(function (response) {
-      _this.cards = [].map.call(response.data.data, function (item) {
-        return new _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_3__["default"](item);
-      });
+    _api_DesksAPI__WEBPACK_IMPORTED_MODULE_3__["default"].getAllCard(this.listId).then(function (cards) {
+      return _this.cards = cards;
     })["catch"](function (error) {
       console.log(error);
     })["finally"](function () {
-      _this.loading = false;
+      return _this.loading = false;
     });
   },
   methods: {
@@ -159,26 +151,21 @@ __webpack_require__.r(__webpack_exports__);
       var card = this.cards[event.newIndex];
       var prev = this.cards[event.newIndex - 1] ? this.cards[event.newIndex - 1].id : 0;
       var next = this.cards[event.newIndex + 1] ? this.cards[event.newIndex + 1].id : 0;
-      axios.post(__baseURL + '/api/V1/cards/' + card.id, Object.assign({
-        _method: 'PUT'
-      }, card, {
+      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_3__["default"].updateCard(card, {
         list_id: this.listId,
         prev: prev,
         next: next
-      })).then(function (response) {
-        _this2.updateCard(new _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_3__["default"](response.data.data)); //TODO move somewhere outside
-
+      }).then(function (card) {
+        _this2.updateCard(card);
 
         _this2.cards.forEach(function (item, index) {
           item.prev = _this2.cards[index - 1] ? _this2.cards[index - 1].id : 0;
           item.next = _this2.cards[index + 1] ? _this2.cards[index + 1].id : 0;
         });
-      })["catch"](function (error) {
+      })["catch"](function () {
         _this2.cards.splice(event.newIndex, 1);
 
         event.from.__vue__.$options.propsData.value.splice(event.oldIndex, 0, card);
-
-        console.log(error);
       })["finally"](function () {});
     },
     onEnd: function onEnd(event) {
@@ -190,24 +177,19 @@ __webpack_require__.r(__webpack_exports__);
         var card = this.cards[event.newIndex];
         var prev = this.cards[event.newIndex - 1] ? this.cards[event.newIndex - 1].id : 0;
         var next = this.cards[event.newIndex + 1] ? this.cards[event.newIndex + 1].id : 0;
-        axios.post(__baseURL + '/api/V1/cards/' + card.id, Object.assign({
-          _method: 'PUT'
-        }, card, {
+        _api_DesksAPI__WEBPACK_IMPORTED_MODULE_3__["default"].updateCard(card, {
           list_id: this.listId,
           prev: prev,
           next: next
-        })).then(function (response) {
-          _this3.updateCard(new _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_3__["default"](response.data.data)); //TODO move somewhere outside
-
+        }).then(function (card) {
+          _this3.updateCard(card);
 
           _this3.cards.forEach(function (item, index) {
             item.prev = _this3.cards[index - 1] ? _this3.cards[index - 1].id : 0;
             item.next = _this3.cards[index + 1] ? _this3.cards[index + 1].id : 0;
           });
-        })["catch"](function (error) {
+        })["catch"](function () {
           _this3.cards.splice(event.oldIndex, 0, _this3.cards[event.newIndex]);
-
-          console.log(error);
         })["finally"](function () {});
       }
     },
@@ -244,6 +226,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
 /* harmony import */ var _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/CardDTO */ "./resources/js/DTO/CardDTO.js");
+/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -281,6 +264,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -304,17 +288,16 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/cards', Object.assign({}, this.card, {
+      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__["default"].createCard(this.card, {
         prev: this.prevId
-      })).then(function (response) {
-        _this.$emit('createCard', new _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_1__["default"](response.data.data));
+      }).then(function (card) {
+        _this.$emit('createCard', card);
 
         _this.$bvModal.hide(_this.uuid);
-      })["catch"](function (error) {
-        _this.errored = true;
-        console.log(error);
+      })["catch"](function () {
+        return _this.errored = true;
       })["finally"](function () {
-        _this.loading = false;
+        return _this.loading = false;
       });
     }
   }
@@ -333,6 +316,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
 /* harmony import */ var _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/CardDTO */ "./resources/js/DTO/CardDTO.js");
+/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -363,6 +347,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -382,17 +367,14 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      axios.post(__baseURL + '/api/V1/cards/' + this.card.id, {
-        _method: 'DELETE'
-      }).then(function (response) {
+      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__["default"].deleteCard(this.card).then(function () {
         _this.$emit('deleteCard', _this.card);
 
         _this.$bvModal.hide(_this.uuid);
-      })["catch"](function (error) {
-        _this.errored = true;
-        console.log(error);
+      })["catch"](function () {
+        return _this.errored = true;
       })["finally"](function () {
-        _this.loading = false;
+        return _this.loading = false;
       });
     }
   }
@@ -471,6 +453,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../DTO/CardDTO */ "./resources/js/DTO/CardDTO.js");
+/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -487,6 +470,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -525,15 +509,12 @@ __webpack_require__.r(__webpack_exports__);
         this.card.name = this.value;
         this.loading = true;
         this.errored = false;
-        axios.post(__baseURL + '/api/V1/cards/' + this.card.id, Object.assign({
-          _method: 'PUT'
-        }, this.card)).then(function (response) {
-          _this.$emit('updateCard', _this.card.setAttributes(response.data.data));
-        })["catch"](function (error) {
-          _this.errored = true;
-          console.log(error);
+        _api_DesksAPI__WEBPACK_IMPORTED_MODULE_1__["default"].updateCard(this.card).then(function (card) {
+          return _this.$emit('updateCard', card);
+        })["catch"](function () {
+          return _this.errored = true;
         })["finally"](function () {
-          _this.loading = false;
+          return _this.loading = false;
         });
       }
     }
@@ -554,6 +535,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../DTO/CardDTO */ "./resources/js/DTO/CardDTO.js");
 /* harmony import */ var _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ckeditor/ckeditor5-build-classic */ "./node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js");
 /* harmony import */ var _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -564,6 +546,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -609,16 +592,12 @@ __webpack_require__.r(__webpack_exports__);
       this.card.text = this.value;
       this.loading = true;
       this.errored = false;
-      console.log(this.card);
-      axios.post(__baseURL + '/api/V1/cards/' + this.card.id, Object.assign({
-        _method: 'PUT'
-      }, this.card)).then(function (response) {
-        _this2.$emit('updateCard', new _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_0__["default"](response.data.data));
-      })["catch"](function (error) {
-        _this2.errored = true;
-        console.log(error);
+      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__["default"].updateCard(this.card).then(function (card) {
+        return _this2.$emit('updateCard', card);
+      })["catch"](function () {
+        return _this2.errored = true;
       })["finally"](function () {
-        _this2.loading = false;
+        return _this2.loading = false;
       });
     }
   }
@@ -1158,13 +1137,11 @@ __webpack_require__.r(__webpack_exports__);
         var next = this.lists[event.newIndex + 1] ? this.lists[event.newIndex + 1].id : 0;
         this.loading = true;
         this.errored = false;
-        axios.post(__baseURL + '/api/V1/lists/' + list.id, Object.assign({
-          _method: 'PUT'
-        }, list, {
+        _api_DesksAPI__WEBPACK_IMPORTED_MODULE_5__["default"].updateList(list, {
           prev: prev,
           next: next
-        })).then(function (response) {
-          _this2.updateList(new _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_3__["default"](response.data.data)); //TODO move somewhere outside
+        }).then(function (list) {
+          _this2.updateList(list); //TODO move somewhere outside
 
 
           _this2.lists.forEach(function (list, index) {
@@ -2062,6 +2039,25 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 // module
 exports.push([module.i, "\n.card-update-name[data-v-7fa8979c] {\n    resize: none;\n    font-size: 1.25rem;\n    font-weight: 500;\n    line-height: 1.2;\n    color: #212529;\n    margin: -0.375rem -0.75rem;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CardsUpdateText.vue?vue&type=style&index=0&id=53bd7d84&scoped=true&lang=css&":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/CardsUpdateText.vue?vue&type=style&index=0&id=53bd7d84&scoped=true&lang=css& ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n[contentEditable=true][data-v-53bd7d84]:empty:not(:focus)::before{\n    content:attr(data-placeholder);\n}\n", ""]);
 
 // exports
 
@@ -5208,6 +5204,36 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CardsUpdateText.vue?vue&type=style&index=0&id=53bd7d84&scoped=true&lang=css&":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/CardsUpdateText.vue?vue&type=style&index=0&id=53bd7d84&scoped=true&lang=css& ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./CardsUpdateText.vue?vue&type=style&index=0&id=53bd7d84&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CardsUpdateText.vue?vue&type=style&index=0&id=53bd7d84&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/lib/addStyles.js":
 /*!****************************************************!*\
   !*** ./node_modules/style-loader/lib/addStyles.js ***!
@@ -7412,6 +7438,10 @@ var render = function () {
       _vm._v(" "),
       _c("div", {
         ref: "text",
+        attrs: {
+          contenteditable: "true",
+          "data-placeholder": "Please add description",
+        },
         domProps: { innerHTML: _vm._s(_vm.value) },
         on: { click: _vm.onFocus },
       }),
@@ -16219,11 +16249,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DTO_TaskDTO__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../DTO/TaskDTO */ "./resources/js/DTO/TaskDTO.js");
 /* harmony import */ var _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/DeskDTO */ "./resources/js/DTO/DeskDTO.js");
 /* harmony import */ var _DTO_ListDTO__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../DTO/ListDTO */ "./resources/js/DTO/ListDTO.js");
+/* harmony import */ var _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../DTO/CardDTO */ "./resources/js/DTO/CardDTO.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
 
 
 
@@ -16300,7 +16332,7 @@ var DesksAPI = /*#__PURE__*/function () {
     }
     /**
      * @param {DeskDTO} desk
-     * @returns {Promise}
+     * @returns {Promise<void>}
      */
 
   }, {
@@ -16368,13 +16400,81 @@ var DesksAPI = /*#__PURE__*/function () {
     }
     /**
      * @param {ListDTO} list
-     * @returns {Promise}
+     * @returns {Promise<void>}
      */
 
   }, {
     key: "deleteList",
     value: function deleteList(list) {
       return axios.post(ENDPOINT + 'lists/' + list.id, {
+        _method: 'DELETE'
+      }).then(null, function (error) {
+        return console.log(error);
+      });
+    }
+    /**
+     * @param {Number} listID
+     * @returns {Promise<Array.<CardDTO>>}
+     */
+
+  }, {
+    key: "getAllCard",
+    value: function getAllCard(listID) {
+      return axios.get(ENDPOINT + '/api/V1/cards/', {
+        params: {
+          list_id: listID
+        }
+      }).then(function (response) {
+        return [].map.call(response.data.data, function (item) {
+          return new _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_3__["default"](item);
+        });
+      }, function (error) {
+        return console.log(error);
+      });
+    }
+    /**
+     * @param {CardDTO} card
+     * @param {Object} [params]
+     * @returns {Promise<CardDTO>}
+     */
+
+  }, {
+    key: "createCard",
+    value: function createCard(card, params) {
+      params = params || {};
+      return axios.post(ENDPOINT + 'cards', Object.assign({}, card, params)).then(function (response) {
+        return new _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_3__["default"](response.data.data);
+      }, function (error) {
+        return console.log(error);
+      });
+    }
+    /**
+     * @param {CardDTO} card
+     * @param {Object} [params]
+     * @returns {Promise<CardDTO>}
+     */
+
+  }, {
+    key: "updateCard",
+    value: function updateCard(card, params) {
+      params = params || {};
+      return axios.post(ENDPOINT + 'cards/' + card.id, Object.assign({
+        _method: 'PUT'
+      }, card, params)).then(function (response) {
+        return new _DTO_CardDTO__WEBPACK_IMPORTED_MODULE_3__["default"](response.data.data);
+      }, function (error) {
+        return console.log(error);
+      });
+    }
+    /**
+     * @param {CardDTO} card
+     * @returns {Promise<void>}
+     */
+
+  }, {
+    key: "deleteCard",
+    value: function deleteCard(card) {
+      return axios.post(ENDPOINT + 'cards/' + card.id, {
         _method: 'DELETE'
       }).then(null, function (error) {
         return console.log(error);
@@ -16432,7 +16532,7 @@ var DesksAPI = /*#__PURE__*/function () {
     }
     /**
      * @param {TaskDTO} task
-     * @returns {Promise}
+     * @returns {Promise<void>}
      */
 
   }, {
@@ -17000,7 +17100,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CardsUpdateText_vue_vue_type_template_id_53bd7d84_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CardsUpdateText.vue?vue&type=template&id=53bd7d84&scoped=true& */ "./resources/js/components/CardsUpdateText.vue?vue&type=template&id=53bd7d84&scoped=true&");
 /* harmony import */ var _CardsUpdateText_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CardsUpdateText.vue?vue&type=script&lang=js& */ "./resources/js/components/CardsUpdateText.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _CardsUpdateText_vue_vue_type_style_index_0_id_53bd7d84_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CardsUpdateText.vue?vue&type=style&index=0&id=53bd7d84&scoped=true&lang=css& */ "./resources/js/components/CardsUpdateText.vue?vue&type=style&index=0&id=53bd7d84&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
 
 
 
@@ -17008,7 +17110,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _CardsUpdateText_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _CardsUpdateText_vue_vue_type_template_id_53bd7d84_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
   _CardsUpdateText_vue_vue_type_template_id_53bd7d84_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -17037,6 +17139,22 @@ component.options.__file = "resources/js/components/CardsUpdateText.vue"
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CardsUpdateText_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./CardsUpdateText.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CardsUpdateText.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CardsUpdateText_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/CardsUpdateText.vue?vue&type=style&index=0&id=53bd7d84&scoped=true&lang=css&":
+/*!**************************************************************************************************************!*\
+  !*** ./resources/js/components/CardsUpdateText.vue?vue&type=style&index=0&id=53bd7d84&scoped=true&lang=css& ***!
+  \**************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CardsUpdateText_vue_vue_type_style_index_0_id_53bd7d84_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./CardsUpdateText.vue?vue&type=style&index=0&id=53bd7d84&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CardsUpdateText.vue?vue&type=style&index=0&id=53bd7d84&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CardsUpdateText_vue_vue_type_style_index_0_id_53bd7d84_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CardsUpdateText_vue_vue_type_style_index_0_id_53bd7d84_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CardsUpdateText_vue_vue_type_style_index_0_id_53bd7d84_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CardsUpdateText_vue_vue_type_style_index_0_id_53bd7d84_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+
 
 /***/ }),
 

@@ -20,8 +20,7 @@
 import CardsItem from "./CardsItem";
 import CardsCreate from "./CardsCreate";
 import draggable from "vuedraggable";
-import CardDTO from "../DTO/CardDTO";
-import ListDTO from "../DTO/ListDTO";
+import DesksAPI from "../api/DesksAPI";
 
 export default {
     components: {CardsItem, CardsCreate, draggable},
@@ -36,13 +35,11 @@ export default {
     },
     mounted() {
         this.loading = true;
-        axios
-            .get(__baseURL + '/api/V1/cards/', {params: {list_id: this.listId}})
-            .then(response => {
-                this.cards = [].map.call(response.data.data, item => new CardDTO(item));
-            })
+
+        DesksAPI.getAllCard(this.listId)
+            .then(cards => this.cards = cards)
             .catch(error => { console.log(error); })
-            .finally(() => { this.loading = false; });
+            .finally(() => this.loading = false);
     },
     methods: {
         onAdd(event) {
@@ -52,23 +49,18 @@ export default {
             let card = this.cards[event.newIndex];
             let prev = this.cards[event.newIndex - 1] ? this.cards[event.newIndex - 1].id : 0;
             let next = this.cards[event.newIndex + 1] ? this.cards[event.newIndex + 1].id : 0;
-            axios
-                .post(
-                    __baseURL + '/api/V1/cards/' + card.id,
-                    Object.assign({_method: 'PUT'}, card, {list_id: this.listId, prev: prev, next: next})
-                )
-                .then(response => {
-                    this.updateCard(new CardDTO(response.data.data));
-                    //TODO move somewhere outside
+
+            DesksAPI.updateCard(card, {list_id: this.listId, prev: prev, next: next})
+                .then(card => {
+                    this.updateCard(card);
                     this.cards.forEach((item, index) => {
                         item.prev = this.cards[index - 1] ? this.cards[index - 1].id : 0;
                         item.next = this.cards[index + 1] ? this.cards[index + 1].id : 0;
                     })
                 })
-                .catch(error => {
+                .catch(() => {
                     this.cards.splice(event.newIndex, 1);
                     event.from.__vue__.$options.propsData.value.splice(event.oldIndex, 0, card);
-                    console.log(error);
                 })
                 .finally(() => {  });
         },
@@ -79,22 +71,17 @@ export default {
                 let card = this.cards[event.newIndex];
                 let prev = this.cards[event.newIndex - 1] ? this.cards[event.newIndex - 1].id : 0;
                 let next = this.cards[event.newIndex + 1] ? this.cards[event.newIndex + 1].id : 0;
-                axios
-                    .post(
-                        __baseURL + '/api/V1/cards/' + card.id,
-                        Object.assign({_method: 'PUT'}, card, {list_id: this.listId, prev: prev, next: next})
-                    )
-                    .then(response => {
-                        this.updateCard(new CardDTO(response.data.data));
-                        //TODO move somewhere outside
+
+                DesksAPI.updateCard(card, {list_id: this.listId, prev: prev, next: next})
+                    .then(card => {
+                        this.updateCard(card);
                         this.cards.forEach((item, index) => {
                             item.prev = this.cards[index - 1] ? this.cards[index - 1].id : 0;
                             item.next = this.cards[index + 1] ? this.cards[index + 1].id : 0;
                         })
                     })
-                    .catch(error => {
+                    .catch(() => {
                         this.cards.splice(event.oldIndex, 0, this.cards[event.newIndex]);
-                        console.log(error);
                     })
                     .finally(() => {  });
             }

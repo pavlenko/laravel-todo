@@ -1,6 +1,7 @@
 import TaskDTO from "../DTO/TaskDTO";
 import DeskDTO from "../DTO/DeskDTO";
 import ListDTO from "../DTO/ListDTO";
+import CardDTO from "../DTO/CardDTO";
 
 const ENDPOINT = __baseURL + '/api/V1/';
 
@@ -66,7 +67,7 @@ class DesksAPI
 
     /**
      * @param {DeskDTO} desk
-     * @returns {Promise}
+     * @returns {Promise<void>}
      */
     deleteDesk(desk) {
         return axios
@@ -122,11 +123,67 @@ class DesksAPI
 
     /**
      * @param {ListDTO} list
-     * @returns {Promise}
+     * @returns {Promise<void>}
      */
     deleteList(list) {
         return axios
             .post(ENDPOINT + 'lists/' + list.id, {_method: 'DELETE'})
+            .then(null, error => console.log(error));
+    }
+
+    /**
+     * @param {Number} listID
+     * @returns {Promise<Array.<CardDTO>>}
+     */
+    getAllCard(listID) {
+        return axios
+            .get(ENDPOINT + '/api/V1/cards/', {params: {list_id: listID}})
+            .then(
+                response => [].map.call(response.data.data, item => new CardDTO(item)),
+                error => console.log(error)
+            );
+    }
+
+    /**
+     * @param {CardDTO} card
+     * @param {Object} [params]
+     * @returns {Promise<CardDTO>}
+     */
+    createCard(card, params) {
+        params = params || {};
+        return axios
+            .post(ENDPOINT + 'cards', Object.assign({}, card, params))
+            .then(
+                response => new CardDTO(response.data.data),
+                error => console.log(error)
+            );
+    }
+
+    /**
+     * @param {CardDTO} card
+     * @param {Object} [params]
+     * @returns {Promise<CardDTO>}
+     */
+    updateCard(card, params) {
+        params = params || {};
+        return axios
+            .post(
+                ENDPOINT + 'cards/' + card.id,
+                Object.assign({_method: 'PUT'}, card, params)
+            )
+            .then(
+                response => new CardDTO(response.data.data),
+                error => console.log(error)
+            );
+    }
+
+    /**
+     * @param {CardDTO} card
+     * @returns {Promise<void>}
+     */
+    deleteCard(card) {
+        return axios
+            .post(ENDPOINT + 'cards/' + card.id, {_method: 'DELETE'})
             .then(null, error => console.log(error));
     }
 
@@ -175,7 +232,7 @@ class DesksAPI
 
     /**
      * @param {TaskDTO} task
-     * @returns {Promise}
+     * @returns {Promise<void>}
      */
     deleteTask(task) {
         return axios

@@ -16,6 +16,7 @@
 
 <script>
 import CardDTO from "../DTO/CardDTO";
+import DesksAPI from "../api/DesksAPI";
 
 export default {
     props: {
@@ -52,19 +53,10 @@ export default {
                 this.loading = true;
                 this.errored = false;
 
-                axios
-                    .post(
-                        __baseURL + '/api/V1/cards/' + this.card.id,
-                        Object.assign({_method: 'PUT'}, this.card)
-                    )
-                    .then(response => {
-                        this.$emit('updateCard', this.card.setAttributes(response.data.data));
-                    })
-                    .catch(error => {
-                        this.errored = true;
-                        console.log(error);
-                    })
-                    .finally(() => { this.loading = false; });
+                DesksAPI.updateCard(this.card)
+                    .then(card => this.$emit('updateCard', card))
+                    .catch(() => this.errored = true)
+                    .finally(() => this.loading = false);
             }
         }
     }
