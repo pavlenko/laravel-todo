@@ -63,6 +63,9 @@ export default {
 </script>
 
 <style scoped>
+[contentEditable=true] {
+    outline: none;
+}
 [contentEditable=true]:empty:not(:focus)::before{
     content:attr(data-placeholder);
 }

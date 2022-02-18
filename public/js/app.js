@@ -2057,7 +2057,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n[contentEditable=true][data-v-53bd7d84]:empty:not(:focus)::before{\n    content:attr(data-placeholder);\n}\n", ""]);
+exports.push([module.i, "\n[contentEditable=true][data-v-53bd7d84] {\n    outline: none;\n}\n[contentEditable=true][data-v-53bd7d84]:empty:not(:focus)::before{\n    content:attr(data-placeholder);\n}\n", ""]);
 
 // exports
 
@@ -16420,7 +16420,7 @@ var DesksAPI = /*#__PURE__*/function () {
   }, {
     key: "getAllCard",
     value: function getAllCard(listID) {
-      return axios.get(ENDPOINT + '/api/V1/cards/', {
+      return axios.get(ENDPOINT + 'cards', {
         params: {
           list_id: listID
         }

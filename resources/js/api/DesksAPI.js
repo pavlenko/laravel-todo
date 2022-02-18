@@ -137,7 +137,7 @@ class DesksAPI
      */
     getAllCard(listID) {
         return axios
-            .get(ENDPOINT + '/api/V1/cards/', {params: {list_id: listID}})
+            .get(ENDPOINT + 'cards', {params: {list_id: listID}})
             .then(
                 response => [].map.call(response.data.data, item => new CardDTO(item)),
                 error => console.log(error)
