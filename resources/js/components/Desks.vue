@@ -48,10 +48,15 @@ export default {
     components: {DesksItem, DesksCreate},
     data() {
         return {
-            desks: [],
+            //desks: [],
             loading: false,
             errored: false
         };
+    },
+    computed: {
+        desks() {
+            return this.$store.state.desks;
+        }
     },
     mounted() {
         this.load();
@@ -61,10 +66,14 @@ export default {
             this.loading = true;
             this.errored = false;
 
-            DesksAPI.getAllDesk()
-                .then(desks => this.desks = desks)
+            this.$store.dispatch('fetchDesks')
                 .catch(() => this.errored = true)
                 .finally(() => this.loading = false);
+
+            /*DesksAPI.getAllDesk()
+                .then(desks => this.desks = desks)
+                .catch(() => this.errored = true)
+                .finally(() => this.loading = false);*/
         },
         createDesk(desk) {
             this.desks.unshift(desk);

@@ -15,7 +15,10 @@ class DesksAPI
             .get(ENDPOINT + 'desks')
             .then(
                 response => [].map.call(response.data.data, item => new DeskDTO(item)),
-                error => console.log(error)
+                error => {
+                    console.log(error);
+                    throw error;
+                }
             );
     }
 
@@ -28,7 +31,10 @@ class DesksAPI
             .get(ENDPOINT + 'desks/' + deskID)
             .then(
                 response => new DeskDTO(response.data.data),
-                error => console.log(error)
+                error => {
+                    console.log(error);
+                    throw error;
+                }
             );
     }
 
@@ -43,7 +49,10 @@ class DesksAPI
             .post(ENDPOINT + 'desks', Object.assign({}, desk, params))
             .then(
                 response => new DeskDTO(response.data.data),
-                error => console.log(error)
+                error => {
+                    console.log(error);
+                    throw error;
+                }
             );
     }
 
@@ -61,7 +70,10 @@ class DesksAPI
             )
             .then(
                 response => new DeskDTO(response.data.data),
-                error => console.log(error)
+                error => {
+                    console.log(error);
+                    throw error;
+                }
             );
     }
 
@@ -72,7 +84,10 @@ class DesksAPI
     deleteDesk(desk) {
         return axios
             .post(ENDPOINT + 'desks/' + desk.id, {_method: 'DELETE'})
-            .then(null, error => console.log(error));
+            .then(null, error => {
+                console.log(error);
+                throw error;
+            });
     }
 
     /**
@@ -84,7 +99,10 @@ class DesksAPI
             .get(ENDPOINT + 'lists', {params: {desk_id: deskID}})
             .then(
                 response => [].map.call(response.data.data, item => new ListDTO(item)),
-                error => console.log(error)
+                error => {
+                    console.log(error);
+                    throw error;
+                }
             );
     }
 
@@ -99,7 +117,10 @@ class DesksAPI
             .post(ENDPOINT + 'lists', Object.assign({}, list, params))
             .then(
                 response => new ListDTO(response.data.data),
-                error => console.log(error)
+                error => {
+                    console.log(error);
+                    throw error;
+                }
             );
     }
 
@@ -117,7 +138,10 @@ class DesksAPI
             )
             .then(
                 response => new ListDTO(response.data.data),
-                error => console.log(error)
+                error => {
+                    console.log(error);
+                    throw error;
+                }
             );
     }
 
@@ -128,7 +152,10 @@ class DesksAPI
     deleteList(list) {
         return axios
             .post(ENDPOINT + 'lists/' + list.id, {_method: 'DELETE'})
-            .then(null, error => console.log(error));
+            .then(null, error => {
+                console.log(error);
+                throw error;
+            });
     }
 
     /**
@@ -140,7 +167,10 @@ class DesksAPI
             .get(ENDPOINT + 'cards', {params: {list_id: listID}})
             .then(
                 response => [].map.call(response.data.data, item => new CardDTO(item)),
-                error => console.log(error)
+                error => {
+                    console.log(error);
+                    throw error;
+                }
             );
     }
 
@@ -155,7 +185,10 @@ class DesksAPI
             .post(ENDPOINT + 'cards', Object.assign({}, card, params))
             .then(
                 response => new CardDTO(response.data.data),
-                error => console.log(error)
+                error => {
+                    console.log(error);
+                    throw error;
+                }
             );
     }
 
@@ -173,7 +206,10 @@ class DesksAPI
             )
             .then(
                 response => new CardDTO(response.data.data),
-                error => console.log(error)
+                error => {
+                    console.log(error);
+                    throw error;
+                }
             );
     }
 
@@ -184,7 +220,10 @@ class DesksAPI
     deleteCard(card) {
         return axios
             .post(ENDPOINT + 'cards/' + card.id, {_method: 'DELETE'})
-            .then(null, error => console.log(error));
+            .then(null, error => {
+                console.log(error);
+                throw error;
+            });
     }
 
     /**
@@ -196,7 +235,10 @@ class DesksAPI
             .get(ENDPOINT + 'tasks', {params: {card_id: cardID}})
             .then(
                 response => [].map.call(response.data.data, item => new TaskDTO(item)),
-                error => console.log(error)
+                error => {
+                    console.log(error);
+                    throw error;
+                }
             );
     }
 
@@ -212,7 +254,13 @@ class DesksAPI
                 ENDPOINT + 'tasks',
                 Object.assign({}, task, params)
             )
-            .then(response => new TaskDTO(response.data.data));
+            .then(
+                response => new TaskDTO(response.data.data),
+                error => {
+                    console.log(error);
+                    throw error;
+                }
+            );
     }
 
     /**
@@ -227,7 +275,13 @@ class DesksAPI
                 ENDPOINT + 'tasks/' + task.id,
                 Object.assign({_method: 'PUT'}, task, params)
             )
-            .then(response => new TaskDTO(response.data.data));
+            .then(
+                response => new TaskDTO(response.data.data),
+                error => {
+                    console.log(error);
+                    throw error;
+                }
+            );
     }
 
     /**
@@ -237,7 +291,10 @@ class DesksAPI
     deleteTask(task) {
         return axios
             .post(ENDPOINT + 'tasks/' + task.id, {_method: 'DELETE'})
-            .then(null, error => console.log(error));
+            .then(null, error => {
+                console.log(error);
+                throw error;
+            });
     }
 }
 

@@ -19,6 +19,7 @@ final class DeskController extends Controller
 
     public function store(DeskRequest $request)
     {
+        //throw new \Exception();
         $request->validate([]);
 
         $desks = new Desks();

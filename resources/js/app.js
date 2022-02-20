@@ -1,10 +1,12 @@
 require('./bootstrap');
 
 import Vue from "vue";
+import Vuex from 'vuex';
 import VueRouter from "vue-router/dist/vue-router.min";
 import BootstrapVue from "bootstrap-vue/dist/bootstrap-vue.min";
 //import CKEditor from '@ckeditor/ckeditor5-vue2';
 
+Vue.use(Vuex);
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
 //Vue.use(CKEditor);
@@ -23,6 +25,8 @@ const colors = {
     'warning': '#ffc107',
     'danger': '#dc3545',
 };
+
+import store from './store/desks';
 
 const router = new VueRouter({
     mode: 'history',
@@ -47,6 +51,7 @@ const router = new VueRouter({
 
 const app = new Vue({
     el: '#app',
+    store: new Vuex.Store(store),
     router,
     components: {App},
     template: '<app></app>'

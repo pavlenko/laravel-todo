@@ -6,7 +6,7 @@
             </span>
         </a>
         <b-modal :id="uuid" title="Create Desk" hide-footer :header-class="'py-1 px-3'" body-class="p-0">
-            <div v-if="errored" class="alert alert-danger p-2" role="alert">
+            <div v-if="errored" class="alert alert-danger p-2 mx-3 mt-3 mb-0" role="alert">
                 <h4 class="alert-heading m-0">
                     Something went wrong
                     <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" @click="errored = false">
@@ -50,17 +50,22 @@ export default {
         };
     },
     methods: {
-        createDesk(event) {
+        createDesk() {
             this.loading = true;
             this.errored = false;
 
-            DesksAPI.createDesk(this.desk)
+            this.$store.dispatch('createDesk', this.desk)
+                .then(() => this.$bvModal.hide(this.uuid))
+                .catch(() => this.errored = true)
+                .finally(() => this.loading = false);
+
+            /*DesksAPI.createDesk(this.desk)
                 .then(desk => {
                     this.$emit('createDesk', desk);
                     this.$bvModal.hide(this.uuid);
                 })
                 .catch(() => this.errored = true)
-                .finally(() => this.loading = false);
+                .finally(() => this.loading = false);*/
         }
     }
 }
