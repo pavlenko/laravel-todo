@@ -2,7 +2,8 @@ import DesksAPI from "../api/DesksAPI";
 
 const state = () => {
     return {
-        desks: []
+        desks: [],
+        lists: []
     };
 };
 
@@ -28,25 +29,35 @@ const mutations = {
         if (index !== -1) {
             state.desks.splice(index, 1);
         }
+    },
+    FETCH_LISTS_SUCCESS(state, lists) {
+        state.lists = lists
+    },
+    RESORT_LIST(state, lists) {
+        state.lists = lists;
     }
 };
 
 const actions = {
-    fetchDesks({commit, state}) {
+    fetchDesks({commit}) {
         return DesksAPI.getAllDesk()
             .then(desks => commit('FETCH_DESKS_SUCCESS', desks));
     },
-    createDesk({commit, state}, desk) {
+    createDesk({commit}, desk) {
         return DesksAPI.createDesk(desk)
             .then(desk => commit('CREATE_DESK_SUCCESS', desk));
     },
-    updateDesk({commit, state}, desk) {
+    updateDesk({commit}, desk) {
         return DesksAPI.updateDesk(desk)
             .then(desk => commit('UPDATE_DESK_SUCCESS', desk));
     },
-    deleteDesk({commit, state}, desk) {
+    deleteDesk({commit}, desk) {
         return DesksAPI.deleteDesk(desk)
             .then(() => commit('DELETE_DESK_SUCCESS', desk));
+    },
+    fetchLists({commit}, deskID) {
+        return DesksAPI.getAllList(deskID)
+            .then(lists => commit('FETCH_LISTS_SUCCESS', lists));
     }
 };
 

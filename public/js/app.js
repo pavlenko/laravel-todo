@@ -1078,29 +1078,42 @@ __webpack_require__.r(__webpack_exports__);
     return {
       deskId: this.$route.params.id,
       desk: {},
-      lists: [],
+      //lists: [],
       loading: false,
       errored: false
     };
   },
+  computed: {
+    lists: {
+      get: function get() {
+        return this.$store.state.lists;
+      },
+      set: function set(value) {
+        this.$store.commit('RESORT_LIST', value);
+      }
+    }
+  },
   mounted: function mounted() {
     var _this = this;
 
-    this.loading = true;
-    this.errored = false;
-    Promise.all([_api_DesksAPI__WEBPACK_IMPORTED_MODULE_5__["default"].getOneDesk(this.deskId).then(function (desk) {
+    _api_DesksAPI__WEBPACK_IMPORTED_MODULE_5__["default"].getOneDesk(this.deskId).then(function (desk) {
       return _this.desk = desk;
-    }), _api_DesksAPI__WEBPACK_IMPORTED_MODULE_5__["default"].getAllList(this.deskId).then(function (lists) {
-      return _this.lists = lists;
-    })])["catch"](function () {
-      return _this.errored = true;
-    })["finally"](function () {
-      return _this.loading = false;
-    });
+    }), this.fetchLists();
   },
   methods: {
-    resort: function resort(event) {
+    fetchLists: function fetchLists() {
       var _this2 = this;
+
+      this.loading = true;
+      this.errored = false;
+      this.$store.dispatch('fetchLists', this.deskId)["catch"](function () {
+        return _this2.errored = true;
+      })["finally"](function () {
+        return _this2.loading = false;
+      });
+    },
+    resort: function resort(event) {
+      var _this3 = this;
 
       if (event.newIndex !== event.oldIndex) {
         var list = this.lists[event.newIndex];
@@ -1112,20 +1125,20 @@ __webpack_require__.r(__webpack_exports__);
           prev: prev,
           next: next
         }).then(function (list) {
-          _this2.updateList(list); //TODO move somewhere outside
+          _this3.updateList(list); //TODO move somewhere outside
 
 
-          _this2.lists.forEach(function (list, index) {
-            list.prev = _this2.lists[index - 1] ? _this2.lists[index - 1].id : 0;
-            list.next = _this2.lists[index + 1] ? _this2.lists[index + 1].id : 0;
+          _this3.lists.forEach(function (list, index) {
+            list.prev = _this3.lists[index - 1] ? _this3.lists[index - 1].id : 0;
+            list.next = _this3.lists[index + 1] ? _this3.lists[index + 1].id : 0;
           });
         })["catch"](function (error) {
-          _this2.lists.splice(event.oldIndex, 0, _this2.lists[event.newIndex]);
+          _this3.lists.splice(event.oldIndex, 0, _this3.lists[event.newIndex]);
 
-          _this2.errored = true;
+          _this3.errored = true;
           console.log(error);
         })["finally"](function () {
-          _this2.loading = false;
+          _this3.loading = false;
         });
       }
     },
@@ -8314,7 +8327,26 @@ var render = function () {
                 staticClass: "alert alert-danger p-2 mx-2",
                 attrs: { role: "alert" },
               },
-              [_vm._m(0)]
+              [
+                _c("h5", { staticClass: "alert-heading m-0" }, [
+                  _vm._v(
+                    "\n                Something went wrong\n                "
+                  ),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-sm btn-danger",
+                      attrs: { type: "button", "data-dismiss": "alert" },
+                      on: { click: _vm.fetchLists },
+                    },
+                    [
+                      _vm._v(
+                        "\n                    Try again\n                "
+                      ),
+                    ]
+                  ),
+                ]),
+              ]
             )
           : _vm._e(),
         _vm._v(" "),
@@ -8377,28 +8409,7 @@ var render = function () {
     ),
   ])
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("h4", { staticClass: "alert-heading m-0" }, [
-      _vm._v("\n                Something went wrong\n                "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-sm btn-danger",
-          attrs: {
-            type: "button",
-            "data-dismiss": "alert",
-            "TODO-click": "load",
-          },
-        },
-        [_vm._v("\n                    Try again\n                ")]
-      ),
-    ])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -19576,7 +19587,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var state = function state() {
   return {
-    desks: []
+    desks: [],
+    lists: []
   };
 };
 
@@ -19609,35 +19621,43 @@ var mutations = {
     if (index !== -1) {
       state.desks.splice(index, 1);
     }
+  },
+  FETCH_LISTS_SUCCESS: function FETCH_LISTS_SUCCESS(state, lists) {
+    state.lists = lists;
+  },
+  RESORT_LIST: function RESORT_LIST(state, lists) {
+    state.lists = lists;
   }
 };
 var actions = {
   fetchDesks: function fetchDesks(_ref) {
-    var commit = _ref.commit,
-        state = _ref.state;
+    var commit = _ref.commit;
     return _api_DesksAPI__WEBPACK_IMPORTED_MODULE_0__["default"].getAllDesk().then(function (desks) {
       return commit('FETCH_DESKS_SUCCESS', desks);
     });
   },
   createDesk: function createDesk(_ref2, desk) {
-    var commit = _ref2.commit,
-        state = _ref2.state;
+    var commit = _ref2.commit;
     return _api_DesksAPI__WEBPACK_IMPORTED_MODULE_0__["default"].createDesk(desk).then(function (desk) {
       return commit('CREATE_DESK_SUCCESS', desk);
     });
   },
   updateDesk: function updateDesk(_ref3, desk) {
-    var commit = _ref3.commit,
-        state = _ref3.state;
+    var commit = _ref3.commit;
     return _api_DesksAPI__WEBPACK_IMPORTED_MODULE_0__["default"].updateDesk(desk).then(function (desk) {
       return commit('UPDATE_DESK_SUCCESS', desk);
     });
   },
   deleteDesk: function deleteDesk(_ref4, desk) {
-    var commit = _ref4.commit,
-        state = _ref4.state;
+    var commit = _ref4.commit;
     return _api_DesksAPI__WEBPACK_IMPORTED_MODULE_0__["default"].deleteDesk(desk).then(function () {
       return commit('DELETE_DESK_SUCCESS', desk);
+    });
+  },
+  fetchLists: function fetchLists(_ref5, deskID) {
+    var commit = _ref5.commit;
+    return _api_DesksAPI__WEBPACK_IMPORTED_MODULE_0__["default"].getAllList(deskID).then(function (lists) {
+      return commit('FETCH_LISTS_SUCCESS', lists);
     });
   }
 };

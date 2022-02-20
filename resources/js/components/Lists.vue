@@ -22,12 +22,12 @@
         </section>
         <section class="content pb-3">
             <div v-if="errored" class="alert alert-danger p-2 mx-2" role="alert">
-                <h4 class="alert-heading m-0">
+                <h5 class="alert-heading m-0">
                     Something went wrong
-                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" TODO-click="load">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" @click="fetchLists">
                         Try again
                     </button>
-                </h4>
+                </h5>
             </div>
             <div v-if="loading" class="d-flex justify-content-center">
                 <div class="spinner-border" role="status" aria-hidden="true"></div>
@@ -59,24 +59,34 @@ export default {
         return {
             deskId: this.$route.params.id,
             desk: {},
-            lists: [],
+            //lists: [],
             loading: false,
             errored: false
         };
     },
+    computed: {
+        lists: {
+            get() {
+                return this.$store.state.lists
+            },
+            set(value) {
+                this.$store.commit('RESORT_LIST', value)
+            }
+        }
+    },
     mounted() {
-        this.loading = true;
-        this.errored = false;
-
-        Promise
-            .all([
-                DesksAPI.getOneDesk(this.deskId).then(desk => this.desk = desk),
-                DesksAPI.getAllList(this.deskId).then(lists => this.lists = lists)
-            ])
-            .catch(() => this.errored = true)
-            .finally(() => this.loading = false);
+        DesksAPI.getOneDesk(this.deskId).then(desk => this.desk = desk),
+        this.fetchLists();
     },
     methods: {
+        fetchLists() {
+            this.loading = true;
+            this.errored = false;
+
+            this.$store.dispatch('fetchLists', this.deskId)
+                .catch(() => this.errored = true)
+                .finally(() => this.loading = false);
+        },
         resort(event) {
             if (event.newIndex !== event.oldIndex) {
                 let list = this.lists[event.newIndex];
