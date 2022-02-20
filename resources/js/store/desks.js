@@ -24,9 +24,9 @@ const mutations = {
         }
     },
     DELETE_DESK_SUCCESS(state, desk) {
-        const index = store.desks.findIndex(item => String(item.id) === String(desk.id));
+        const index = state.desks.findIndex(item => String(item.id) === String(desk.id));
         if (index !== -1) {
-            store.splice(index, 1);
+            state.desks.splice(index, 1);
         }
     }
 };
@@ -46,7 +46,7 @@ const actions = {
     },
     deleteDesk({commit, state}, desk) {
         return DesksAPI.deleteDesk(desk)
-            .then(desk => commit('DELETE_DESK_SUCCESS', desk));
+            .then(() => commit('DELETE_DESK_SUCCESS', desk));
     }
 };
 

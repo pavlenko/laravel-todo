@@ -54,7 +54,10 @@ export default {
             this.errored = false;
 
             this.$store.dispatch('createDesk', this.desk)
-                .then(() => this.$bvModal.hide(this.uuid))
+                .then(() => {
+                    this.$bvModal.hide(this.uuid);
+                    this.desk = new DeskDTO();
+                })
                 .catch(() => this.errored = true)
                 .finally(() => this.loading = false);
         }

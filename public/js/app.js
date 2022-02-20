@@ -761,7 +761,9 @@ __webpack_require__.r(__webpack_exports__);
       this.loading = true;
       this.errored = false;
       this.$store.dispatch('createDesk', this.desk).then(function () {
-        return _this.$bvModal.hide(_this.uuid);
+        _this.$bvModal.hide(_this.uuid);
+
+        _this.desk = new _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__["default"]();
       })["catch"](function () {
         return _this.errored = true;
       })["finally"](function () {
@@ -19600,12 +19602,12 @@ var mutations = {
     }
   },
   DELETE_DESK_SUCCESS: function DELETE_DESK_SUCCESS(state, desk) {
-    var index = store.desks.findIndex(function (item) {
+    var index = state.desks.findIndex(function (item) {
       return String(item.id) === String(desk.id);
     });
 
     if (index !== -1) {
-      store.splice(index, 1);
+      state.desks.splice(index, 1);
     }
   }
 };
@@ -19634,7 +19636,7 @@ var actions = {
   deleteDesk: function deleteDesk(_ref4, desk) {
     var commit = _ref4.commit,
         state = _ref4.state;
-    return _api_DesksAPI__WEBPACK_IMPORTED_MODULE_0__["default"].deleteDesk(desk).then(function (desk) {
+    return _api_DesksAPI__WEBPACK_IMPORTED_MODULE_0__["default"].deleteDesk(desk).then(function () {
       return commit('DELETE_DESK_SUCCESS', desk);
     });
   }
