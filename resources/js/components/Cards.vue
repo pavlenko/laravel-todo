@@ -1,5 +1,13 @@
 <template>
     <div class="card-body p-2">
+        <div v-if="errored" class="alert alert-danger p-2" role="alert">
+            <h5 class="alert-heading m-0">
+                Something went wrong
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" @click="errored = false">
+                    Try again
+                </button>
+            </h5>
+        </div>
         <draggable
             v-model="cards"
             :forceFallback="true"
@@ -30,15 +38,17 @@ export default {
     data() {
         return {
             cards: [],
-            loading: false
+            loading: false,
+            errored: false
         };
     },
     mounted() {
         this.loading = true;
+        this.errored = false;
 
         DesksAPI.getAllCard(this.listId)
             .then(cards => this.cards = cards)
-            .catch(error => { console.log(error); })
+            .catch(() => this.errored = true)
             .finally(() => this.loading = false);
     },
     methods: {
@@ -59,6 +69,9 @@ export default {
             let prev = this.cards[newIndex - 1] ? this.cards[newIndex - 1].id : 0;
             let next = this.cards[newIndex + 1] ? this.cards[newIndex + 1].id : 0;
 
+            this.loading = true;
+            this.errored = false;
+            //TODO maybe better use toast for this action, or centered modal alert & standardize usage
             DesksAPI.updateCard(card, {list_id: this.listId, prev: prev, next: next})
                 .then(card => {
                     this.updateCard(card);
@@ -68,10 +81,11 @@ export default {
                     })
                 })
                 .catch(() => {
+                    this.errored = true;
                     newList.splice(newIndex, 1);
                     oldList.splice(oldIndex, 0, card);
                 })
-                .finally(() => {  });
+                .finally(() => this.loading = false);
         },
         createCard(card) {
             this.cards.push(card);

@@ -112,6 +112,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -128,32 +135,44 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       cards: [],
-      loading: false
+      loading: false,
+      errored: false
     };
   },
   mounted: function mounted() {
     var _this = this;
 
     this.loading = true;
+    this.errored = false;
     _api_DesksAPI__WEBPACK_IMPORTED_MODULE_3__["default"].getAllCard(this.listId).then(function (cards) {
       return _this.cards = cards;
-    })["catch"](function (error) {
-      console.log(error);
+    })["catch"](function () {
+      return _this.errored = true;
     })["finally"](function () {
       return _this.loading = false;
     });
   },
   methods: {
     onAdd: function onAdd(event) {
-      var _this2 = this;
-
       // Called in target list
       //console.log('onAdd', this.listId, event);
       this.resortCard(event.from.__vue__.$options.propsData.value, event.oldIndex, this.cards, event.newIndex);
-      return;
-      var card = this.cards[event.newIndex];
-      var prev = this.cards[event.newIndex - 1] ? this.cards[event.newIndex - 1].id : 0;
-      var next = this.cards[event.newIndex + 1] ? this.cards[event.newIndex + 1].id : 0;
+    },
+    onEnd: function onEnd(event) {
+      // Called in source list
+      //console.log('onEnd', this.listId, event);
+      if (event.pullMode !== true) {
+        this.resortCard(this.cards, event.oldIndex, this.cards, event.newIndex);
+      }
+    },
+    resortCard: function resortCard(oldList, oldIndex, newList, newIndex) {
+      var _this2 = this;
+
+      var card = this.cards[newIndex];
+      var prev = this.cards[newIndex - 1] ? this.cards[newIndex - 1].id : 0;
+      var next = this.cards[newIndex + 1] ? this.cards[newIndex + 1].id : 0;
+      this.loading = true;
+      this.errored = false;
       _api_DesksAPI__WEBPACK_IMPORTED_MODULE_3__["default"].updateCard(card, {
         list_id: this.listId,
         prev: prev,
@@ -161,64 +180,17 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (card) {
         _this2.updateCard(card);
 
-        _this2.cards.forEach(function (item, index) {
-          item.prev = _this2.cards[index - 1] ? _this2.cards[index - 1].id : 0;
-          item.next = _this2.cards[index + 1] ? _this2.cards[index + 1].id : 0;
-        });
-      })["catch"](function () {
-        _this2.cards.splice(event.newIndex, 1);
-
-        event.from.__vue__.$options.propsData.value.splice(event.oldIndex, 0, card);
-      })["finally"](function () {});
-    },
-    onEnd: function onEnd(event) {
-      var _this3 = this;
-
-      // Called in source list
-      //console.log('onEnd', this.listId, event);
-      if (event.pullMode !== true) {
-        this.resortCard(this.cards, event.oldIndex, this.cards, event.newIndex);
-        return;
-        var card = this.cards[event.newIndex];
-        var prev = this.cards[event.newIndex - 1] ? this.cards[event.newIndex - 1].id : 0;
-        var next = this.cards[event.newIndex + 1] ? this.cards[event.newIndex + 1].id : 0;
-        _api_DesksAPI__WEBPACK_IMPORTED_MODULE_3__["default"].updateCard(card, {
-          list_id: this.listId,
-          prev: prev,
-          next: next
-        }).then(function (card) {
-          _this3.updateCard(card);
-
-          _this3.cards.forEach(function (item, index) {
-            item.prev = _this3.cards[index - 1] ? _this3.cards[index - 1].id : 0;
-            item.next = _this3.cards[index + 1] ? _this3.cards[index + 1].id : 0;
-          });
-        })["catch"](function () {
-          _this3.cards.splice(event.oldIndex, 0, _this3.cards[event.newIndex]);
-        })["finally"](function () {});
-      }
-    },
-    resortCard: function resortCard(oldList, oldIndex, newList, newIndex) {
-      var _this4 = this;
-
-      var card = this.cards[newIndex];
-      var prev = this.cards[newIndex - 1] ? this.cards[newIndex - 1].id : 0;
-      var next = this.cards[newIndex + 1] ? this.cards[newIndex + 1].id : 0;
-      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_3__["default"].updateCard(card, {
-        list_id: this.listId,
-        prev: prev,
-        next: next
-      }).then(function (card) {
-        _this4.updateCard(card);
-
         newList.forEach(function (item, index) {
           item.prev = newList[index - 1] ? newList[index - 1].id : 0;
           item.next = newList[index + 1] ? newList[index + 1].id : 0;
         });
       })["catch"](function () {
+        _this2.errored = true;
         newList.splice(newIndex, 1);
         oldList.splice(oldIndex, 0, card);
-      })["finally"](function () {});
+      })["finally"](function () {
+        return _this2.loading = false;
+      });
     },
     createCard: function createCard(card) {
       this.cards.push(card);
@@ -6887,11 +6859,36 @@ var render = function () {
     "div",
     { staticClass: "card-body p-2" },
     [
+      _vm.errored
+        ? _c(
+            "div",
+            { staticClass: "alert alert-danger p-2", attrs: { role: "alert" } },
+            [
+              _c("h5", { staticClass: "alert-heading m-0" }, [
+                _vm._v("\n            Something went wrong\n            "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-sm btn-danger",
+                    attrs: { type: "button", "data-dismiss": "alert" },
+                    on: {
+                      click: function ($event) {
+                        _vm.errored = false
+                      },
+                    },
+                  },
+                  [_vm._v("\n                Try again\n            ")]
+                ),
+              ]),
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
       _c(
         "draggable",
         {
           class: { "mb-3": _vm.cards.length > 0 },
-          attrs: { forceFallback: true, animation: 150, group: "cards" },
+          attrs: { forceFallback: true, group: "cards" },
           on: { add: _vm.onAdd, end: _vm.onEnd },
           model: {
             value: _vm.cards,
