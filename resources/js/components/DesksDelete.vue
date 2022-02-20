@@ -2,13 +2,13 @@
     <button type="button" class="btn btn-sm" @click.prevent v-b-modal="uuid">
         <i class="fas fa-trash"></i>
         <b-modal :id="uuid" title="Delete Desk" hide-footer :header-class="'py-1 px-3'" body-class="p-0">
-            <div v-if="errored" class="alert alert-danger p-2" role="alert">
-                <h4 class="alert-heading m-0">
+            <div v-if="errored" class="alert alert-danger p-2 mx-3 mt-3 mb-0" role="alert">
+                <h5 class="alert-heading m-0">
                     Something went wrong
                     <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" @click="errored = false">
                         Try again
                     </button>
-                </h4>
+                </h5>
             </div>
             <form @submit.prevent="deleteDesk" style="position: relative">
                 <div class="px-3 pt-3">
@@ -31,7 +31,6 @@
 <script>
 import {v4 as uuid} from "uuid";
 import DeskDTO from "../DTO/DeskDTO";
-import DesksAPI from "../api/DesksAPI";
 
 export default {
     props: {
@@ -49,11 +48,8 @@ export default {
             this.loading = true;
             this.errored = false;
 
-            DesksAPI.deleteDesk(this.desk)
-                .then(() => {
-                    this.$emit('deleteDesk', this.desk);
-                    this.$bvModal.hide(this.uuid);
-                })
+            this.$store.dispatch('deleteDesk', this.desk)
+                .then(() => this.$bvModal.hide(this.uuid))
                 .catch(() => this.errored = true)
                 .finally(() => this.loading = false);
         }

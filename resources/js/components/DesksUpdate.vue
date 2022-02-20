@@ -3,12 +3,12 @@
         <i class="fas fa-pencil"></i>
         <b-modal :id="uuid" title="Update Desk" hide-footer :header-class="'py-1 px-3'" body-class="p-0">
             <div v-if="errored" class="alert alert-danger p-2" role="alert">
-                <h4 class="alert-heading m-0">
+                <h5 class="alert-heading m-0">
                     Something went wrong
                     <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" @click="errored = false">
                         Try again
                     </button>
-                </h4>
+                </h5>
             </div>
             <form @submit.prevent="updateDesk" style="position: relative">
                 <div class="px-3 pt-3">
@@ -34,11 +34,10 @@
 <script>
 import {v4 as uuid} from "uuid";
 import DeskDTO from "../DTO/DeskDTO";
-import DesksAPI from "../api/DesksAPI";
 
 export default {
     props: {
-        desk: DeskDTO
+        deskId: Number
     },
     data() {
         return {
@@ -47,16 +46,18 @@ export default {
             errored: false
         };
     },
+    computed: {
+        desk() {
+            return new DeskDTO(this.$store.state.desks.find((item) => Number(item.id) === Number(this.deskId)))
+        }
+    },
     methods: {
         updateDesk() {
             this.loading = true;
             this.errored = false;
 
-            DesksAPI.updateDesk(this.desk)
-                .then(desk => {
-                    this.$emit('updateDesk', desk);
-                    this.$bvModal.hide(this.uuid);
-                })
+            this.$store.dispatch('updateDesk', this.desk)
+                .then(() => this.$bvModal.hide(this.uuid))
                 .catch(() => this.errored = true)
                 .finally(() => this.loading = false);
         }

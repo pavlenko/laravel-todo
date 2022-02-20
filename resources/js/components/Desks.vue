@@ -20,16 +20,16 @@
         <section class="content">
             <div class="container-fluid" style="min-width: 100%">
                 <div v-if="!loading && !errored" class="row" style="margin: 0 -7.5px">
-                    <desks-item v-for="desk in desks" :key="desk.id" :desk="desk" @updateDesk="updateDesk" @deleteDesk="deleteDesk"></desks-item>
-                    <desks-create @createDesk="createDesk"></desks-create>
+                    <desks-item v-for="desk in desks" :key="desk.id" :desk="desk"></desks-item>
+                    <desks-create></desks-create>
                 </div>
                 <div v-if="errored" class="alert alert-danger p-2" role="alert">
-                    <h4 class="alert-heading m-0">
+                    <h5 class="alert-heading m-0">
                         Something went wrong
-                        <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" @click="load">
+                        <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" @click="fetchDesks">
                             Try again
                         </button>
-                    </h4>
+                    </h5>
                 </div>
                 <div v-if="loading" class="d-flex justify-content-center">
                     <div class="spinner-border" role="status" aria-hidden="true"></div>
@@ -42,13 +42,11 @@
 <script>
 import DesksItem from "./DesksItem";
 import DesksCreate from "./DesksCreate";
-import DesksAPI from "../api/DesksAPI";
 
 export default {
     components: {DesksItem, DesksCreate},
     data() {
         return {
-            //desks: [],
             loading: false,
             errored: false
         };
@@ -59,33 +57,16 @@ export default {
         }
     },
     mounted() {
-        this.load();
+        this.fetchDesks();
     },
     methods: {
-        load() {
+        fetchDesks() {
             this.loading = true;
             this.errored = false;
 
             this.$store.dispatch('fetchDesks')
                 .catch(() => this.errored = true)
                 .finally(() => this.loading = false);
-
-            /*DesksAPI.getAllDesk()
-                .then(desks => this.desks = desks)
-                .catch(() => this.errored = true)
-                .finally(() => this.loading = false);*/
-        },
-        createDesk(desk) {
-            this.desks.unshift(desk);
-        },
-        updateDesk(desk) {
-            let index = this.desks.findIndex(item => String(item.id) === String(desk.id));
-            if (index !== -1) {
-                this.desks.splice(index, 1, desk);
-            }
-        },
-        deleteDesk(desk) {
-            this.desks = this.desks.filter(item => String(item.id) !== String(desk.id));
         }
     }
 }

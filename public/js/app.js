@@ -172,7 +172,8 @@ __webpack_require__.r(__webpack_exports__);
       var prev = this.cards[newIndex - 1] ? this.cards[newIndex - 1].id : 0;
       var next = this.cards[newIndex + 1] ? this.cards[newIndex + 1].id : 0;
       this.loading = true;
-      this.errored = false;
+      this.errored = false; //TODO maybe better use toast for this action, or centered modal alert & standardize usage
+
       _api_DesksAPI__WEBPACK_IMPORTED_MODULE_3__["default"].updateCard(card, {
         list_id: this.listId,
         prev: prev,
@@ -615,7 +616,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DesksItem__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DesksItem */ "./resources/js/components/DesksItem.vue");
 /* harmony import */ var _DesksCreate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DesksCreate */ "./resources/js/components/DesksCreate.vue");
-/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -657,7 +657,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -667,7 +666,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      //desks: [],
       loading: false,
       errored: false
     };
@@ -678,10 +676,10 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    this.load();
+    this.fetchDesks();
   },
   methods: {
-    load: function load() {
+    fetchDesks: function fetchDesks() {
       var _this = this;
 
       this.loading = true;
@@ -690,27 +688,6 @@ __webpack_require__.r(__webpack_exports__);
         return _this.errored = true;
       })["finally"](function () {
         return _this.loading = false;
-      });
-      /*DesksAPI.getAllDesk()
-          .then(desks => this.desks = desks)
-          .catch(() => this.errored = true)
-          .finally(() => this.loading = false);*/
-    },
-    createDesk: function createDesk(desk) {
-      this.desks.unshift(desk);
-    },
-    updateDesk: function updateDesk(desk) {
-      var index = this.desks.findIndex(function (item) {
-        return String(item.id) === String(desk.id);
-      });
-
-      if (index !== -1) {
-        this.desks.splice(index, 1, desk);
-      }
-    },
-    deleteDesk: function deleteDesk(desk) {
-      this.desks = this.desks.filter(function (item) {
-        return String(item.id) !== String(desk.id);
       });
     }
   }
@@ -729,7 +706,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
 /* harmony import */ var _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/DeskDTO */ "./resources/js/DTO/DeskDTO.js");
-/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -767,7 +743,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -792,13 +767,6 @@ __webpack_require__.r(__webpack_exports__);
       })["finally"](function () {
         return _this.loading = false;
       });
-      /*DesksAPI.createDesk(this.desk)
-          .then(desk => {
-              this.$emit('createDesk', desk);
-              this.$bvModal.hide(this.uuid);
-          })
-          .catch(() => this.errored = true)
-          .finally(() => this.loading = false);*/
     }
   }
 });
@@ -816,7 +784,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
 /* harmony import */ var _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/DeskDTO */ "./resources/js/DTO/DeskDTO.js");
-/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -847,7 +814,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -867,10 +833,8 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
-      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__["default"].deleteDesk(this.desk).then(function () {
-        _this.$emit('deleteDesk', _this.desk);
-
-        _this.$bvModal.hide(_this.uuid);
+      this.$store.dispatch('deleteDesk', this.desk).then(function () {
+        return _this.$bvModal.hide(_this.uuid);
       })["catch"](function () {
         return _this.errored = true;
       })["finally"](function () {
@@ -914,17 +878,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     desk: _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_2__["default"]
-  },
-  data: function data() {
-    return {};
-  },
-  methods: {
-    updateDesk: function updateDesk(desk) {
-      this.$emit('updateDesk', desk);
-    },
-    deleteDesk: function deleteDesk(desk) {
-      this.$emit('deleteDesk', desk);
-    }
   }
 });
 
@@ -941,7 +894,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
 /* harmony import */ var _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../DTO/DeskDTO */ "./resources/js/DTO/DeskDTO.js");
-/* harmony import */ var _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../api/DesksAPI */ "./resources/js/api/DesksAPI.js");
 //
 //
 //
@@ -975,12 +927,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    desk: _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__["default"]
+    deskId: Number
   },
   data: function data() {
     return {
@@ -989,20 +940,27 @@ __webpack_require__.r(__webpack_exports__);
       errored: false
     };
   },
+  computed: {
+    desk: function desk() {
+      var _this = this;
+
+      return new _DTO_DeskDTO__WEBPACK_IMPORTED_MODULE_1__["default"](this.$store.state.desks.find(function (item) {
+        return Number(item.id) === Number(_this.deskId);
+      }));
+    }
+  },
   methods: {
     updateDesk: function updateDesk() {
-      var _this = this;
+      var _this2 = this;
 
       this.loading = true;
       this.errored = false;
-      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_2__["default"].updateDesk(this.desk).then(function (desk) {
-        _this.$emit('updateDesk', desk);
-
-        _this.$bvModal.hide(_this.uuid);
+      this.$store.dispatch('updateDesk', this.desk).then(function () {
+        return _this2.$bvModal.hide(_this2.uuid);
       })["catch"](function () {
-        return _this.errored = true;
+        return _this2.errored = true;
       })["finally"](function () {
-        return _this.loading = false;
+        return _this2.loading = false;
       });
     }
   }
@@ -7560,14 +7518,10 @@ var render = function () {
                     return _c("desks-item", {
                       key: desk.id,
                       attrs: { desk: desk },
-                      on: {
-                        updateDesk: _vm.updateDesk,
-                        deleteDesk: _vm.deleteDesk,
-                      },
                     })
                   }),
                   _vm._v(" "),
-                  _c("desks-create", { on: { createDesk: _vm.createDesk } }),
+                  _c("desks-create"),
                 ],
                 2
               )
@@ -7581,7 +7535,7 @@ var render = function () {
                   attrs: { role: "alert" },
                 },
                 [
-                  _c("h4", { staticClass: "alert-heading m-0" }, [
+                  _c("h5", { staticClass: "alert-heading m-0" }, [
                     _vm._v(
                       "\n                    Something went wrong\n                    "
                     ),
@@ -7590,7 +7544,7 @@ var render = function () {
                       {
                         staticClass: "btn btn-sm btn-danger",
                         attrs: { type: "button", "data-dismiss": "alert" },
-                        on: { click: _vm.load },
+                        on: { click: _vm.fetchDesks },
                       },
                       [
                         _vm._v(
@@ -7688,7 +7642,7 @@ var render = function () {
                   attrs: { role: "alert" },
                 },
                 [
-                  _c("h4", { staticClass: "alert-heading m-0" }, [
+                  _c("h5", { staticClass: "alert-heading m-0" }, [
                     _vm._v(
                       "\n                Something went wrong\n                "
                     ),
@@ -7886,11 +7840,11 @@ var render = function () {
             ? _c(
                 "div",
                 {
-                  staticClass: "alert alert-danger p-2",
+                  staticClass: "alert alert-danger p-2 mx-3 mt-3 mb-0",
                   attrs: { role: "alert" },
                 },
                 [
-                  _c("h4", { staticClass: "alert-heading m-0" }, [
+                  _c("h5", { staticClass: "alert-heading m-0" }, [
                     _vm._v(
                       "\n                Something went wrong\n                "
                     ),
@@ -8037,14 +7991,12 @@ var render = function () {
           _vm._v(" "),
           _c("desks-update", {
             staticClass: "bg-info",
-            attrs: { desk: _vm.desk },
-            on: { updateDesk: _vm.updateDesk },
+            attrs: { "desk-id": _vm.desk.id },
           }),
           _vm._v(" "),
           _c("desks-delete", {
             staticClass: "bg-info",
             attrs: { desk: _vm.desk },
-            on: { deleteDesk: _vm.deleteDesk },
           }),
         ],
         1
@@ -8117,7 +8069,7 @@ var render = function () {
                   attrs: { role: "alert" },
                 },
                 [
-                  _c("h4", { staticClass: "alert-heading m-0" }, [
+                  _c("h5", { staticClass: "alert-heading m-0" }, [
                     _vm._v(
                       "\n                Something went wrong\n                "
                     ),
@@ -19637,6 +19589,24 @@ var mutations = {
   },
   CREATE_DESK_SUCCESS: function CREATE_DESK_SUCCESS(state, desk) {
     state.desks.unshift(desk);
+  },
+  UPDATE_DESK_SUCCESS: function UPDATE_DESK_SUCCESS(state, desk) {
+    var index = state.desks.findIndex(function (item) {
+      return String(item.id) === String(desk.id);
+    });
+
+    if (index !== -1) {
+      state.desks.splice(index, 1, desk);
+    }
+  },
+  DELETE_DESK_SUCCESS: function DELETE_DESK_SUCCESS(state, desk) {
+    var index = store.desks.findIndex(function (item) {
+      return String(item.id) === String(desk.id);
+    });
+
+    if (index !== -1) {
+      store.splice(index, 1);
+    }
   }
 };
 var actions = {
@@ -19652,6 +19622,20 @@ var actions = {
         state = _ref2.state;
     return _api_DesksAPI__WEBPACK_IMPORTED_MODULE_0__["default"].createDesk(desk).then(function (desk) {
       return commit('CREATE_DESK_SUCCESS', desk);
+    });
+  },
+  updateDesk: function updateDesk(_ref3, desk) {
+    var commit = _ref3.commit,
+        state = _ref3.state;
+    return _api_DesksAPI__WEBPACK_IMPORTED_MODULE_0__["default"].updateDesk(desk).then(function (desk) {
+      return commit('UPDATE_DESK_SUCCESS', desk);
+    });
+  },
+  deleteDesk: function deleteDesk(_ref4, desk) {
+    var commit = _ref4.commit,
+        state = _ref4.state;
+    return _api_DesksAPI__WEBPACK_IMPORTED_MODULE_0__["default"].deleteDesk(desk).then(function (desk) {
+      return commit('DELETE_DESK_SUCCESS', desk);
     });
   }
 };
