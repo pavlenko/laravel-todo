@@ -111,6 +111,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -148,6 +149,8 @@ __webpack_require__.r(__webpack_exports__);
 
       // Called in target list
       //console.log('onAdd', this.listId, event);
+      this.resortCard(event.from.__vue__.$options.propsData.value, event.oldIndex, this.cards, event.newIndex);
+      return;
       var card = this.cards[event.newIndex];
       var prev = this.cards[event.newIndex - 1] ? this.cards[event.newIndex - 1].id : 0;
       var next = this.cards[event.newIndex + 1] ? this.cards[event.newIndex + 1].id : 0;
@@ -174,6 +177,8 @@ __webpack_require__.r(__webpack_exports__);
       // Called in source list
       //console.log('onEnd', this.listId, event);
       if (event.pullMode !== true) {
+        this.resortCard(this.cards, event.oldIndex, this.cards, event.newIndex);
+        return;
         var card = this.cards[event.newIndex];
         var prev = this.cards[event.newIndex - 1] ? this.cards[event.newIndex - 1].id : 0;
         var next = this.cards[event.newIndex + 1] ? this.cards[event.newIndex + 1].id : 0;
@@ -192,6 +197,28 @@ __webpack_require__.r(__webpack_exports__);
           _this3.cards.splice(event.oldIndex, 0, _this3.cards[event.newIndex]);
         })["finally"](function () {});
       }
+    },
+    resortCard: function resortCard(oldList, oldIndex, newList, newIndex) {
+      var _this4 = this;
+
+      var card = this.cards[newIndex];
+      var prev = this.cards[newIndex - 1] ? this.cards[newIndex - 1].id : 0;
+      var next = this.cards[newIndex + 1] ? this.cards[newIndex + 1].id : 0;
+      _api_DesksAPI__WEBPACK_IMPORTED_MODULE_3__["default"].updateCard(card, {
+        list_id: this.listId,
+        prev: prev,
+        next: next
+      }).then(function (card) {
+        _this4.updateCard(card);
+
+        newList.forEach(function (item, index) {
+          item.prev = newList[index - 1] ? newList[index - 1].id : 0;
+          item.next = newList[index + 1] ? newList[index + 1].id : 0;
+        });
+      })["catch"](function () {
+        newList.splice(newIndex, 1);
+        oldList.splice(oldIndex, 0, card);
+      })["finally"](function () {});
     },
     createCard: function createCard(card) {
       this.cards.push(card);
@@ -6864,7 +6891,7 @@ var render = function () {
         "draggable",
         {
           class: { "mb-3": _vm.cards.length > 0 },
-          attrs: { forceFallback: true, group: "cards" },
+          attrs: { forceFallback: true, animation: 150, group: "cards" },
           on: { add: _vm.onAdd, end: _vm.onEnd },
           model: {
             value: _vm.cards,

@@ -45,46 +45,33 @@ export default {
         onAdd(event) {
             // Called in target list
             //console.log('onAdd', this.listId, event);
-
-            let card = this.cards[event.newIndex];
-            let prev = this.cards[event.newIndex - 1] ? this.cards[event.newIndex - 1].id : 0;
-            let next = this.cards[event.newIndex + 1] ? this.cards[event.newIndex + 1].id : 0;
-
-            DesksAPI.updateCard(card, {list_id: this.listId, prev: prev, next: next})
-                .then(card => {
-                    this.updateCard(card);
-                    this.cards.forEach((item, index) => {
-                        item.prev = this.cards[index - 1] ? this.cards[index - 1].id : 0;
-                        item.next = this.cards[index + 1] ? this.cards[index + 1].id : 0;
-                    })
-                })
-                .catch(() => {
-                    this.cards.splice(event.newIndex, 1);
-                    event.from.__vue__.$options.propsData.value.splice(event.oldIndex, 0, card);
-                })
-                .finally(() => {  });
+            this.resortCard(event.from.__vue__.$options.propsData.value, event.oldIndex, this.cards, event.newIndex);
         },
         onEnd(event) {
             // Called in source list
             //console.log('onEnd', this.listId, event);
             if (event.pullMode !== true) {
-                let card = this.cards[event.newIndex];
-                let prev = this.cards[event.newIndex - 1] ? this.cards[event.newIndex - 1].id : 0;
-                let next = this.cards[event.newIndex + 1] ? this.cards[event.newIndex + 1].id : 0;
-
-                DesksAPI.updateCard(card, {list_id: this.listId, prev: prev, next: next})
-                    .then(card => {
-                        this.updateCard(card);
-                        this.cards.forEach((item, index) => {
-                            item.prev = this.cards[index - 1] ? this.cards[index - 1].id : 0;
-                            item.next = this.cards[index + 1] ? this.cards[index + 1].id : 0;
-                        })
-                    })
-                    .catch(() => {
-                        this.cards.splice(event.oldIndex, 0, this.cards[event.newIndex]);
-                    })
-                    .finally(() => {  });
+                this.resortCard(this.cards, event.oldIndex, this.cards, event.newIndex);
             }
+        },
+        resortCard(oldList, oldIndex, newList, newIndex) {
+            let card = this.cards[newIndex];
+            let prev = this.cards[newIndex - 1] ? this.cards[newIndex - 1].id : 0;
+            let next = this.cards[newIndex + 1] ? this.cards[newIndex + 1].id : 0;
+
+            DesksAPI.updateCard(card, {list_id: this.listId, prev: prev, next: next})
+                .then(card => {
+                    this.updateCard(card);
+                    newList.forEach((item, index) => {
+                        item.prev = newList[index - 1] ? newList[index - 1].id : 0;
+                        item.next = newList[index + 1] ? newList[index + 1].id : 0;
+                    })
+                })
+                .catch(() => {
+                    newList.splice(newIndex, 1);
+                    oldList.splice(oldIndex, 0, card);
+                })
+                .finally(() => {  });
         },
         createCard(card) {
             this.cards.push(card);

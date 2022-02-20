@@ -45,6 +45,7 @@ final class CardController extends Controller
 
     public function update(CardRequest $request, $id)
     {
+        throw new \Exception();
         $desks = new Desks();
 
         $dto = $desks->getOneCard($id);
