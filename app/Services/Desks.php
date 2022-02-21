@@ -152,27 +152,53 @@ final class Desks
         $this->onDeleteSortable($list, new ListModel());
     }
 
-    public function getAllCard(int $listID): array
+    public function getAllCard(int $listID, bool $withTasks = false): array
     {
-        $rows = CardModel::query()->where('list_id', $listID)->get();
+        $query = CardModel::query()->where('list_id', $listID);
+        if ($withTasks) {
+            $query->with('tasks');
+        }
+
+        /* @var $rows CardModel[] */
+        $rows = $query->get();
         $data = [];
 
         foreach ($rows as $row) {
-            $data[] = new CardDTO($row->getAttributes());
+            $data[] = $this->createCard(
+                $row->getAttributes(),
+                $withTasks
+                    ? $this->sortByPrevNext(array_map(fn(TaskModel $item) => $this->createTask($item->getAttributes()), $row->tasks))
+                    : []
+            );
         }
 
         return $this->sortByPrevNext($data);
     }
 
-    public function getOneCard(int $cardID): ?CardDTO
+    public function getOneCard(int $cardID, bool $withTasks = false): ?CardDTO
     {
-        $card = CardModel::query()->whereKey($cardID)->first();
-        return null !== $card ? $this->createCard($card->getAttributes()) : null;
+        $query = CardModel::query()->whereKey($cardID);
+        if ($withTasks) {
+            $query->with('tasks');
+        }
+
+        /* @var $data CardModel */
+        $data = $query->first();
+        if (null === $data) {
+            return null;
+        }
+
+        return $this->createCard(
+            $data->getAttributes(),
+            $withTasks
+                ? $this->sortByPrevNext(array_map(fn(TaskModel $item) => $this->createTask($item->getAttributes()), $data->tasks))
+                : []
+        );
     }
 
-    public function createCard(array $attributes): CardDTO
+    public function createCard(array $attributes, array $tasks = []): CardDTO
     {
-        return new CardDTO($attributes);
+        return new CardDTO($attributes, $tasks);
     }
 
     public function insertCard(CardDTO $card): void

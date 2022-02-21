@@ -16,6 +16,12 @@ final class CardDTO extends BaseDTO
 {
     public array $tasks = [];
 
+    public function __construct(array $values, array $tasks = [])
+    {
+        parent::__construct($values);
+        $this->tasks = $tasks;
+    }
+
     public function attributes(): array
     {
         return [

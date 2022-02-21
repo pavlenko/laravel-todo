@@ -12,7 +12,7 @@ final class DeskDTO extends BaseDTO
 {
     public array $lists = [];
 
-    public function __construct(array $values, array $lists)
+    public function __construct(array $values, array $lists = [])
     {
         parent::__construct($values);
         $this->lists = $lists;
