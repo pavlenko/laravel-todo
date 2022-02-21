@@ -28,11 +28,11 @@ final class ListModel extends Model
 
     public function desk(): Relation
     {
-        return $this->belongsTo(DeskModel::class);
+        return $this->belongsTo(DeskModel::class, 'desk_id');
     }
 
     public function cards(): Relation
     {
-        return $this->hasMany(CardModel::class);
+        return $this->hasMany(CardModel::class, 'list_id');
     }
 }

@@ -24,6 +24,6 @@ final class DeskModel extends Model
 
     public function lists(): Relation
     {
-        return $this->hasMany(ListModel::class);
+        return $this->hasMany(ListModel::class, 'desk_id');
     }
 }

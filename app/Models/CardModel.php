@@ -28,11 +28,11 @@ final class CardModel extends Model
 
     public function list(): Relation
     {
-        return $this->belongsTo(ListModel::class);
+        return $this->belongsTo(ListModel::class, 'list_id');
     }
 
     public function tasks(): Relation
     {
-        return $this->hasMany(TaskModel::class);
+        return $this->hasMany(TaskModel::class, 'card_id');
     }
 }

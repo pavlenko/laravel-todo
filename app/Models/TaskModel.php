@@ -28,6 +28,6 @@ final class TaskModel extends Model
 
     public function card(): Relation
     {
-        return $this->belongsTo(CardModel::class);
+        return $this->belongsTo(CardModel::class, 'card_id');
     }
 }
