@@ -15,6 +15,12 @@ final class ListDTO extends BaseDTO
 {
     public array $cards = [];
 
+    public function __construct(array $values, array $cards)
+    {
+        parent::__construct($values);
+        $this->cards = $cards;
+    }
+
     public function attributes(): array
     {
         return [

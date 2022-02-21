@@ -87,27 +87,41 @@ final class Desks
         DeskModel::query()->whereKey($desk->id)->delete();
     }
 
-    public function getAllList(int $deskID): array
+    public function getAllList(int $deskID, bool $withCards = false): array
     {
-        $rows = ListModel::query()->where('desk_id', $deskID)->get();
+        $query = ListModel::query()->where('desk_id', $deskID);
+        if ($withCards) {
+            $query->with('cards');
+        }
+
+        /* @var $rows ListModel[] */
+        $rows = $query->get();
         $data = [];
 
         foreach ($rows as $row) {
-            $data[] = $this->createList($row->getAttributes());
+            $data[] = $this->createList(
+                $row->getAttributes(),
+                //TODO sort
+                array_map(fn(CardModel $item) => $this->createCard($item), $row->cards)
+            );
         }
 
         return $this->sortByPrevNext($data);
     }
 
-    public function getOneList(int $listID): ?ListDTO
+    public function getOneList(int $listID, bool $withCards = false): ?ListDTO
     {
-        $data = ListModel::query()->find($listID);
+        $query = ListModel::query();
+        if ($withCards) {
+            $query->with('cards');
+        }
+        $data = $query->find($listID);
         return null !== $data ? $this->createList($data->getAttributes()) : null;
     }
 
-    public function createList(array $attributes): ListDTO
+    public function createList(array $attributes, array $cards = []): ListDTO
     {
-        return new ListDTO($attributes);
+        return new ListDTO($attributes, $cards);
     }
 
     public function insertList(ListDTO $list): void
