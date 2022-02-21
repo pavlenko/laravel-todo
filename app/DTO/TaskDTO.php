@@ -12,7 +12,7 @@ namespace App\DTO;
  * @property $created_at
  * @property $updated_at
  */
-final class TaskDTO extends BaseDTO
+final class TaskDTO extends BaseSortableDTO
 {
     public function attributes(): array
     {

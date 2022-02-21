@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTO\BaseDTO;
+use App\DTO\BaseSortableDTO;
 use App\DTO\CardDTO;
 use App\DTO\DeskDTO;
 use App\DTO\ListDTO;
@@ -262,12 +263,17 @@ final class Desks
         $this->onDeleteSortable($task, new TaskModel());
     }
 
+    /**
+     * @param BaseSortableDTO[] $data
+     * @return BaseSortableDTO[]
+     */
     protected function sortByPrevNext(array $data): array
     {
         if (empty($data)) {
             return [];
         }
 
+        /* @var $first BaseSortableDTO */
         $first  = current(array_filter($data, fn($item) => $item->prev == 0));
         $result = [$first];
 
@@ -275,6 +281,7 @@ final class Desks
             return current(array_filter($data, fn($item) => $item->id == $id)) ?: null;
         };
 
+        /* @var $item BaseSortableDTO */
         $id = $first->next;
         while ($item = $findByID($data, $id)) {
             $result[] = $item;
@@ -284,13 +291,13 @@ final class Desks
         return $result;
     }
 
-    private function onCreateSortable(BaseDTO $dto, Model $model): void
+    private function onCreateSortable(BaseSortableDTO $dto, Model $model): void
     {
         // Update new position
         $model::query()->whereKey($dto->prev)->update(['next' => $dto->id]);
     }
 
-    private function onUpdateSortable(BaseDTO $dto, Model $model): void
+    private function onUpdateSortable(BaseSortableDTO $dto, Model $model): void
     {
         // Skip if not changed
         if (!$dto->isChanged('prev') && !$dto->isChanged('next')) {
@@ -309,7 +316,7 @@ final class Desks
         $model::query()->whereKey($dto->next)->update(['prev' => $dto->id]);
     }
 
-    private function onDeleteSortable(BaseDTO $dto, Model $model): void
+    private function onDeleteSortable(BaseSortableDTO $dto, Model $model): void
     {
         // Update old position
         $model::query()->whereKey($dto->prev)->update(['next' => $dto->next ?? 0]);

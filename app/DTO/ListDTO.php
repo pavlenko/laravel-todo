@@ -11,7 +11,7 @@ namespace App\DTO;
  * @property $created_at
  * @property $updated_at
  */
-final class ListDTO extends BaseDTO
+final class ListDTO extends BaseSortableDTO
 {
     public array $cards = [];
 

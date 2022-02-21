@@ -12,7 +12,7 @@ namespace App\DTO;
  * @property $created_at
  * @property $updated_at
  */
-final class CardDTO extends BaseDTO
+final class CardDTO extends BaseSortableDTO
 {
     public array $tasks = [];
 
