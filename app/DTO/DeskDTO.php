@@ -10,6 +10,8 @@ namespace App\DTO;
  */
 final class DeskDTO extends BaseDTO
 {
+    public array $lists = [];
+
     public function attributes(): array
     {
         return [
@@ -18,5 +20,10 @@ final class DeskDTO extends BaseDTO
             'created_at',
             'updated_at',
         ];
+    }
+
+    public function toArray(): array
+    {
+        return parent::toArray() + ['lists' => $this->lists];
     }
 }

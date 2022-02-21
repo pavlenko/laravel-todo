@@ -13,6 +13,8 @@ namespace App\DTO;
  */
 final class ListDTO extends BaseDTO
 {
+    public array $cards = [];
+
     public function attributes(): array
     {
         return [
@@ -24,5 +26,10 @@ final class ListDTO extends BaseDTO
              'created_at',
              'updated_at',
         ];
+    }
+
+    public function toArray(): array
+    {
+        return parent::toArray() + ['cards' => $this->cards];
     }
 }

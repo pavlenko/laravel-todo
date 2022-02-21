@@ -17,19 +17,6 @@ abstract class BaseDTO
 
     abstract public function attributes(): array;
 
-    /*public function attributes(): array
-    {
-        $class = new \ReflectionClass($this);
-        $names = [];
-        foreach ($class->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
-            if (!$property->isStatic()) {
-                $names[] = $property->getName();
-            }
-        }
-
-        return $names;
-    }*/
-
     public function getAttributes(): array
     {
         $values = [];
