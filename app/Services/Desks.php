@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\DTO\BaseDTO;
 use App\DTO\BaseSortableDTO;
 use App\DTO\CardDTO;
 use App\DTO\DeskDTO;
@@ -13,7 +12,6 @@ use App\Models\DeskModel;
 use App\Models\ListModel;
 use App\Models\TaskModel;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Grammars\Grammar;
 
 final class Desks
 {
@@ -81,22 +79,6 @@ final class Desks
 
     public function deleteDesk(DeskDTO $desk): void
     {
-        //TODO delete lists+cards+tasks
-        $sql1 = <<<'SQL'
-DELETE t FROM tasks t
-LEFT JOIN cards c ON c.id = t.card_id
-LEFT JOIN lists l ON l.id = c.list_id
-WHERE l.desk_id = :desk_id
-SQL;
-        $sql2 = <<<'SQL'
-DELETE c FROM cards c
-LEFT JOIN lists l ON l.id = c.list_id
-WHERE l.desk_id = :desk_id
-SQL;
-        $sql3 = <<<'SQL'
-DELETE l FROM lists l
-WHERE l.desk_id = :desk_id
-SQL;
         TaskModel::query()
             ->leftJoin('cards', 'cards.id', '=', 'tasks.card_id')
             ->leftJoin('lists', 'list.id', '=', 'cards.list_id')
@@ -174,16 +156,6 @@ SQL;
 
     public function deleteList(ListDTO $list): void
     {
-        //TODO delete cards+tasks
-        $sql1 = <<<'SQL'
-DELETE t FROM tasks t
-LEFT JOIN cards c ON c.id = t.card_id
-WHERE c.list_id = :list_id
-SQL;
-        $sql2 = <<<'SQL'
-DELETE c FROM cards c
-WHERE c.list_id = :list_id
-SQL;
         TaskModel::query()
             ->leftJoin('cards', 'cards.id', '=', 'tasks.card_id')
             ->where('cards.list_id', $list->id)
@@ -257,11 +229,6 @@ SQL;
 
     public function deleteCard(CardDTO $card): void
     {
-        //TODO delete tasks
-        $sql2 = <<<'SQL'
-DELETE t FROM tasks t
-WHERE t.card_id = :card_id
-SQL;
         TaskModel::query()->where('card_id', $card->id)->delete();
         CardModel::query()->whereKey($card->id)->delete();
         $this->onDeleteSortable($card, new CardModel());
