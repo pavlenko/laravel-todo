@@ -58,6 +58,7 @@ final class Desks
 
     public function deleteDesk(DeskDTO $desk): void
     {
+        //TODO delete lists+cards+tasks
         DeskModel::query()->whereKey($desk->id)->delete();
     }
 
@@ -99,6 +100,7 @@ final class Desks
 
     public function deleteList(ListDTO $list): void
     {
+        //TODO delete cards+tasks
         ListModel::query()->whereKey($list->id)->delete();
         $this->onDeleteSortable($list, new ListModel());
     }
@@ -141,6 +143,7 @@ final class Desks
 
     public function deleteCard(CardDTO $card): void
     {
+        //TODO delete tasks
         CardModel::query()->whereKey($card->id)->delete();
         $this->onDeleteSortable($card, new CardModel());
     }

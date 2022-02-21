@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
  * @property $id
@@ -13,13 +14,20 @@ use Illuminate\Database\Eloquent\Model;
  * @property $status
  * @property $created_at
  * @property $updated_at
+ *
+ * @property CardModel $card
  */
-class TaskModel extends Model
+final class TaskModel extends Model
 {
     protected $fillable = ['card_id', 'name', 'status'];
 
     public function getTable(): string
     {
         return 'tasks';
+    }
+
+    public function card(): Relation
+    {
+        return $this->belongsTo(CardModel::class);
     }
 }
