@@ -81,6 +81,21 @@ final class Desks
     public function deleteDesk(DeskDTO $desk): void
     {
         //TODO delete lists+cards+tasks
+        $sql1 = <<<'SQL'
+DELETE t FROM tasks t
+LEFT JOIN cards c ON c.id = t.card_id
+LEFT JOIN lists l ON l.id = c.list_id
+WHERE l.desk_id = :desk_id
+SQL;
+        $sql2 = <<<'SQL'
+DELETE c FROM cards c
+LEFT JOIN lists l ON l.id = c.list_id
+WHERE l.desk_id = :desk_id
+SQL;
+        $sql3 = <<<'SQL'
+DELETE l FROM lists l
+WHERE l.desk_id = :desk_id
+SQL;
         DeskModel::query()->whereKey($desk->id)->delete();
     }
 
@@ -149,6 +164,15 @@ final class Desks
     public function deleteList(ListDTO $list): void
     {
         //TODO delete cards+tasks
+        $sql1 = <<<'SQL'
+DELETE t FROM tasks t
+LEFT JOIN cards c ON c.id = t.card_id
+WHERE c.list_id = :list_id
+SQL;
+        $sql2 = <<<'SQL'
+DELETE c FROM cards c
+WHERE c.list_id = :list_id
+SQL;
         ListModel::query()->whereKey($list->id)->delete();
         $this->onDeleteSortable($list, new ListModel());
     }
@@ -218,6 +242,10 @@ final class Desks
     public function deleteCard(CardDTO $card): void
     {
         //TODO delete tasks
+        $sql2 = <<<'SQL'
+DELETE t FROM tasks t
+WHERE t.card_id = :card_id
+SQL;
         CardModel::query()->whereKey($card->id)->delete();
         $this->onDeleteSortable($card, new CardModel());
     }
