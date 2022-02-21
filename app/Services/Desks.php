@@ -32,7 +32,7 @@ final class Desks
             $data[] = $this->createDesk(
                 $row->getAttributes(),
                 $withLists
-                    ? array_map(fn(ListModel $item) => $this->createList($item->getAttributes()), $row->lists)
+                    ? $this->sortByPrevNext(array_map(fn(ListModel $item) => $this->createList($item->getAttributes()), $row->lists))
                     : []
             );
         }
@@ -40,7 +40,7 @@ final class Desks
         return $data;
     }
 
-    public function getOneDesk($params, bool $withLists = false): ?DeskDTO
+    public function getOneDesk(int $deskID, bool $withLists = false): ?DeskDTO
     {
         $query = DeskModel::query();
         if ($withLists) {
@@ -48,11 +48,7 @@ final class Desks
         }
 
         /* @var $data DeskModel */
-        if (!is_array($params)) {
-            $data = $query->find($params);
-        } else {
-            $data = $query->where($params)->first();
-        }
+        $data = $query->find($deskID);
         if (null === $data) {
             return null;
         }
@@ -60,7 +56,7 @@ final class Desks
         return $this->createDesk(
             $data->getAttributes(),
             $withLists
-                ? array_map(fn(ListModel $item) => $this->createList($item->getAttributes()), $data->lists)
+                ? $this->sortByPrevNext(array_map(fn(ListModel $item) => $this->createList($item->getAttributes()), $data->lists))
                 : []
         );
     }
@@ -101,8 +97,9 @@ final class Desks
         foreach ($rows as $row) {
             $data[] = $this->createList(
                 $row->getAttributes(),
-                //TODO sort
-                array_map(fn(CardModel $item) => $this->createCard($item), $row->cards)
+                $withCards
+                    ? $this->sortByPrevNext(array_map(fn(CardModel $item) => $this->createCard($item->getAttributes()), $row->cards))
+                    : []
             );
         }
 
@@ -115,8 +112,19 @@ final class Desks
         if ($withCards) {
             $query->with('cards');
         }
+
+        /* @var $data ListModel */
         $data = $query->find($listID);
-        return null !== $data ? $this->createList($data->getAttributes()) : null;
+        if (null === $data) {
+            return null;
+        }
+
+        return $this->createList(
+            $data->getAttributes(),
+            $withCards
+                ? $this->sortByPrevNext(array_map(fn(CardModel $item) => $this->createCard($item->getAttributes()), $data->cards))
+                : []
+        );
     }
 
     public function createList(array $attributes, array $cards = []): ListDTO
