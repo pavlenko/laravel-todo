@@ -13,6 +13,7 @@ use App\Models\DeskModel;
 use App\Models\ListModel;
 use App\Models\TaskModel;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Grammars\Grammar;
 
 final class Desks
 {
@@ -96,6 +97,11 @@ SQL;
 DELETE l FROM lists l
 WHERE l.desk_id = :desk_id
 SQL;
+        TaskModel::query()
+            ->leftJoin('cards', 'cards.id', '=', 'tasks.card_id')
+            ->leftJoin('lists', 'list.id', '=', 'cards.list_id')
+            ->where('lists.desk_id', $desk->id)
+            ->delete();
         DeskModel::query()->whereKey($desk->id)->delete();
     }
 
@@ -173,6 +179,10 @@ SQL;
 DELETE c FROM cards c
 WHERE c.list_id = :list_id
 SQL;
+        TaskModel::query()
+            ->leftJoin('cards', 'cards.id', '=', 'tasks.card_id')
+            ->where('cards.list_id', $list->id)
+            ->delete();
         ListModel::query()->whereKey($list->id)->delete();
         $this->onDeleteSortable($list, new ListModel());
     }
@@ -246,6 +256,7 @@ SQL;
 DELETE t FROM tasks t
 WHERE t.card_id = :card_id
 SQL;
+        TaskModel::query()->where('card_id', $card->id)->delete();
         CardModel::query()->whereKey($card->id)->delete();
         $this->onDeleteSortable($card, new CardModel());
     }
