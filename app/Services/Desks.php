@@ -102,6 +102,11 @@ SQL;
             ->leftJoin('lists', 'list.id', '=', 'cards.list_id')
             ->where('lists.desk_id', $desk->id)
             ->delete();
+        CardModel::query()
+            ->leftJoin('lists', 'list.id', '=', 'cards.list_id')
+            ->where('lists.desk_id', $desk->id)
+            ->delete();
+        ListModel::query()->where('desk_id', $desk->id)->delete();
         DeskModel::query()->whereKey($desk->id)->delete();
     }
 
@@ -183,6 +188,7 @@ SQL;
             ->leftJoin('cards', 'cards.id', '=', 'tasks.card_id')
             ->where('cards.list_id', $list->id)
             ->delete();
+        CardModel::query()->where('list_id', $list->id)->delete();
         ListModel::query()->whereKey($list->id)->delete();
         $this->onDeleteSortable($list, new ListModel());
     }
