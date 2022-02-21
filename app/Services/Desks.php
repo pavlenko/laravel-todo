@@ -18,31 +18,56 @@ final class Desks
     /**
      * @return array<DeskDTO>
      */
-    public function getAllDesk(): array
+    public function getAllDesk(bool $withLists = false): array
     {
-        $rows = DeskModel::query()->orderBy('updated_at', 'desc')->get();
+        $query = DeskModel::query()->orderBy('updated_at', 'desc');
+        if ($withLists) {
+            $query->with('lists');
+        }
+
+        /* @var $rows DeskModel[] */
+        $rows = $query->get();
         $data = [];
         foreach ($rows as $row) {
-            $data[] = $this->createDesk($row->getAttributes());
+            $data[] = $this->createDesk(
+                $row->getAttributes(),
+                $withLists
+                    ? array_map(fn(ListModel $item) => $this->createList($item->getAttributes()), $row->lists)
+                    : []
+            );
         }
 
         return $data;
     }
 
-    public function getOneDesk($params): ?DeskDTO
+    public function getOneDesk($params, bool $withLists = false): ?DeskDTO
     {
-        if (!is_array($params)) {
-            $data = DeskModel::query()->find($params);
-        } else {
-            $data = DeskModel::query()->where($params)->first();
+        $query = DeskModel::query();
+        if ($withLists) {
+            $query->with('lists');
         }
 
-        return null !== $data ? $this->createDesk($data->getAttributes()) : null;
+        /* @var $data DeskModel */
+        if (!is_array($params)) {
+            $data = $query->find($params);
+        } else {
+            $data = $query->where($params)->first();
+        }
+        if (null === $data) {
+            return null;
+        }
+
+        return $this->createDesk(
+            $data->getAttributes(),
+            $withLists
+                ? array_map(fn(ListModel $item) => $this->createList($item->getAttributes()), $data->lists)
+                : []
+        );
     }
 
-    public function createDesk(array $attributes): DeskDTO
+    public function createDesk(array $attributes, array $lists = []): DeskDTO
     {
-        return new DeskDTO($attributes);
+        return new DeskDTO($attributes, $lists);
     }
 
     public function insertDesk(DeskDTO $desk): void
