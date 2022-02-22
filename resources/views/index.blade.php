@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ url('/external/admin-lte/3.1.0/css/adminlte.min.css') }}">
     <script>window.__baseURL = '{{ url('/') }}'</script>
 </head>
-<body>
+<body class="sidebar-mini">
     <div id="app"></div>
     <script src="{{ mix('js/manifest.js') }}"></script>
     <script src="{{ mix('js/vendor.js') }}"></script>

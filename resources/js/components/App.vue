@@ -46,6 +46,12 @@ import Desks from "./Desks";
 
 export default {
     name: "App",
-    components: {Desks}
+    components: {Desks},
+    mounted() {
+        setTimeout(() => {
+            console.log($('[data-widget="pushmenu"]').PushMenu);
+            //$('[data-widget="pushmenu"]').PushMenu({});
+        }, 1000)
+    }
 }
 </script>
