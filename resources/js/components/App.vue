@@ -9,16 +9,17 @@
         </nav>
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <span class="brand-link">
+                <img :src="appLogo" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">Laravel VUE</span>
             </span>
             <div class="sidebar">
-                <nav class="mt-2 nav-compact nav-flat">
-                    <ul class="nav nav-pills nav-sidebar flex-column" role="menu" data-accordion="false">
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar nav-compact nav-flat flex-column" role="menu" data-accordion="false">
                         <router-link :to="{ name: 'home'}" exact v-slot="{ href, navigate, isExactActive }">
                             <li class="nav-item">
                                 <a :href="href" class="nav-link" :class="[isExactActive && 'active']" @click="navigate">
                                     <i class="nav-icon fas fa-home"></i>
-                                    Home
+                                    <p>Home</p>
                                 </a>
                             </li>
                         </router-link>
@@ -26,7 +27,7 @@
                             <li class="nav-item">
                                 <a :href="href" class="nav-link" :class="[isActive && 'active']" @click="navigate">
                                     <i class="nav-icon fas fa-columns"></i>
-                                    Desks
+                                    <p>Desks</p>
                                 </a>
                             </li>
                         </router-link>
@@ -47,11 +48,10 @@ import Desks from "./Desks";
 export default {
     name: "App",
     components: {Desks},
-    mounted() {
-        setTimeout(() => {
-            console.log($('[data-widget="pushmenu"]').PushMenu);
-            //$('[data-widget="pushmenu"]').PushMenu({});
-        }, 1000)
+    data() {
+        return {
+            appLogo: __appLogo
+        };
     }
 }
 </script>

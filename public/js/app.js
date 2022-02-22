@@ -42,7 +42,8 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _Desks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Desks */ "./resources/js/components/Desks.vue");
+/* harmony import */ var _Desks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Desks */ "./resources/js/components/Desks.vue");
+//
 //
 //
 //
@@ -92,13 +93,12 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     Desks: _Desks__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  mounted: function mounted() {
-    setTimeout(function () {
-      console.log($('[data-widget="pushmenu"]').PushMenu); //$('[data-widget="pushmenu"]').PushMenu({});
-    }, 1000);
+  data: function data() {
+    return {
+      appLogo: __appLogo
+    };
   }
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),
 
@@ -6689,14 +6689,25 @@ var render = function () {
         "aside",
         { staticClass: "main-sidebar sidebar-dark-primary elevation-4" },
         [
-          _vm._m(1),
+          _c("span", { staticClass: "brand-link" }, [
+            _c("img", {
+              staticClass: "brand-image img-circle elevation-3",
+              staticStyle: { opacity: ".8" },
+              attrs: { src: _vm.appLogo, alt: "AdminLTE Logo" },
+            }),
+            _vm._v(" "),
+            _c("span", { staticClass: "brand-text font-weight-light" }, [
+              _vm._v("Laravel VUE"),
+            ]),
+          ]),
           _vm._v(" "),
           _c("div", { staticClass: "sidebar" }, [
-            _c("nav", { staticClass: "mt-2 nav-compact nav-flat" }, [
+            _c("nav", { staticClass: "mt-2" }, [
               _c(
                 "ul",
                 {
-                  staticClass: "nav nav-pills nav-sidebar flex-column",
+                  staticClass:
+                    "nav nav-pills nav-sidebar nav-compact nav-flat flex-column",
                   attrs: { role: "menu", "data-accordion": "false" },
                 },
                 [
@@ -6723,9 +6734,8 @@ var render = function () {
                                   _c("i", {
                                     staticClass: "nav-icon fas fa-home",
                                   }),
-                                  _vm._v(
-                                    "\n                                Home\n                            "
-                                  ),
+                                  _vm._v(" "),
+                                  _c("p", [_vm._v("Home")]),
                                 ]
                               ),
                             ]),
@@ -6758,9 +6768,8 @@ var render = function () {
                                   _c("i", {
                                     staticClass: "nav-icon fas fa-columns",
                                   }),
-                                  _vm._v(
-                                    "\n                                Desks\n                            "
-                                  ),
+                                  _vm._v(" "),
+                                  _c("p", [_vm._v("Desks")]),
                                 ]
                               ),
                             ]),
@@ -6779,7 +6788,7 @@ var render = function () {
       _vm._v(" "),
       _c("router-view"),
       _vm._v(" "),
-      _vm._m(2),
+      _vm._m(1),
     ],
     1
   )
@@ -6810,16 +6819,6 @@ var staticRenderFns = [
         ]),
       ]
     )
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "brand-link" }, [
-      _c("span", { staticClass: "brand-text font-weight-light" }, [
-        _vm._v("Laravel VUE"),
-      ]),
-    ])
   },
   function () {
     var _vm = this
