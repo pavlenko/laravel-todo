@@ -14,6 +14,7 @@ Vue.use(BootstrapVue);
 import App from './components/App';
 import Page404 from './components/Page404';
 import PageLogin from './components/PageLogin';
+import PageRegister from './components/PageRegister';
 import Home from "./components/Home";
 import Desks from './components/Desks';
 import Lists from './components/Lists';
@@ -52,6 +53,11 @@ const router = new VueRouter({
             path: '/user/login',
             name: 'user_login',
             component: PageLogin
+        },
+        {
+            path: '/user/register',
+            name: 'user_register',
+            component: PageRegister
         },
         {path: "*", component: Page404}
     ]
