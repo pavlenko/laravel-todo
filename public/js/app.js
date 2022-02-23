@@ -26,7 +26,8 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LayoutHeader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LayoutHeader */ "./resources/js/components/LayoutHeader.vue");
-/* harmony import */ var _Desks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Desks */ "./resources/js/components/Desks.vue");
+/* harmony import */ var _LayoutSidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LayoutSidebar */ "./resources/js/components/LayoutSidebar.vue");
+/* harmony import */ var _Desks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Desks */ "./resources/js/components/Desks.vue");
 //
 //
 //
@@ -38,40 +39,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "App",
   components: {
     LayoutHeader: _LayoutHeader__WEBPACK_IMPORTED_MODULE_0__["default"],
-    Desks: _Desks__WEBPACK_IMPORTED_MODULE_1__["default"]
+    LayoutSidebar: _LayoutSidebar__WEBPACK_IMPORTED_MODULE_1__["default"],
+    Desks: _Desks__WEBPACK_IMPORTED_MODULE_2__["default"]
   }
 });
 
@@ -1039,6 +1015,53 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "LayoutHeader"
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/LayoutSidebar.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/LayoutSidebar.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "LayoutSidebar"
 });
 
 /***/ }),
@@ -6706,124 +6729,16 @@ var render = function () {
     [
       _c("layout-header"),
       _vm._v(" "),
-      _c(
-        "aside",
-        { staticClass: "main-sidebar sidebar-dark-primary elevation-4" },
-        [
-          _vm._m(0),
-          _vm._v(" "),
-          _c("div", { staticClass: "sidebar" }, [
-            _c("nav", { staticClass: "mt-2" }, [
-              _c(
-                "ul",
-                {
-                  staticClass:
-                    "nav nav-pills nav-sidebar nav-compact nav-flat flex-column",
-                  attrs: { role: "menu", "data-accordion": "false" },
-                },
-                [
-                  _c("router-link", {
-                    attrs: { to: { name: "home" }, exact: "" },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "default",
-                        fn: function (ref) {
-                          var href = ref.href
-                          var navigate = ref.navigate
-                          var isExactActive = ref.isExactActive
-                          return [
-                            _c("li", { staticClass: "nav-item" }, [
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "nav-link",
-                                  class: [isExactActive && "active"],
-                                  attrs: { href: href },
-                                  on: { click: navigate },
-                                },
-                                [
-                                  _c("i", {
-                                    staticClass: "nav-icon fas fa-home",
-                                  }),
-                                  _vm._v(" "),
-                                  _c("p", [_vm._v("Home")]),
-                                ]
-                              ),
-                            ]),
-                          ]
-                        },
-                      },
-                    ]),
-                  }),
-                  _vm._v(" "),
-                  _c("router-link", {
-                    attrs: { to: { name: "desks" } },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "default",
-                        fn: function (ref) {
-                          var href = ref.href
-                          var navigate = ref.navigate
-                          var isActive = ref.isActive
-                          return [
-                            _c("li", { staticClass: "nav-item" }, [
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "nav-link",
-                                  class: [isActive && "active"],
-                                  attrs: { href: href },
-                                  on: { click: navigate },
-                                },
-                                [
-                                  _c("i", {
-                                    staticClass: "nav-icon fas fa-columns",
-                                  }),
-                                  _vm._v(" "),
-                                  _c("p", [_vm._v("Desks")]),
-                                ]
-                              ),
-                            ]),
-                          ]
-                        },
-                      },
-                    ]),
-                  }),
-                ],
-                1
-              ),
-            ]),
-          ]),
-        ]
-      ),
+      _c("layout-sidebar"),
       _vm._v(" "),
       _c("router-view"),
       _vm._v(" "),
-      _vm._m(1),
+      _vm._m(0),
     ],
     1
   )
 }
 var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "brand-link" }, [
-      _c("img", {
-        staticClass: "brand-image img-circle elevation-3",
-        staticStyle: { opacity: ".8" },
-        attrs: {
-          src: "/external/admin-lte/3.1.0/img/AdminLTELogo.png",
-          alt: "AdminLTE Logo",
-        },
-      }),
-      _vm._v(" "),
-      _c("span", { staticClass: "brand-text font-weight-light" }, [
-        _vm._v("Laravel VUE"),
-      ]),
-    ])
-  },
   function () {
     var _vm = this
     var _h = _vm.$createElement
@@ -8395,6 +8310,137 @@ var staticRenderFns = [
         ]),
       ]
     )
+  },
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/LayoutSidebar.vue?vue&type=template&id=bc6ff112&":
+/*!****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/LayoutSidebar.vue?vue&type=template&id=bc6ff112& ***!
+  \****************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "aside",
+    { staticClass: "main-sidebar sidebar-dark-primary elevation-4" },
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("div", { staticClass: "sidebar" }, [
+        _c("nav", { staticClass: "mt-2" }, [
+          _c(
+            "ul",
+            {
+              staticClass:
+                "nav nav-pills nav-sidebar nav-compact nav-flat flex-column",
+              attrs: { role: "menu", "data-accordion": "false" },
+            },
+            [
+              _c("router-link", {
+                attrs: { to: { name: "home" }, exact: "" },
+                scopedSlots: _vm._u([
+                  {
+                    key: "default",
+                    fn: function (ref) {
+                      var href = ref.href
+                      var navigate = ref.navigate
+                      var isExactActive = ref.isExactActive
+                      return [
+                        _c("li", { staticClass: "nav-item" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "nav-link",
+                              class: [isExactActive && "active"],
+                              attrs: { href: href },
+                              on: { click: navigate },
+                            },
+                            [
+                              _c("i", { staticClass: "nav-icon fas fa-home" }),
+                              _vm._v(" "),
+                              _c("p", [_vm._v("Home")]),
+                            ]
+                          ),
+                        ]),
+                      ]
+                    },
+                  },
+                ]),
+              }),
+              _vm._v(" "),
+              _c("router-link", {
+                attrs: { to: { name: "desks" } },
+                scopedSlots: _vm._u([
+                  {
+                    key: "default",
+                    fn: function (ref) {
+                      var href = ref.href
+                      var navigate = ref.navigate
+                      var isActive = ref.isActive
+                      return [
+                        _c("li", { staticClass: "nav-item" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "nav-link",
+                              class: [isActive && "active"],
+                              attrs: { href: href },
+                              on: { click: navigate },
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "nav-icon fas fa-columns",
+                              }),
+                              _vm._v(" "),
+                              _c("p", [_vm._v("Desks")]),
+                            ]
+                          ),
+                        ]),
+                      ]
+                    },
+                  },
+                ]),
+              }),
+            ],
+            1
+          ),
+        ]),
+      ]),
+    ]
+  )
+}
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "brand-link" }, [
+      _c("img", {
+        staticClass: "brand-image img-circle elevation-3",
+        staticStyle: { opacity: ".8" },
+        attrs: {
+          src: "/external/admin-lte/3.1.0/img/AdminLTELogo.png",
+          alt: "AdminLTE Logo",
+        },
+      }),
+      _vm._v(" "),
+      _c("span", { staticClass: "brand-text font-weight-light" }, [
+        _vm._v("Laravel VUE"),
+      ]),
+    ])
   },
 ]
 render._withStripped = true
@@ -19090,6 +19136,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LayoutHeader_vue_vue_type_template_id_94c29a7c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LayoutHeader_vue_vue_type_template_id_94c29a7c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/LayoutSidebar.vue":
+/*!***************************************************!*\
+  !*** ./resources/js/components/LayoutSidebar.vue ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _LayoutSidebar_vue_vue_type_template_id_bc6ff112___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LayoutSidebar.vue?vue&type=template&id=bc6ff112& */ "./resources/js/components/LayoutSidebar.vue?vue&type=template&id=bc6ff112&");
+/* harmony import */ var _LayoutSidebar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LayoutSidebar.vue?vue&type=script&lang=js& */ "./resources/js/components/LayoutSidebar.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _LayoutSidebar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _LayoutSidebar_vue_vue_type_template_id_bc6ff112___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _LayoutSidebar_vue_vue_type_template_id_bc6ff112___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/LayoutSidebar.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/LayoutSidebar.vue?vue&type=script&lang=js&":
+/*!****************************************************************************!*\
+  !*** ./resources/js/components/LayoutSidebar.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LayoutSidebar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./LayoutSidebar.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/LayoutSidebar.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LayoutSidebar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/LayoutSidebar.vue?vue&type=template&id=bc6ff112&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/LayoutSidebar.vue?vue&type=template&id=bc6ff112& ***!
+  \**********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LayoutSidebar_vue_vue_type_template_id_bc6ff112___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./LayoutSidebar.vue?vue&type=template&id=bc6ff112& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/LayoutSidebar.vue?vue&type=template&id=bc6ff112&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LayoutSidebar_vue_vue_type_template_id_bc6ff112___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LayoutSidebar_vue_vue_type_template_id_bc6ff112___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

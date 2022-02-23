@@ -3,6 +3,9 @@
         <slot name="header">
             <layout-header></layout-header>
         </slot>
+        <slot name="sidebar">
+            <layout-sidebar></layout-sidebar>
+        </slot>
         <!--TODO header/footer/sidebar/content (maybe content+title+breadcrumbs)-->
     </div>
 </template>
