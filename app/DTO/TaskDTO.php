@@ -17,14 +17,14 @@ final class TaskDTO extends BaseSortableDTO
     public function attributes(): array
     {
         return [
-            'id',
-            'card_id',
-            'prev',
-            'next',
-            'name',
-            'status',
-            'created_at',
-            'updated_at',
+            'id'         => null,
+            'card_id'    => null,
+            'prev'       => null,
+            'next'       => null,
+            'name'       => null,
+            'status'     => null,
+            'created_at' => null,
+            'updated_at' => null,
         ];
     }
 }

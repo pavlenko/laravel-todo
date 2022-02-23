@@ -25,14 +25,14 @@ final class CardDTO extends BaseSortableDTO
     public function attributes(): array
     {
         return [
-            'id',
-            'list_id',
-            'prev',
-            'next',
-            'name',
-            'text',
-            'created_at',
-            'updated_at',
+            'id'         => null,
+            'list_id'    => null,
+            'prev'       => null,
+            'next'       => null,
+            'name'       => null,
+            'text'       => null,
+            'created_at' => null,
+            'updated_at' => null,
         ];
     }
 

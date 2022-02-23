@@ -24,13 +24,13 @@ final class ListDTO extends BaseSortableDTO
     public function attributes(): array
     {
         return [
-             'id',
-             'desk_id',
-             'prev',
-             'next',
-             'name',
-             'created_at',
-             'updated_at',
+            'id'         => null,
+            'desk_id'    => null,
+            'prev'       => null,
+            'next'       => null,
+            'name'       => null,
+            'created_at' => null,
+            'updated_at' => null,
         ];
     }
 

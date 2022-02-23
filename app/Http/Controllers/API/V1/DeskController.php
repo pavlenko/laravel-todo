@@ -13,7 +13,7 @@ final class DeskController extends Controller
 {
     public function index()
     {
-        $desks = (new Desks())->getAllDesk();
+        $desks = (new Desks())->getAllDesk();dd($desks);
         return JsonResource::collection($desks);
     }
 

@@ -9,10 +9,40 @@ abstract class BaseDTO
 
     public function __construct(array $values)
     {
-        foreach ($this->attributes() as $attribute) {
-            $this->oldAttributes[$attribute] = $values[$attribute] ?? null;
-            $this->newAttributes[$attribute] = $values[$attribute] ?? null;
+        foreach ($this->attributes() as $attribute => $type) {
+            $this->oldAttributes[$attribute] = $this->typecast($type, $values[$attribute] ?? null);
+            $this->newAttributes[$attribute] = $this->typecast($type, $values[$attribute] ?? null);
         }
+    }
+
+    protected function typecast(?string $type, $value)
+    {
+        //TODO handle <some_type>[] cast
+        //TODO handle (array)$object cast
+        //TODO handle (object)$array cast
+        if (null === $value || gettype($value) === $type) {
+            return $value;
+        }
+
+        if (class_exists($type)) {
+            return new $type($value);
+        }
+
+        switch ($type) {
+            case 'string':
+                if (is_float($value)) {
+                    return str_replace(',', '.', (string) $value);
+                }
+
+                return (string) $value;
+            case 'boolean':
+                return $value && $value !== "\0";
+            case 'float':
+            case 'double':
+                return (float) $value;
+        }
+
+        return $value;
     }
 
     abstract public function attributes(): array;
@@ -20,7 +50,7 @@ abstract class BaseDTO
     public function getAttributes(): array
     {
         $values = [];
-        foreach ($this->attributes() as $attribute) {
+        foreach ($this->attributes() as $attribute => $type) {
             $values[$attribute] = $this->{$attribute};
         }
         return $values;
@@ -28,7 +58,7 @@ abstract class BaseDTO
 
     public function setAttributes(array $values)
     {
-        foreach ($this->attributes() as $attribute) {
+        foreach ($this->attributes() as $attribute => $type) {
             if (isset($values[$attribute])) {
                 $this->{$attribute} = $values[$attribute];
             }
@@ -55,7 +85,7 @@ abstract class BaseDTO
 
     public function getChanges(): array
     {
-        $names = $this->attributes();
+        $names = array_keys($this->attributes());
         $names = array_flip($names);
 
         $attributes = [];
@@ -70,7 +100,7 @@ abstract class BaseDTO
 
     public function getOldValue(string $name)
     {
-        if (!in_array($name, $this->attributes())) {
+        if (!array_key_exists($name, $this->attributes())) {
             return null;
         }
 
@@ -79,7 +109,7 @@ abstract class BaseDTO
 
     public function __get(string $name)
     {
-        if (!in_array($name, $this->attributes())) {
+        if (!array_key_exists($name, $this->attributes())) {
             return null;
         }
 
@@ -94,7 +124,7 @@ abstract class BaseDTO
 
     public function __set(string $name, $value): void
     {
-        if (!in_array($name, $this->attributes())) {
+        if (!array_key_exists($name, $this->attributes())) {
             return;
         }
 
@@ -105,7 +135,7 @@ abstract class BaseDTO
             return;
         }
 
-        $this->newAttributes[$name] = $value;
+        $this->newAttributes[$name] = $this->typecast($this->attributes()[$name], $value);
     }
 
     public function __isset(string $name): bool
