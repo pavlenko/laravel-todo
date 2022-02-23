@@ -13,6 +13,7 @@ Vue.use(BootstrapVue);
 
 import App from './components/App';
 import Page404 from './components/Page404';
+import PageLogin from './components/PageLogin';
 import Home from "./components/Home";
 import Desks from './components/Desks';
 import Lists from './components/Lists';
@@ -47,9 +48,26 @@ const router = new VueRouter({
             name: 'lists',
             component: Lists
         },
+        {
+            path: '/user/login',
+            name: 'user_login',
+            component: PageLogin
+        },
         {path: "*", component: Page404}
     ]
 });
+
+router.beforeEach(function (to, from, next) {
+    console.log(to);
+    next();
+    /*if ((to.path !== '/login' && to.path !== 'login') && !auth.user.authenticated) {
+        next({path: '/login'});
+    } else if ((to.path === '/login' || to.path === 'login') && auth.user.authenticated) {
+        next({path: '/'});
+    } else {
+        next();
+    }*/
+})
 
 const app = new Vue({
     el: '#app',
