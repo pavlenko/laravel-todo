@@ -12,6 +12,7 @@ Vue.use(BootstrapVue);
 //Vue.use(CKEditor);
 
 import App from './components/App';
+import Page404 from './components/Page404';
 import Home from "./components/Home";
 import Desks from './components/Desks';
 import Lists from './components/Lists';
@@ -45,7 +46,8 @@ const router = new VueRouter({
             path: '/desks/:id',
             name: 'lists',
             component: Lists
-        }
+        },
+        {path: "*", component: Page404}
     ]
 });
 
