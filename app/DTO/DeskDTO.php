@@ -21,9 +21,9 @@ final class DeskDTO extends BaseDTO
     public function attributes(): array
     {
         return [
-            'id'         => 'float',
+            'id'         => null,
             'name'       => null,
-            'created_at' => \DateTime::class,
+            'created_at' => null,
             'updated_at' => null,
         ];
     }

@@ -32,7 +32,7 @@ final class Desks
             $data[] = $this->createDesk(
                 $row->getAttributes(),
                 $withLists
-                    ? $this->sortByPrevNext(array_map(fn(ListModel $item) => $this->createList($item->getAttributes()), $row->lists))
+                    ? $this->sortByPrevNext(array_map(fn(array $item) => $this->createList($item), $row->lists->toArray()))
                     : []
             );
         }
@@ -56,7 +56,7 @@ final class Desks
         return $this->createDesk(
             $data->getAttributes(),
             $withLists
-                ? $this->sortByPrevNext(array_map(fn(ListModel $item) => $this->createList($item->getAttributes()), $data->lists))
+                ? $this->sortByPrevNext(array_map(fn(array $item) => $this->createList($item), $data->lists->toArray()))
                 : []
         );
     }
@@ -107,7 +107,7 @@ final class Desks
             $data[] = $this->createList(
                 $row->getAttributes(),
                 $withCards
-                    ? $this->sortByPrevNext(array_map(fn(CardModel $item) => $this->createCard($item->getAttributes()), $row->cards))
+                    ? $this->sortByPrevNext(array_map(fn(array $item) => $this->createCard($item), $row->cards->toArray()))
                     : []
             );
         }
@@ -131,7 +131,7 @@ final class Desks
         return $this->createList(
             $data->getAttributes(),
             $withCards
-                ? $this->sortByPrevNext(array_map(fn(CardModel $item) => $this->createCard($item->getAttributes()), $data->cards))
+                ? $this->sortByPrevNext(array_map(fn(array $item) => $this->createCard($item), $data->cards->toArray()))
                 : []
         );
     }
@@ -180,7 +180,7 @@ final class Desks
             $data[] = $this->createCard(
                 $row->getAttributes(),
                 $withTasks
-                    ? $this->sortByPrevNext(array_map(fn(TaskModel $item) => $this->createTask($item->getAttributes()), $row->tasks))
+                    ? $this->sortByPrevNext(array_map(fn(array $item) => $this->createTask($item), $row->tasks->toArray()))
                     : []
             );
         }
@@ -204,7 +204,7 @@ final class Desks
         return $this->createCard(
             $data->getAttributes(),
             $withTasks
-                ? $this->sortByPrevNext(array_map(fn(TaskModel $item) => $this->createTask($item->getAttributes()), $data->tasks))
+                ? $this->sortByPrevNext(array_map(fn(array $item) => $this->createTask($item), $data->tasks->toArray()))
                 : []
         );
     }

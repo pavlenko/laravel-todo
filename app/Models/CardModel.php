@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @property $updated_at
  *
  * @property ListModel $list
- * @property TaskModel[] $tasks
+ * @property TaskModel[]|Collection $tasks
  */
 final class CardModel extends Model
 {
