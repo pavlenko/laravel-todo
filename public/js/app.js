@@ -72,11 +72,6 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     LayoutHeader: _LayoutHeader__WEBPACK_IMPORTED_MODULE_0__["default"],
     Desks: _Desks__WEBPACK_IMPORTED_MODULE_1__["default"]
-  },
-  data: function data() {
-    return {
-      appLogo: __appLogo
-    };
   }
 });
 
@@ -6715,17 +6710,7 @@ var render = function () {
         "aside",
         { staticClass: "main-sidebar sidebar-dark-primary elevation-4" },
         [
-          _c("span", { staticClass: "brand-link" }, [
-            _c("img", {
-              staticClass: "brand-image img-circle elevation-3",
-              staticStyle: { opacity: ".8" },
-              attrs: { src: _vm.appLogo, alt: "AdminLTE Logo" },
-            }),
-            _vm._v(" "),
-            _c("span", { staticClass: "brand-text font-weight-light" }, [
-              _vm._v("Laravel VUE"),
-            ]),
-          ]),
+          _vm._m(0),
           _vm._v(" "),
           _c("div", { staticClass: "sidebar" }, [
             _c("nav", { staticClass: "mt-2" }, [
@@ -6814,12 +6799,31 @@ var render = function () {
       _vm._v(" "),
       _c("router-view"),
       _vm._v(" "),
-      _vm._m(0),
+      _vm._m(1),
     ],
     1
   )
 }
 var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "brand-link" }, [
+      _c("img", {
+        staticClass: "brand-image img-circle elevation-3",
+        staticStyle: { opacity: ".8" },
+        attrs: {
+          src: "/external/admin-lte/3.1.0/img/AdminLTELogo.png",
+          alt: "AdminLTE Logo",
+        },
+      }),
+      _vm._v(" "),
+      _c("span", { staticClass: "brand-text font-weight-light" }, [
+        _vm._v("Laravel VUE"),
+      ]),
+    ])
+  },
   function () {
     var _vm = this
     var _h = _vm.$createElement

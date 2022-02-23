@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="{{ url('/external/admin-lte/3.1.0/css/adminlte.min.css') }}">
     <script>
         window.__baseURL = '{{ url('/') }}';
-        window.__appLogo = '{{ url('/images/AdminLTELogo.png') }}';
     </script>
 </head>
 <body class="sidebar-mini layout-fixed">

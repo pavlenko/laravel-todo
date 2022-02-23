@@ -3,7 +3,7 @@
         <layout-header></layout-header>
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <span class="brand-link">
-                <img :src="appLogo" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <img src="/external/admin-lte/3.1.0/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">Laravel VUE</span>
             </span>
             <div class="sidebar">
@@ -42,11 +42,6 @@ import Desks from "./Desks";
 
 export default {
     name: "App",
-    components: {LayoutHeader, Desks},
-    data() {
-        return {
-            appLogo: __appLogo
-        };
-    }
+    components: {LayoutHeader, Desks}
 }
 </script>
