@@ -10,15 +10,44 @@ namespace App\DTO;
  * @property $name
  * @property $created_at
  * @property $updated_at
+ *
+ * @property CardDTO[] $cards
  */
 final class ListDTO extends BaseSortableDTO
 {
-    public array $cards = [];
+    private array $cards = [];
 
     public function __construct(array $values, array $cards = [])
     {
         parent::__construct($values);
-        $this->cards = $cards;
+        $this->setCards($cards);
+    }
+
+    /**
+     * @return CardDTO[]
+     */
+    public function getCards(): array
+    {
+        return $this->cards;
+    }
+
+    /**
+     * @param CardDTO[] $cards
+     */
+    public function setCards(array $cards): void
+    {
+        $this->cards = [];
+        foreach ($cards as $index => $item) {
+            if (!($item instanceof ListDTO)) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Lists item must be of type %s, got %s at index \'%s\'',
+                    CardDTO::class,
+                    is_object($item) ? get_class($item) : gettype($item),
+                    $index
+                ));
+            }
+            $this->cards[] = $item;
+        }
     }
 
     public function attributes(): array
