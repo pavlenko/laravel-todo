@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskRequest;
-use App\Services\Desks;
+use App\Services\TasksManager;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
@@ -17,7 +17,7 @@ final class TaskController extends Controller
             'card_id' => 'required|integer|exists:cards,id'
         ]);
 
-        $tasks = (new Desks())->getAllTask($request->card_id);
+        $tasks = (new TasksManager())->getAllTask($request->card_id);
         return JsonResource::collection($tasks);
     }
 
@@ -27,7 +27,7 @@ final class TaskController extends Controller
             'card_id' => 'required|integer|exists:cards,id'
         ]);
 
-        $desks = new Desks();
+        $desks = new TasksManager();
         $dto   = $desks->createTask($request->input());
 
         $desks->insertTask($dto);
@@ -36,12 +36,12 @@ final class TaskController extends Controller
 
     public function show($id)
     {
-        return new JsonResource((new Desks())->getOneTask($id));
+        return new JsonResource((new TasksManager())->getOneTask($id));
     }
 
     public function update(TaskRequest $request, $id)
     {
-        $desks = new Desks();
+        $desks = new TasksManager();
 
         $dto = $desks->getOneTask($id);
         $dto->setAttributes($request->input());
@@ -53,7 +53,7 @@ final class TaskController extends Controller
 
     public function destroy($id)
     {
-        $desks = new Desks();
+        $desks = new TasksManager();
         $dto   = $desks->getOneTask($id);
 
         $desks->deleteTask($dto);

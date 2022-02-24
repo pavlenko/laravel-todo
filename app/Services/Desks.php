@@ -2,19 +2,23 @@
 
 namespace App\Services;
 
-use App\DTO\BaseSortableDTO;
 use App\DTO\CardDTO;
 use App\DTO\DeskDTO;
 use App\DTO\ListDTO;
-use App\DTO\TaskDTO;
 use App\Models\CardModel;
 use App\Models\DeskModel;
 use App\Models\ListModel;
 use App\Models\TaskModel;
-use Illuminate\Database\Eloquent\Model;
 
-final class Desks
+final class Desks extends BaseManager
 {
+    private TasksManager $tasks;
+
+    public function __construct(?TasksManager $tasks = null)
+    {
+        $this->tasks = $tasks ?: new TasksManager();
+    }
+
     /**
      * @return array<DeskDTO>
      */
@@ -180,7 +184,7 @@ final class Desks
             $data[] = $this->createCard(
                 $row->getAttributes(),
                 $withTasks
-                    ? $this->sortByPrevNext(array_map(fn(array $item) => $this->createTask($item), $row->tasks->toArray()))
+                    ? $this->sortByPrevNext(array_map(fn(array $item) => $this->tasks->createTask($item), $row->tasks->toArray()))
                     : []
             );
         }
@@ -204,7 +208,7 @@ final class Desks
         return $this->createCard(
             $data->getAttributes(),
             $withTasks
-                ? $this->sortByPrevNext(array_map(fn(array $item) => $this->createTask($item), $data->tasks->toArray()))
+                ? $this->sortByPrevNext(array_map(fn(array $item) => $this->tasks->createTask($item), $data->tasks->toArray()))
                 : []
         );
     }
@@ -232,106 +236,5 @@ final class Desks
         TaskModel::query()->where('card_id', $card->id)->delete();
         CardModel::query()->whereKey($card->id)->delete();
         $this->onDeleteSortable($card, new CardModel());
-    }
-
-    public function getAllTask(int $cardID): array
-    {
-        $rows = TaskModel::query()->where('card_id', $cardID)->get();
-        $data = [];
-
-        foreach ($rows as $row) {
-            $data[] = $this->createTask($row->getAttributes());
-        }
-
-        return $this->sortByPrevNext($data);
-    }
-
-    public function getOneTask(int $taskID): ?TaskDTO
-    {
-        $card = TaskModel::query()->whereKey($taskID)->first();
-        return null !== $card ? new TaskDTO($card->getAttributes()) : null;
-    }
-
-    public function createTask(array $attributes): TaskDTO
-    {
-        return new TaskDTO($attributes);
-    }
-    public function insertTask(TaskDTO $task): void
-    {
-        $data = TaskModel::query()->create($task->getAttributes());
-        $task->setAttributes($data->getAttributes());
-        $this->onCreateSortable($task, new TaskModel());
-    }
-
-    public function updateTask(TaskDTO $task): void
-    {
-        TaskModel::query()->whereKey($task->id)->update($task->getAttributes());
-        $this->onUpdateSortable($task, new TaskModel());
-    }
-
-    public function deleteTask(TaskDTO $task): void
-    {
-        TaskModel::query()->whereKey($task->id)->delete();
-        $this->onDeleteSortable($task, new TaskModel());
-    }
-
-    /**
-     * @param BaseSortableDTO[] $data
-     * @return BaseSortableDTO[]
-     */
-    protected function sortByPrevNext(array $data): array
-    {
-        if (empty($data)) {
-            return [];
-        }
-
-        /* @var $first BaseSortableDTO */
-        $first  = current(array_filter($data, fn($item) => $item->prev == 0));
-        $result = [$first];
-
-        $findByID = function(array $data, int $id) {
-            return current(array_filter($data, fn($item) => $item->id == $id)) ?: null;
-        };
-
-        /* @var $item BaseSortableDTO */
-        $id = $first->next;
-        while ($item = $findByID($data, $id)) {
-            $result[] = $item;
-            $id = $item->next;
-        }
-
-        return $result;
-    }
-
-    private function onCreateSortable(BaseSortableDTO $dto, Model $model): void
-    {
-        // Update new position
-        $model::query()->whereKey($dto->prev)->update(['next' => $dto->id]);
-    }
-
-    private function onUpdateSortable(BaseSortableDTO $dto, Model $model): void
-    {
-        // Skip if not changed
-        if (!$dto->isChanged('prev') && !$dto->isChanged('next')) {
-            return;
-        }
-
-        // Update old position
-        $srcPrev = (int) $dto->getOldValue('prev');
-        $srcNext = (int) $dto->getOldValue('next');
-
-        $model::query()->whereKey($srcPrev)->update(['next' => $srcNext]);
-        $model::query()->whereKey($srcNext)->update(['prev' => $srcPrev]);
-
-        // Update new position
-        $model::query()->whereKey($dto->prev)->update(['next' => $dto->id]);
-        $model::query()->whereKey($dto->next)->update(['prev' => $dto->id]);
-    }
-
-    private function onDeleteSortable(BaseSortableDTO $dto, Model $model): void
-    {
-        // Update old position
-        $model::query()->whereKey($dto->prev)->update(['next' => $dto->next ?? 0]);
-        $model::query()->whereKey($dto->next)->update(['prev' => $dto->prev ?? 0]);
     }
 }
