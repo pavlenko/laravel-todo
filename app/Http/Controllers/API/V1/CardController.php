@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CardRequest;
-use App\Services\Desks;
+use App\Services\CardsManager;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
@@ -17,9 +17,7 @@ final class CardController extends Controller
             'list_id' => 'required|integer|exists:lists,id'
         ]);
 
-        $desks = new Desks();
-        $cards = $desks->getAllCard($request->list_id);
-
+        $cards = (new CardsManager())->getAllCard($request->list_id);
         return JsonResource::collection($cards);
     }
 
@@ -29,39 +27,35 @@ final class CardController extends Controller
             'list_id' => 'required|integer|exists:lists,id'
         ]);
 
-        $desks = new Desks();
-        $dto   = $desks->createCard($request->input());
+        $manager = new CardsManager();
+        $dto     = $manager->createCard($request->input());
 
-        $desks->insertCard($dto);
+        $manager->insertCard($dto);
         return new JsonResource($dto);
     }
 
     public function show($id)
     {
-        $desks = new Desks();
-        $dto   = $desks->getOneCard($id);
-        return new JsonResource($dto);
+        return new JsonResource((new CardsManager())->getOneCard($id));
     }
 
     public function update(CardRequest $request, $id)
     {
-        throw new \Exception();
-        $desks = new Desks();
+        $manager = new CardsManager();
 
-        $dto = $desks->getOneCard($id);
+        $dto = $manager->getOneCard($id);
         $dto->setAttributes($request->input());
 
-        $desks->updateCard($dto);
-
+        $manager->updateCard($dto);
         return new JsonResource($dto);
     }
 
     public function destroy($id)
     {
-        $desks = new Desks();
-        $dto   = $desks->getOneCard($id);
+        $manager = new CardsManager();
+        $dto     = $manager->getOneCard($id);
 
-        $desks->deleteCard($dto);
+        $manager->deleteCard($dto);
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }

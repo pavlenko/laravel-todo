@@ -2,19 +2,19 @@
 
 namespace App\Services;
 
-use App\DTO\CardDTO;
 use App\DTO\DeskDTO;
 use App\DTO\ListDTO;
-use App\Models\CardModel;
 use App\Models\DeskModel;
 use App\Models\ListModel;
 
 final class Desks extends BaseManager
 {
+    private CardsManager $cards;
     private TasksManager $tasks;
 
-    public function __construct(?TasksManager $tasks = null)
+    public function __construct(?CardsManager $cards = null, ?TasksManager $tasks = null)
     {
+        $this->cards = $cards ?: new CardsManager();
         $this->tasks = $tasks ?: new TasksManager();
     }
 
@@ -83,10 +83,7 @@ final class Desks extends BaseManager
     public function deleteDesk(DeskDTO $desk): void
     {
         $this->tasks->deleteTasksByDesk($desk->id);
-        CardModel::query()
-            ->leftJoin('lists', 'list.id', '=', 'cards.list_id')
-            ->where('lists.desk_id', $desk->id)
-            ->delete();
+        $this->cards->deleteCardsByDesk($desk->id);
         ListModel::query()->where('desk_id', $desk->id)->delete();
         DeskModel::query()->whereKey($desk->id)->delete();
     }
@@ -156,77 +153,8 @@ final class Desks extends BaseManager
     public function deleteList(ListDTO $list): void
     {
         $this->tasks->deleteTasksByList($list->id);
-        CardModel::query()->where('list_id', $list->id)->delete();
+        $this->cards->deleteCardsByList($list->id);
         ListModel::query()->whereKey($list->id)->delete();
         $this->onDeleteSortable($list, new ListModel());
-    }
-
-    public function getAllCard(int $listID, bool $withTasks = false): array
-    {
-        $query = CardModel::query()->where('list_id', $listID);
-        if ($withTasks) {
-            $query->with('tasks');
-        }
-
-        /* @var $rows CardModel[] */
-        $rows = $query->get();
-        $data = [];
-
-        foreach ($rows as $row) {
-            $data[] = $this->createCard(
-                $row->getAttributes(),
-                $withTasks
-                    ? $this->sortByPrevNext(array_map(fn(array $item) => $this->tasks->createTask($item), $row->tasks->toArray()))
-                    : []
-            );
-        }
-
-        return $this->sortByPrevNext($data);
-    }
-
-    public function getOneCard(int $cardID, bool $withTasks = false): ?CardDTO
-    {
-        $query = CardModel::query()->whereKey($cardID);
-        if ($withTasks) {
-            $query->with('tasks');
-        }
-
-        /* @var $data CardModel */
-        $data = $query->first();
-        if (null === $data) {
-            return null;
-        }
-
-        return $this->createCard(
-            $data->getAttributes(),
-            $withTasks
-                ? $this->sortByPrevNext(array_map(fn(array $item) => $this->tasks->createTask($item), $data->tasks->toArray()))
-                : []
-        );
-    }
-
-    public function createCard(array $attributes, array $tasks = []): CardDTO
-    {
-        return new CardDTO($attributes, $tasks);
-    }
-
-    public function insertCard(CardDTO $card): void
-    {
-        $data = CardModel::query()->create($card->getAttributes());
-        $card->setAttributes($data->getAttributes());
-        $this->onCreateSortable($card, new CardModel());
-    }
-
-    public function updateCard(CardDTO $card): void
-    {
-        CardModel::query()->whereKey($card->id)->update($card->getAttributes());
-        $this->onUpdateSortable($card, new CardModel());
-    }
-
-    public function deleteCard(CardDTO $card): void
-    {
-        $this->tasks->deleteTasksByCard($card->id);
-        CardModel::query()->whereKey($card->id)->delete();
-        $this->onDeleteSortable($card, new CardModel());
     }
 }

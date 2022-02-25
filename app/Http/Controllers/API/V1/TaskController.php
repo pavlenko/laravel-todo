@@ -27,10 +27,10 @@ final class TaskController extends Controller
             'card_id' => 'required|integer|exists:cards,id'
         ]);
 
-        $desks = new TasksManager();
-        $dto   = $desks->createTask($request->input());
+        $manager = new TasksManager();
+        $dto     = $manager->createTask($request->input());
 
-        $desks->insertTask($dto);
+        $manager->insertTask($dto);
         return new JsonResource($dto);
     }
 
@@ -41,22 +41,21 @@ final class TaskController extends Controller
 
     public function update(TaskRequest $request, $id)
     {
-        $desks = new TasksManager();
+        $manager = new TasksManager();
 
-        $dto = $desks->getOneTask($id);
+        $dto = $manager->getOneTask($id);
         $dto->setAttributes($request->input());
 
-        $desks->updateTask($dto);
-
+        $manager->updateTask($dto);
         return new JsonResource($dto);
     }
 
     public function destroy($id)
     {
-        $desks = new TasksManager();
-        $dto   = $desks->getOneTask($id);
+        $manager = new TasksManager();
+        $dto     = $manager->getOneTask($id);
 
-        $desks->deleteTask($dto);
+        $manager->deleteTask($dto);
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }
