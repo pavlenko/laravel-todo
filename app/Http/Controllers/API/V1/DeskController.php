@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeskRequest;
-use App\Services\Desks;
+use App\Services\DesksManager;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 use function response;
@@ -13,7 +13,7 @@ final class DeskController extends Controller
 {
     public function index()
     {
-        $desks = (new Desks())->getAllDesk(true);
+        $desks = (new DesksManager())->getAllDesk(true);
         return JsonResource::collection($desks);
     }
 
@@ -21,41 +21,37 @@ final class DeskController extends Controller
     {
         $request->validate([]);
 
-        $desks = new Desks();
-        $dto   = $desks->createDesk($request->input());
+        $manager = new DesksManager();
+        $dto   = $manager->createDesk($request->input());
 
-        $desks->insertDesk($dto);
-
+        $manager->insertDesk($dto);
         return new JsonResource($dto);
     }
 
     public function show($id)
     {
-        $dto = (new Desks())->getOneDesk($id);
-        return new JsonResource($dto);
+        return new JsonResource((new DesksManager())->getOneDesk($id));
     }
 
     public function update(DeskRequest $request, $id)
     {
         $request->validate([]);
 
-        $desks = new Desks();
+        $manager = new DesksManager();
 
-        $dto = $desks->getOneDesk($id);
+        $dto = $manager->getOneDesk($id);
         $dto->setAttributes($request->input());
 
-        $desks->updateDesk($dto);
-
+        $manager->updateDesk($dto);
         return new JsonResource($dto);
     }
 
     public function destroy($id)
     {
-        $desks = new Desks();
-        $dto   = $desks->getOneDesk($id);
+        $manager = new DesksManager();
+        $dto     = $manager->getOneDesk($id);
 
-        $desks->deleteDesk($dto);
-
+        $manager->deleteDesk($dto);
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }

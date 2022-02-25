@@ -5,7 +5,6 @@ namespace App\Services;
 use App\DTO\TaskDTO;
 use App\Models\TaskModel;
 
-//TODO query tasks by desk(s)/list(s)/card(s)
 final class TasksManager extends BaseManager
 {
     public function getAllTask(int $cardID): array

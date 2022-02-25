@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ListRequest;
-use App\Services\Desks;
+use App\Services\ListsManager;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
@@ -17,7 +17,7 @@ final class ListController extends Controller
             'desk_id' => 'required|integer|exists:desks,id'
         ]);
 
-        $lists = (new Desks())->getAllList($request->desk_id);
+        $lists = (new ListsManager())->getAllList($request->desk_id);
         return JsonResource::collection($lists);
     }
 
@@ -27,38 +27,37 @@ final class ListController extends Controller
             'desk_id' => 'required|integer|exists:desks,id'
         ]);
 
-        $desks = new Desks();
-        $dto   = $desks->createList($request->input());
+        $manager = new ListsManager();
+        $dto     = $manager->createList($request->input());
 
-        $desks->insertList($dto);
+        $manager->insertList($dto);
         return new JsonResource($dto);
     }
 
     public function show($id)
     {
-        return new JsonResource((new Desks())->getOneList($id));
+        return new JsonResource((new ListsManager())->getOneList($id));
     }
 
     public function update(ListRequest $request, $id)
     {
         $request->validate([]);
 
-        $desks = new Desks();
+        $manager = new ListsManager();
 
-        $dto = $desks->getOneList($id);
+        $dto = $manager->getOneList($id);
         $dto->setAttributes($request->input());
 
-        $desks->updateList($dto);
-
+        $manager->updateList($dto);
         return new JsonResource($dto);
     }
 
     public function destroy($id)
     {
-        $desks = new Desks();
-        $dto   = $desks->getOneList($id);
+        $manager = new ListsManager();
+        $dto     = $manager->getOneList($id);
 
-        $desks->deleteList($dto);
+        $manager->deleteList($dto);
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }
