@@ -43,6 +43,28 @@ final class TasksManager extends BaseManager
         $this->onUpdateSortable($task, new TaskModel());
     }
 
+    public function deleteTasksByDesk(int $deskID): void
+    {
+        TaskModel::query()
+            ->join('cards', 'cards.id', '=', 'tasks.card_id', 'left')
+            ->join('lists', 'list.id', '=', 'cards.list_id', 'left')
+            ->where('lists.desk_id', $deskID)
+            ->delete();
+    }
+
+    public function deleteTasksByList(int $listID): void
+    {
+        TaskModel::query()
+            ->join('cards', 'cards.id', '=', 'tasks.card_id', 'left')
+            ->where('lists.desk_id', $listID)
+            ->delete();
+    }
+
+    public function deleteTasksByCard(int $cardID): void
+    {
+        TaskModel::query()->where('card_id', $cardID)->delete();
+    }
+
     public function deleteTask(TaskDTO $task): void
     {
         TaskModel::query()->whereKey($task->id)->delete();

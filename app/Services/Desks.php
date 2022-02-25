@@ -8,7 +8,6 @@ use App\DTO\ListDTO;
 use App\Models\CardModel;
 use App\Models\DeskModel;
 use App\Models\ListModel;
-use App\Models\TaskModel;
 
 final class Desks extends BaseManager
 {
@@ -83,11 +82,7 @@ final class Desks extends BaseManager
 
     public function deleteDesk(DeskDTO $desk): void
     {
-        TaskModel::query()
-            ->leftJoin('cards', 'cards.id', '=', 'tasks.card_id')
-            ->leftJoin('lists', 'list.id', '=', 'cards.list_id')
-            ->where('lists.desk_id', $desk->id)
-            ->delete();
+        $this->tasks->deleteTasksByDesk($desk->id);
         CardModel::query()
             ->leftJoin('lists', 'list.id', '=', 'cards.list_id')
             ->where('lists.desk_id', $desk->id)
@@ -160,10 +155,7 @@ final class Desks extends BaseManager
 
     public function deleteList(ListDTO $list): void
     {
-        TaskModel::query()
-            ->leftJoin('cards', 'cards.id', '=', 'tasks.card_id')
-            ->where('cards.list_id', $list->id)
-            ->delete();
+        $this->tasks->deleteTasksByList($list->id);
         CardModel::query()->where('list_id', $list->id)->delete();
         ListModel::query()->whereKey($list->id)->delete();
         $this->onDeleteSortable($list, new ListModel());
@@ -233,7 +225,7 @@ final class Desks extends BaseManager
 
     public function deleteCard(CardDTO $card): void
     {
-        TaskModel::query()->where('card_id', $card->id)->delete();
+        $this->tasks->deleteTasksByCard($card->id);
         CardModel::query()->whereKey($card->id)->delete();
         $this->onDeleteSortable($card, new CardModel());
     }
