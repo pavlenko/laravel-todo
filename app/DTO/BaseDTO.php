@@ -27,7 +27,11 @@ abstract class BaseDTO
 
         if (substr($type, -2) === '[]') {
             $type = substr($type, 0, -2);
-            return array_map(fn($item) => $this->typecast($type, $item), $value);
+            $data = [];
+            foreach ($value as $key => $item) {
+                $data[$key] = $this->typecast($type, $item);
+            }
+            return $data;
         }
 
         switch ($type) {
