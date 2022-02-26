@@ -3,14 +3,14 @@
         <div class="login-box">
             <div class="login-logo d-flex justify-content-center align-items-center">
                 <img src="/external/admin-lte/3.1.0/img/AdminLTELogo.png" alt="AdminLTE Logo" class="img-circle elevation-1 mr-2" style="width: 3rem">
-                <a href="../../index2.html">Laravel VUE</a>
+                <a href="/">Laravel VUE</a>
             </div>
             <div class="card">
                 <div class="card-body login-card-body">
                     <p class="login-box-msg">Sign in to start your session</p>
-                    <form action="../../index3.html" method="post">
+                    <form action="#" method="post" @submit.prevent="login">
                         <div class="input-group mb-3">
-                            <input type="email" class="form-control" placeholder="Email">
+                            <input type="email" class="form-control" placeholder="Email" v-model="email">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-envelope"></span>
@@ -18,7 +18,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <input type="password" class="form-control" placeholder="Password">
+                            <input type="password" class="form-control" placeholder="Password" v-model="password">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-lock"></span>
@@ -53,6 +53,25 @@
 
 <script>
 export default {
-    name: "PageLogin"
+    name: "PageLogin",
+    data() {
+        return {
+            email: null,
+            password: null
+        }
+    },
+    methods: {
+        login() {
+            axios
+                .post(__baseURL + '/api/V1/auth/login', {email: this.email, password: this.password})
+                .then(
+                    response => console.log(response),
+                    error => {
+                        console.log(error);
+                        throw error;
+                    }
+                );
+        }
+    }
 }
 </script>

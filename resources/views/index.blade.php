@@ -11,7 +11,7 @@
         window.__baseURL = '{{ url('/') }}';
     </script>
 </head>
-<body class="sidebar-mini layout-fixed">
+<body class="sidebar-mini layout-fixed mb-0">
     <div id="app"></div>
     <script src="{{ mix('js/manifest.js') }}"></script>
     <script src="{{ mix('js/vendor.js') }}"></script>
