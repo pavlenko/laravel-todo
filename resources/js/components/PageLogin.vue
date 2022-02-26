@@ -1,5 +1,6 @@
 <template>
-    <div class="content-wrapper d-flex justify-content-center align-items-center">
+    <layout-mini>
+    <div class="d-flex justify-content-center align-items-center bg-light min-vh-100">
         <div class="login-box">
             <div class="login-logo d-flex justify-content-center align-items-center">
                 <img src="/external/admin-lte/3.1.0/img/AdminLTELogo.png" alt="AdminLTE Logo" class="img-circle elevation-1 mr-2" style="width: 3rem">
@@ -49,11 +50,14 @@
             </div>
         </div>
     </div>
+    </layout-mini>
 </template>
 
 <script>
+import LayoutMini from "./LayoutMini";
 export default {
     name: "PageLogin",
+    components: {LayoutMini},
     data() {
         return {
             email: null,

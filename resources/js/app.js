@@ -11,7 +11,6 @@ Vue.use(VueRouter);
 Vue.use(BootstrapVue);
 //Vue.use(CKEditor);
 
-import App from './components/App';
 import Page404 from './components/Page404';
 import PageLogin from './components/PageLogin';
 import PageRegister from './components/PageRegister';
@@ -75,10 +74,9 @@ router.beforeEach(function (to, from, next) {
     }*/
 })
 
-const app = new Vue({
+new Vue({
     el: '#app',
     store: new Vuex.Store(store),
     router,
-    components: {App},
-    template: '<app></app>'
+    template: '<router-view></router-view>'
 });

@@ -1,20 +1,24 @@
 <template>
-    <div class="wrapper">
+    <div class="sidebar-mini wrapper">
         <slot name="header">
             <layout-header></layout-header>
         </slot>
         <slot name="sidebar">
             <layout-sidebar></layout-sidebar>
         </slot>
-        <!--TODO header/footer/sidebar/content (maybe content+title+breadcrumbs)-->
+        <slot></slot>
+        <slot name="sidebar">
+            <layout-footer></layout-footer>
+        </slot>
     </div>
 </template>
 
 <script>
-import LayoutHeader from "./LayoutHeader";
+import LayoutHeader from './LayoutHeader';
+import LayoutSidebar from './LayoutSidebar';
+import LayoutFooter from './LayoutFooter';
 
 export default {
-    name: "LayoutFull",
-    components: {LayoutHeader}
+    components: {LayoutHeader, LayoutSidebar, LayoutFooter}
 }
 </script>

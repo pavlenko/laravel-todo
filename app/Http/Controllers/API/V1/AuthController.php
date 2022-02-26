@@ -10,7 +10,6 @@ final class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        return response('AAA');
         $credentials = $request->only('email', 'password');
         if ($token = Auth::guard()->attempt($credentials)) {
             return response()->json(['status' => 'success'])->header('Authorization', $token);

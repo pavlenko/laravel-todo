@@ -7,11 +7,12 @@
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <link rel="stylesheet" href="{{ url('/external/admin-lte/3.1.0/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ url('/external/admin-lte/3.1.0/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
     <script>
         window.__baseURL = '{{ url('/') }}';
     </script>
 </head>
-<body class="sidebar-mini layout-fixed mb-0">
+<body class="layout-fixed mb-0">
     <div id="app"></div>
     <script src="{{ mix('js/manifest.js') }}"></script>
     <script src="{{ mix('js/vendor.js') }}"></script>
