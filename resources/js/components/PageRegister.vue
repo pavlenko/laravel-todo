@@ -7,39 +7,45 @@
                 <router-link :to="{name: 'home'}">Laravel VUE</router-link>
             </div>
             <div class="card">
-                <div class="card-body register-card-body">
+                <div class="card-body">
                     <p class="login-box-msg">Register a new membership</p>
-                    <form action="../../index.html" method="post">
+                    <form method="post" @submit.prevent>
                         <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text bg-transparent border-right-0">
+                                    <span class="fas fa-fw fa-user"></span>
+                                </div>
+                            </div>
                             <input type="text" class="form-control" placeholder="Full name">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-user"></span>
-                                </div>
-                            </div>
                         </div>
                         <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text bg-transparent border-left-0">
+                                    <span class="fas fa-fw fa-envelope"></span>
+                                </div>
+                            </div>
                             <input type="email" class="form-control" placeholder="Email">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-envelope"></span>
-                                </div>
-                            </div>
                         </div>
                         <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text bg-transparent border-right-0">
+                                    <span class="fas fa-fw fa-lock"></span>
+                                </div>
+                            </div>
                             <input type="password" class="form-control" placeholder="Password">
                             <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-lock"></span>
-                                </div>
+                                <a class="input-group-text bg-transparent border-left-0 btn"><span class="fas fa-fw fa-eye"></span></a>
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <input type="password" class="form-control" placeholder="Retype password">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-lock"></span>
+                            <div class="input-group-prepend">
+                                <div class="input-group-text bg-transparent border-right-0">
+                                    <span class="fas fa-fw fa-lock"></span>
                                 </div>
+                            </div>
+                            <input type="password" class="form-control border-left-0" placeholder="Retype password">
+                            <div class="input-group-append">
+                                <a class="input-group-text bg-transparent border-left-0 btn"><span class="fas fa-fw fa-eye"></span></a>
                             </div>
                         </div>
                         <div class="row">

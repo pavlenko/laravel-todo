@@ -7,23 +7,28 @@
                 <router-link :to="{name: 'home'}">Laravel VUE</router-link>
             </div>
             <div class="card">
-                <div class="card-body login-card-body">
+                <div class="card-body">
                     <p class="login-box-msg">Sign in to start your session</p>
                     <form action="#" method="post" @submit.prevent="login">
-                        <div class="input-group mb-3">
-                            <input type="email" class="form-control" placeholder="Email" v-model="email">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
+                        <div class="input-group mb-3" :class="{'focused': focused.email}">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text bg-transparent border-right-0">
                                     <span class="fas fa-envelope"></span>
                                 </div>
                             </div>
+                            <input type="email" class="form-control border-left-0" placeholder="Email" v-model="email" @focus="focused.email = true" @blur="focused.email = false">
                         </div>
-                        <div class="input-group mb-3">
-                            <input type="password" class="form-control" placeholder="Password" v-model="password">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
+                        <div class="input-group mb-3" :class="{'focused': focused.password}">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text bg-transparent border-right-0">
                                     <span class="fas fa-lock"></span>
                                 </div>
+                            </div>
+                            <input :type="password_show ? 'text' : 'password'" class="form-control border-left-0 border-right-0" placeholder="Password" v-model="password" @focus="focused.password = true" @blur="focused.password = false">
+                            <div class="input-group-append">
+                                <button class="input-group-text bg-transparent border-left-0 btn" @click.prevent="password_show = !password_show">
+                                    <span class="fas fa-fw" :class="password_show ? 'fa-eye-slash' : 'fa-eye'"></span>
+                                </button>
                             </div>
                         </div>
                         <div class="row">
@@ -61,7 +66,9 @@ export default {
     data() {
         return {
             email: null,
-            password: null
+            password: null,
+            password_show: false,
+            focused: {email: false, password: false}
         }
     },
     methods: {
@@ -79,3 +86,10 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.focused  .input-group-prepend .input-group-text,
+.focused  .input-group-append .input-group-text {
+    border-color: #80bdff;
+}
+</style>
