@@ -17,15 +17,17 @@ abstract class BaseDTO
 
     protected function typecast(?string $type, $value)
     {
-        //TODO handle <some_type>[] cast
-        //TODO handle (array)$object cast
-        //TODO handle (object)$array cast
         if (null === $value || gettype($value) === $type) {
             return $value;
         }
 
         if (class_exists($type)) {
             return new $type($value);
+        }
+
+        if (substr($type, -2) === '[]') {
+            $type = substr($type, 0, -2);
+            return array_map(fn($item) => $this->typecast($type, $item), $value);
         }
 
         switch ($type) {
@@ -40,6 +42,10 @@ abstract class BaseDTO
             case 'float':
             case 'double':
                 return (float) $value;
+            case 'array':
+                return '' === $value ? [] : [$value];
+            case 'object':
+                return (object) $value;
         }
 
         return $value;
