@@ -1,9 +1,10 @@
 <template>
-    <div class="content-wrapper d-flex justify-content-center align-items-center">
+    <layout-mini>
+    <div class="d-flex justify-content-center align-items-center bg-light min-vh-100">
         <div class="login-box">
             <div class="login-logo d-flex justify-content-center align-items-center">
                 <img src="/external/admin-lte/3.1.0/img/AdminLTELogo.png" alt="AdminLTE Logo" class="img-circle elevation-1 mr-2" style="width: 3rem">
-                <a href="../../index2.html">Laravel VUE</a>
+                <router-link :to="{name: 'home'}">Laravel VUE</router-link>
             </div>
             <div class="card">
                 <div class="card-body register-card-body">
@@ -55,11 +56,14 @@
                             </div>
                         </div>
                     </form>
-                    <a href="login.html" class="text-center">I already have a membership</a>
+                    <p class="mb-0">
+                        <router-link :to="{name: 'user_login'}">I already have a membership</router-link>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
+    </layout-mini>
 </template>
 
 <script>

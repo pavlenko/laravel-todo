@@ -4,7 +4,7 @@
         <div class="login-box">
             <div class="login-logo d-flex justify-content-center align-items-center">
                 <img src="/external/admin-lte/3.1.0/img/AdminLTELogo.png" alt="AdminLTE Logo" class="img-circle elevation-1 mr-2" style="width: 3rem">
-                <a href="/">Laravel VUE</a>
+                <router-link :to="{name: 'home'}">Laravel VUE</router-link>
             </div>
             <div class="card">
                 <div class="card-body login-card-body">
@@ -40,11 +40,11 @@
                             </div>
                         </div>
                     </form>
-                    <p class="mb-1">
+                    <!--<p class="mb-1">
                         <a href="forgot-password.html">I forgot my password</a>
-                    </p>
+                    </p>-->
                     <p class="mb-0">
-                        <a href="register.html" class="text-center">Register a new membership</a>
+                        <router-link :to="{name: 'user_register'}">Register a new membership</router-link>
                     </p>
                 </div>
             </div>
