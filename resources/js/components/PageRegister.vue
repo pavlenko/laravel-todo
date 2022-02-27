@@ -74,6 +74,30 @@
 
 <script>
 export default {
-    name: "PageRegister"
+    data() {
+        return {
+            form: {
+                name: null,
+                email: null,
+                password: null,
+                password_confirm: null
+            },
+            loading: false,
+            errored: false
+        }
+    },
+    methods: {
+        onSubmit() {
+            axios
+                .post(__baseURL + '/api/V1/auth/login', {email: this.email, password: this.password})
+                .then(
+                    response => console.log(response),
+                    error => {
+                        console.log(error);
+                        throw error;
+                    }
+                );
+        }
+    }
 }
 </script>

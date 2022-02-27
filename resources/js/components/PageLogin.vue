@@ -9,7 +9,15 @@
             <div class="card">
                 <div class="card-body">
                     <p class="login-box-msg">Sign in to start your session</p>
-                    <form action="#" method="post" @submit.prevent="login">
+                    <div v-if="errored" class="alert alert-danger p-2" role="alert">
+                        <h5 class="alert-heading m-0">
+                            Something went wrong
+                            <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" @click="errored = false">
+                                Try again
+                            </button>
+                        </h5>
+                    </div>
+                    <form @submit.prevent="onSubmit" style="position: relative">
                         <div class="input-group mb-3" :class="{'focused': focused.email}">
                             <div class="input-group-prepend">
                                 <div class="input-group-text bg-transparent border-right-0">
@@ -41,9 +49,15 @@
                                 </div>
                             </div>
                             <div class="col-4">
-                                <button type="submit" class="btn btn-sm btn-primary btn-block">Sign In</button>
+                                <button type="submit" class="btn btn-sm btn-primary btn-block">
+                                    Sign In
+                                    <div v-if="loading" class="spinner-border spinner-border-sm" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </button>
                             </div>
                         </div>
+                        <div v-if="loading || errored" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)"></div>
                     </form>
                     <!--<p class="mb-1">
                         <a href="forgot-password.html">I forgot my password</a>
@@ -68,20 +82,28 @@ export default {
             email: null,
             password: null,
             password_show: false,
-            focused: {email: false, password: false}
+            focused: {email: false, password: false},
+            loading: false,
+            errored: false
         }
     },
     methods: {
-        login() {
+        onSubmit() {
+            this.loading = true;
+            this.errored = false;
+
             axios
                 .post(__baseURL + '/api/V1/auth/login', {email: this.email, password: this.password})
                 .then(
                     response => console.log(response),
-                    error => {
-                        console.log(error);
-                        throw error;
+                )
+                .catch((error) => {
+                    if (error.response.status >= 500) {
+                        this.errored = true;
                     }
-                );
+                    console.log(error.response)
+                })
+                .finally(() => this.loading = false);
         }
     }
 }

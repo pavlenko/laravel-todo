@@ -1564,6 +1564,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PageLogin",
@@ -1578,19 +1592,27 @@ __webpack_require__.r(__webpack_exports__);
       focused: {
         email: false,
         password: false
-      }
+      },
+      loading: false,
+      errored: false
     };
   },
   methods: {
-    login: function login() {
+    onSubmit: function onSubmit() {
+      var _this = this;
+
+      this.loading = true;
+      this.errored = false;
       axios.post(__baseURL + '/api/V1/auth/login', {
         email: this.email,
         password: this.password
       }).then(function (response) {
         return console.log(response);
-      }, function (error) {
-        console.log(error);
-        throw error;
+      })["catch"](function (error) {
+        _this.errored = true;
+        console.log(error.response);
+      })["finally"](function () {
+        return _this.loading = false;
       });
     }
   }
@@ -1682,7 +1704,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "PageRegister"
+  data: function data() {
+    return {
+      form: {
+        name: null,
+        email: null,
+        password: null,
+        password_confirm: null
+      },
+      loading: false,
+      errored: false
+    };
+  },
+  methods: {
+    onSubmit: function onSubmit() {
+      axios.post(__baseURL + '/api/V1/auth/login', {
+        email: this.email,
+        password: this.password
+      }).then(function (response) {
+        return console.log(response);
+      }, function (error) {
+        console.log(error);
+        throw error;
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -9249,14 +9295,48 @@ var render = function () {
                 _vm._v("Sign in to start your session"),
               ]),
               _vm._v(" "),
+              _vm.errored
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger p-2",
+                      attrs: { role: "alert" },
+                    },
+                    [
+                      _c("h5", { staticClass: "alert-heading m-0" }, [
+                        _vm._v(
+                          "\n                        Something went wrong\n                        "
+                        ),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-sm btn-danger",
+                            attrs: { type: "button", "data-dismiss": "alert" },
+                            on: {
+                              click: function ($event) {
+                                _vm.errored = false
+                              },
+                            },
+                          },
+                          [
+                            _vm._v(
+                              "\n                            Try again\n                        "
+                            ),
+                          ]
+                        ),
+                      ]),
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
               _c(
                 "form",
                 {
-                  attrs: { action: "#", method: "post" },
+                  staticStyle: { position: "relative" },
                   on: {
                     submit: function ($event) {
                       $event.preventDefault()
-                      return _vm.login.apply(null, arguments)
+                      return _vm.onSubmit.apply(null, arguments)
                     },
                   },
                 },
@@ -9483,10 +9563,38 @@ var render = function () {
                           staticClass: "btn btn-sm btn-primary btn-block",
                           attrs: { type: "submit" },
                         },
-                        [_vm._v("Sign In")]
+                        [
+                          _vm._v(
+                            "\n                                Sign In\n                                "
+                          ),
+                          _vm.loading
+                            ? _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "spinner-border spinner-border-sm",
+                                  attrs: { role: "status" },
+                                },
+                                [
+                                  _c("span", { staticClass: "sr-only" }, [
+                                    _vm._v("Loading..."),
+                                  ]),
+                                ]
+                              )
+                            : _vm._e(),
+                        ]
                       ),
                     ]),
                   ]),
+                  _vm._v(" "),
+                  _vm.loading || _vm.errored
+                    ? _c("div", {
+                        staticClass: "card-img-overlay",
+                        staticStyle: {
+                          "background-color": "rgba(255, 255, 255, 0.5)",
+                        },
+                      })
+                    : _vm._e(),
                 ]
               ),
               _vm._v(" "),
