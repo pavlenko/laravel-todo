@@ -9,59 +9,76 @@
             <div class="card">
                 <div class="card-body">
                     <p class="login-box-msg">Register a new membership</p>
-                    <form method="post" @submit.prevent>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text bg-transparent border-right-0">
-                                    <span class="fas fa-fw fa-user"></span>
+                    <form @submit.prevent="onSubmit" style="position: relative">
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text bg-transparent border-right-0 pr-0">
+                                        <span class="fas fa-fw fa-user"></span>
+                                    </div>
                                 </div>
+                                <input type="text" class="form-control border-left-0" placeholder="Full name" v-model="fields.name">
                             </div>
-                            <input type="text" class="form-control" placeholder="Full name">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text bg-transparent border-left-0">
-                                    <span class="fas fa-fw fa-envelope"></span>
-                                </div>
-                            </div>
-                            <input type="email" class="form-control" placeholder="Email">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text bg-transparent border-right-0">
-                                    <span class="fas fa-fw fa-lock"></span>
-                                </div>
-                            </div>
-                            <input type="password" class="form-control" placeholder="Password">
-                            <div class="input-group-append">
-                                <a class="input-group-text bg-transparent border-left-0 btn"><span class="fas fa-fw fa-eye"></span></a>
+                            <div class="invalid-feedback" :class="{'d-block': Array.isArray(errors.name)}">
+                                <div v-for="error in errors.name">{{ error }}</div>
                             </div>
                         </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text bg-transparent border-right-0">
-                                    <span class="fas fa-fw fa-lock"></span>
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text bg-transparent border-right-0 pr-0">
+                                        <span class="fas fa-fw fa-envelope"></span>
+                                    </div>
                                 </div>
+                                <input type="email" class="form-control border-left-0" placeholder="Email" v-model="fields.email">
                             </div>
-                            <input type="password" class="form-control border-left-0" placeholder="Retype password">
-                            <div class="input-group-append">
-                                <a class="input-group-text bg-transparent border-left-0 btn"><span class="fas fa-fw fa-eye"></span></a>
+                            <div class="invalid-feedback" :class="{'d-block': Array.isArray(errors.email)}">
+                                <div v-for="error in errors.email">{{ error }}</div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-8">
-                                <div class="icheck-primary">
-                                    <input type="checkbox" id="agreeTerms" name="terms" value="agree">
-                                    <label for="agreeTerms">
-                                        I agree to the <a href="#">terms</a>
-                                    </label>
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text bg-transparent border-right-0 pr-0">
+                                        <span class="fas fa-fw fa-lock"></span>
+                                    </div>
+                                </div>
+                                <input type="password" class="form-control border-left-0 border-right-0" placeholder="Password" v-model="fields.password">
+                                <div class="input-group-append">
+                                    <a class="input-group-text bg-transparent border-left-0 btn">
+                                        <span class="fas fa-fw fa-eye"></span>
+                                    </a>
                                 </div>
                             </div>
-                            <div class="col-4">
-                                <button type="submit" class="btn btn-primary btn-block">Register</button>
+                            <div class="invalid-feedback" :class="{'d-block': Array.isArray(errors.password)}">
+                                <div v-for="error in errors.password">{{ error }}</div>
                             </div>
                         </div>
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text bg-transparent border-right-0 pr-0">
+                                        <span class="fas fa-fw fa-lock"></span>
+                                    </div>
+                                </div>
+                                <input type="password" class="form-control border-left-0 border-right-0" placeholder="Retype password" v-model="fields.password_confirmation">
+                                <div class="input-group-append">
+                                    <a class="input-group-text bg-transparent border-left-0 btn"><span class="fas fa-fw fa-eye"></span></a>
+                                </div>
+                            </div>
+                            <div class="invalid-feedback" :class="{'d-block': Array.isArray(errors.password_confirmation)}">
+                                <div v-for="error in errors.password_confirmation">{{ error }}</div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-3">
+                            Register
+                            <span v-if="loading" class="spinner-border spinner-border-sm" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </span>
+                        </button>
+                        <div v-if="loading || errored" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)"></div>
                     </form>
+                    {{ fields }}
                     <p class="mb-0">
                         <router-link :to="{name: 'user_login'}">I already have a membership</router-link>
                     </p>
@@ -73,30 +90,42 @@
 </template>
 
 <script>
+import LayoutMini from "./LayoutMini";
 export default {
+    components: {LayoutMini},
     data() {
         return {
-            form: {
+            fields: {
                 name: null,
                 email: null,
                 password: null,
-                password_confirm: null
+                password_confirmation: null
             },
+            errors: {},
             loading: false,
             errored: false
         }
     },
     methods: {
         onSubmit() {
+            this.loading = true;
+            this.errored = false;
+            this.errors  = {};
+
             axios
-                .post(__baseURL + '/api/V1/auth/login', {email: this.email, password: this.password})
+                .post(__baseURL + '/api/V1/auth/register', this.fields)
                 .then(
-                    response => console.log(response),
-                    error => {
-                        console.log(error);
-                        throw error;
+                    response => console.log(response)
+                )
+                .catch((error) => {
+                    if (error.response.status >= 500) {
+                        this.errored = true;
                     }
-                );
+                    if (error.response.data.errors) {
+                        this.errors = error.response.data.errors;
+                    }
+                })
+                .finally(() => this.loading = false);;
         }
     }
 }

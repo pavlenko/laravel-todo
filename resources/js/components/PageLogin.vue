@@ -21,7 +21,7 @@
                         <div class="mb-3">
                             <div class="input-group" :class="{'focused': focused.email}">
                                 <div class="input-group-prepend">
-                                    <div class="input-group-text bg-transparent border-right-0">
+                                    <div class="input-group-text bg-transparent border-right-0 pr-0">
                                         <span class="fas fa-envelope"></span>
                                     </div>
                                 </div>
@@ -34,7 +34,7 @@
                         <div class="mb-3">
                             <div class="input-group" :class="{'focused': focused.password}">
                                 <div class="input-group-prepend">
-                                    <div class="input-group-text bg-transparent border-right-0">
+                                    <div class="input-group-text bg-transparent border-right-0 pr-0">
                                         <span class="fas fa-lock"></span>
                                     </div>
                                 </div>
@@ -103,7 +103,6 @@ export default {
                     }
                     if (error.response.data.errors) {
                         this.errors = error.response.data.errors;
-                        console.log(this.errors);
                     }
                 })
                 .finally(() => this.loading = false);
