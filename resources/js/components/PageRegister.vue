@@ -78,7 +78,6 @@
                         </button>
                         <div v-if="loading || errored" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)"></div>
                     </form>
-                    {{ fields }}
                     <p class="mb-0">
                         <router-link :to="{name: 'user_login'}">I already have a membership</router-link>
                     </p>
