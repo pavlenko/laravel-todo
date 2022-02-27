@@ -1576,19 +1576,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PageLogin",
@@ -9590,51 +9577,32 @@ var render = function () {
                     ),
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "row" }, [
-                    _c("div", { staticClass: "col-8" }, [
-                      _c("div", { staticClass: "icheck-primary" }, [
-                        _c("input", {
-                          attrs: { type: "checkbox", id: "remember" },
-                        }),
-                        _vm._v(" "),
-                        _c("label", { attrs: { for: "remember" } }, [
-                          _vm._v(
-                            "\n                                    Remember Me\n                                "
-                          ),
-                        ]),
-                      ]),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-4" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-sm btn-primary btn-block",
-                          attrs: { type: "submit" },
-                        },
-                        [
-                          _vm._v(
-                            "\n                                Sign In\n                                "
-                          ),
-                          _vm.loading
-                            ? _c(
-                                "span",
-                                {
-                                  staticClass:
-                                    "spinner-border spinner-border-sm",
-                                  attrs: { role: "status" },
-                                },
-                                [
-                                  _c("span", { staticClass: "sr-only" }, [
-                                    _vm._v("Loading..."),
-                                  ]),
-                                ]
-                              )
-                            : _vm._e(),
-                        ]
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-sm btn-primary mb-3",
+                      attrs: { type: "submit" },
+                    },
+                    [
+                      _vm._v(
+                        "\n                        Sign In\n                        "
                       ),
-                    ]),
-                  ]),
+                      _vm.loading
+                        ? _c(
+                            "span",
+                            {
+                              staticClass: "spinner-border spinner-border-sm",
+                              attrs: { role: "status" },
+                            },
+                            [
+                              _c("span", { staticClass: "sr-only" }, [
+                                _vm._v("Loading..."),
+                              ]),
+                            ]
+                          )
+                        : _vm._e(),
+                    ]
+                  ),
                   _vm._v(" "),
                   _vm.loading || _vm.errored
                     ? _c("div", {
@@ -9645,9 +9613,6 @@ var render = function () {
                       })
                     : _vm._e(),
                 ]
-              ),
-              _vm._v(
-                "\n                " + _vm._s(_vm.errors) + "\n                "
               ),
               _vm._v(" "),
               _c(

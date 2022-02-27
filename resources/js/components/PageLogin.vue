@@ -49,24 +49,12 @@
                                 <div v-for="error in errors.password">{{ error }}</div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-8">
-                                <div class="icheck-primary">
-                                    <input type="checkbox" id="remember">
-                                    <label for="remember">
-                                        Remember Me
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <button type="submit" class="btn btn-sm btn-primary btn-block">
-                                    Sign In
-                                    <span v-if="loading" class="spinner-border spinner-border-sm" role="status">
-                                        <span class="sr-only">Loading...</span>
-                                    </span>
-                                </button>
-                            </div>
-                        </div>
+                        <button type="submit" class="btn btn-sm btn-primary mb-3">
+                            Sign In
+                            <span v-if="loading" class="spinner-border spinner-border-sm" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </span>
+                        </button>
                         <div v-if="loading || errored" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)"></div>
                     </form>
                     <!--<p class="mb-1">

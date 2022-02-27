@@ -11,8 +11,8 @@ final class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required',
+            'email'    => 'required|email|unique:users',
+            'password' => 'required|min:3',
         ]);
 
         $credentials = $request->only('email', 'password');
@@ -20,5 +20,13 @@ final class AuthController extends Controller
             return response()->json(['status' => 'success'])->header('Authorization', $token);
         }
         return response()->json(['error' => 'login_error'], 401);
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'email'    => 'required|email|unique:users',
+            'password' => 'required|min:3|confirmed',
+        ]);
     }
 }
