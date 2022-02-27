@@ -40,7 +40,7 @@
                                 </div>
                                 <input :type="password_show ? 'text' : 'password'" class="form-control border-left-0 border-right-0" placeholder="Password" v-model="password" @focus="focused.password = true" @blur="focused.password = false">
                                 <div class="input-group-append">
-                                    <button class="input-group-text bg-transparent border-left-0 btn" @click.prevent="password_show = !password_show">
+                                    <button type="button" class="input-group-text bg-transparent border-left-0 btn" @click.prevent="password_show = !password_show">
                                         <span class="fas fa-fw" :class="password_show ? 'fa-eye-slash' : 'fa-eye'"></span>
                                     </button>
                                 </div>
@@ -90,6 +90,7 @@ export default {
         onSubmit() {
             this.loading = true;
             this.errored = false;
+            this.errors  = {};
 
             axios
                 .post(__baseURL + '/api/V1/auth/login', {email: this.email, password: this.password})

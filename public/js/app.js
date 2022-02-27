@@ -1602,6 +1602,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.errored = false;
+      this.errors = {};
       axios.post(__baseURL + '/api/V1/auth/login', {
         email: this.email,
         password: this.password
@@ -9542,6 +9543,7 @@ var render = function () {
                             {
                               staticClass:
                                 "input-group-text bg-transparent border-left-0 btn",
+                              attrs: { type: "button" },
                               on: {
                                 click: function ($event) {
                                   $event.preventDefault()
