@@ -1578,6 +1578,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PageLogin",
@@ -1593,6 +1604,7 @@ __webpack_require__.r(__webpack_exports__);
         email: false,
         password: false
       },
+      errors: {},
       loading: false,
       errored: false
     };
@@ -1609,8 +1621,14 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         return console.log(response);
       })["catch"](function (error) {
-        _this.errored = true;
-        console.log(error.response);
+        if (error.response.status >= 500) {
+          _this.errored = true;
+        }
+
+        if (error.response.data.errors) {
+          _this.errors = error.response.data.errors;
+          console.log(_this.errors);
+        }
       })["finally"](function () {
         return _this.loading = false;
       });
@@ -9341,205 +9359,236 @@ var render = function () {
                   },
                 },
                 [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "input-group mb-3",
-                      class: { focused: _vm.focused.email },
-                    },
-                    [
-                      _c("div", { staticClass: "input-group-prepend" }, [
-                        _c(
-                          "div",
-                          {
-                            staticClass:
-                              "input-group-text bg-transparent border-right-0",
+                  _c("div", { staticClass: "mb-3" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "input-group",
+                        class: { focused: _vm.focused.email },
+                      },
+                      [
+                        _c("div", { staticClass: "input-group-prepend" }, [
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "input-group-text bg-transparent border-right-0",
+                            },
+                            [_c("span", { staticClass: "fas fa-envelope" })]
+                          ),
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.email,
+                              expression: "email",
+                            },
+                          ],
+                          staticClass: "form-control border-left-0",
+                          attrs: { type: "email", placeholder: "Email" },
+                          domProps: { value: _vm.email },
+                          on: {
+                            focus: function ($event) {
+                              _vm.focused.email = true
+                            },
+                            blur: function ($event) {
+                              _vm.focused.email = false
+                            },
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.email = $event.target.value
+                            },
                           },
-                          [_c("span", { staticClass: "fas fa-envelope" })]
-                        ),
-                      ]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.email,
-                            expression: "email",
-                          },
-                        ],
-                        staticClass: "form-control border-left-0",
-                        attrs: { type: "email", placeholder: "Email" },
-                        domProps: { value: _vm.email },
-                        on: {
-                          focus: function ($event) {
-                            _vm.focused.email = true
-                          },
-                          blur: function ($event) {
-                            _vm.focused.email = false
-                          },
-                          input: function ($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.email = $event.target.value
-                          },
-                        },
+                        }),
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "invalid-feedback",
+                        class: { "d-block": Array.isArray(_vm.errors.email) },
+                      },
+                      _vm._l(_vm.errors.email, function (error) {
+                        return _c("div", [_vm._v(_vm._s(error))])
                       }),
-                    ]
-                  ),
+                      0
+                    ),
+                  ]),
                   _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass: "input-group mb-3",
-                      class: { focused: _vm.focused.password },
-                    },
-                    [
-                      _c("div", { staticClass: "input-group-prepend" }, [
-                        _c(
-                          "div",
-                          {
-                            staticClass:
-                              "input-group-text bg-transparent border-right-0",
-                          },
-                          [_c("span", { staticClass: "fas fa-lock" })]
-                        ),
-                      ]),
-                      _vm._v(" "),
-                      (_vm.password_show ? "text" : "password") === "checkbox"
-                        ? _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.password,
-                                expression: "password",
-                              },
-                            ],
-                            staticClass:
-                              "form-control border-left-0 border-right-0",
-                            attrs: {
-                              placeholder: "Password",
-                              type: "checkbox",
+                  _c("div", { staticClass: "mb-3" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "input-group",
+                        class: { focused: _vm.focused.password },
+                      },
+                      [
+                        _c("div", { staticClass: "input-group-prepend" }, [
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "input-group-text bg-transparent border-right-0",
                             },
-                            domProps: {
-                              checked: Array.isArray(_vm.password)
-                                ? _vm._i(_vm.password, null) > -1
-                                : _vm.password,
-                            },
-                            on: {
-                              focus: function ($event) {
-                                _vm.focused.password = true
+                            [_c("span", { staticClass: "fas fa-lock" })]
+                          ),
+                        ]),
+                        _vm._v(" "),
+                        (_vm.password_show ? "text" : "password") === "checkbox"
+                          ? _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.password,
+                                  expression: "password",
+                                },
+                              ],
+                              staticClass:
+                                "form-control border-left-0 border-right-0",
+                              attrs: {
+                                placeholder: "Password",
+                                type: "checkbox",
                               },
-                              blur: function ($event) {
-                                _vm.focused.password = false
+                              domProps: {
+                                checked: Array.isArray(_vm.password)
+                                  ? _vm._i(_vm.password, null) > -1
+                                  : _vm.password,
                               },
-                              change: function ($event) {
-                                var $$a = _vm.password,
-                                  $$el = $event.target,
-                                  $$c = $$el.checked ? true : false
-                                if (Array.isArray($$a)) {
-                                  var $$v = null,
-                                    $$i = _vm._i($$a, $$v)
-                                  if ($$el.checked) {
-                                    $$i < 0 &&
-                                      (_vm.password = $$a.concat([$$v]))
+                              on: {
+                                focus: function ($event) {
+                                  _vm.focused.password = true
+                                },
+                                blur: function ($event) {
+                                  _vm.focused.password = false
+                                },
+                                change: function ($event) {
+                                  var $$a = _vm.password,
+                                    $$el = $event.target,
+                                    $$c = $$el.checked ? true : false
+                                  if (Array.isArray($$a)) {
+                                    var $$v = null,
+                                      $$i = _vm._i($$a, $$v)
+                                    if ($$el.checked) {
+                                      $$i < 0 &&
+                                        (_vm.password = $$a.concat([$$v]))
+                                    } else {
+                                      $$i > -1 &&
+                                        (_vm.password = $$a
+                                          .slice(0, $$i)
+                                          .concat($$a.slice($$i + 1)))
+                                    }
                                   } else {
-                                    $$i > -1 &&
-                                      (_vm.password = $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1)))
+                                    _vm.password = $$c
                                   }
-                                } else {
-                                  _vm.password = $$c
-                                }
+                                },
                               },
-                            },
-                          })
-                        : (_vm.password_show ? "text" : "password") === "radio"
-                        ? _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.password,
-                                expression: "password",
+                            })
+                          : (_vm.password_show ? "text" : "password") ===
+                            "radio"
+                          ? _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.password,
+                                  expression: "password",
+                                },
+                              ],
+                              staticClass:
+                                "form-control border-left-0 border-right-0",
+                              attrs: { placeholder: "Password", type: "radio" },
+                              domProps: { checked: _vm._q(_vm.password, null) },
+                              on: {
+                                focus: function ($event) {
+                                  _vm.focused.password = true
+                                },
+                                blur: function ($event) {
+                                  _vm.focused.password = false
+                                },
+                                change: function ($event) {
+                                  _vm.password = null
+                                },
                               },
-                            ],
-                            staticClass:
-                              "form-control border-left-0 border-right-0",
-                            attrs: { placeholder: "Password", type: "radio" },
-                            domProps: { checked: _vm._q(_vm.password, null) },
-                            on: {
-                              focus: function ($event) {
-                                _vm.focused.password = true
+                            })
+                          : _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.password,
+                                  expression: "password",
+                                },
+                              ],
+                              staticClass:
+                                "form-control border-left-0 border-right-0",
+                              attrs: {
+                                placeholder: "Password",
+                                type: _vm.password_show ? "text" : "password",
                               },
-                              blur: function ($event) {
-                                _vm.focused.password = false
+                              domProps: { value: _vm.password },
+                              on: {
+                                focus: function ($event) {
+                                  _vm.focused.password = true
+                                },
+                                blur: function ($event) {
+                                  _vm.focused.password = false
+                                },
+                                input: function ($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.password = $event.target.value
+                                },
                               },
-                              change: function ($event) {
-                                _vm.password = null
-                              },
-                            },
-                          })
-                        : _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.password,
-                                expression: "password",
-                              },
-                            ],
-                            staticClass:
-                              "form-control border-left-0 border-right-0",
-                            attrs: {
-                              placeholder: "Password",
-                              type: _vm.password_show ? "text" : "password",
-                            },
-                            domProps: { value: _vm.password },
-                            on: {
-                              focus: function ($event) {
-                                _vm.focused.password = true
-                              },
-                              blur: function ($event) {
-                                _vm.focused.password = false
-                              },
-                              input: function ($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.password = $event.target.value
-                              },
-                            },
-                          }),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "input-group-append" }, [
-                        _c(
-                          "button",
-                          {
-                            staticClass:
-                              "input-group-text bg-transparent border-left-0 btn",
-                            on: {
-                              click: function ($event) {
-                                $event.preventDefault()
-                                _vm.password_show = !_vm.password_show
-                              },
-                            },
-                          },
-                          [
-                            _c("span", {
-                              staticClass: "fas fa-fw",
-                              class: _vm.password_show
-                                ? "fa-eye-slash"
-                                : "fa-eye",
                             }),
-                          ]
-                        ),
-                      ]),
-                    ]
-                  ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "input-group-append" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "input-group-text bg-transparent border-left-0 btn",
+                              on: {
+                                click: function ($event) {
+                                  $event.preventDefault()
+                                  _vm.password_show = !_vm.password_show
+                                },
+                              },
+                            },
+                            [
+                              _c("span", {
+                                staticClass: "fas fa-fw",
+                                class: _vm.password_show
+                                  ? "fa-eye-slash"
+                                  : "fa-eye",
+                              }),
+                            ]
+                          ),
+                        ]),
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "invalid-feedback",
+                        class: {
+                          "d-block": Array.isArray(_vm.errors.password),
+                        },
+                      },
+                      _vm._l(_vm.errors.password, function (error) {
+                        return _c("div", [_vm._v(_vm._s(error))])
+                      }),
+                      0
+                    ),
+                  ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "row" }, [
                     _c("div", { staticClass: "col-8" }, [
@@ -9569,7 +9618,7 @@ var render = function () {
                           ),
                           _vm.loading
                             ? _c(
-                                "div",
+                                "span",
                                 {
                                   staticClass:
                                     "spinner-border spinner-border-sm",
@@ -9596,6 +9645,9 @@ var render = function () {
                       })
                     : _vm._e(),
                 ]
+              ),
+              _vm._v(
+                "\n                " + _vm._s(_vm.errors) + "\n                "
               ),
               _vm._v(" "),
               _c(

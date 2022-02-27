@@ -18,25 +18,35 @@
                         </h5>
                     </div>
                     <form @submit.prevent="onSubmit" style="position: relative">
-                        <div class="input-group mb-3" :class="{'focused': focused.email}">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text bg-transparent border-right-0">
-                                    <span class="fas fa-envelope"></span>
+                        <div class="mb-3">
+                            <div class="input-group" :class="{'focused': focused.email}">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text bg-transparent border-right-0">
+                                        <span class="fas fa-envelope"></span>
+                                    </div>
                                 </div>
+                                <input type="email" class="form-control border-left-0" placeholder="Email" v-model="email" @focus="focused.email = true" @blur="focused.email = false">
                             </div>
-                            <input type="email" class="form-control border-left-0" placeholder="Email" v-model="email" @focus="focused.email = true" @blur="focused.email = false">
+                            <div class="invalid-feedback" :class="{'d-block': Array.isArray(errors.email)}">
+                                <div v-for="error in errors.email">{{ error }}</div>
+                            </div>
                         </div>
-                        <div class="input-group mb-3" :class="{'focused': focused.password}">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text bg-transparent border-right-0">
-                                    <span class="fas fa-lock"></span>
+                        <div class="mb-3">
+                            <div class="input-group" :class="{'focused': focused.password}">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text bg-transparent border-right-0">
+                                        <span class="fas fa-lock"></span>
+                                    </div>
+                                </div>
+                                <input :type="password_show ? 'text' : 'password'" class="form-control border-left-0 border-right-0" placeholder="Password" v-model="password" @focus="focused.password = true" @blur="focused.password = false">
+                                <div class="input-group-append">
+                                    <button class="input-group-text bg-transparent border-left-0 btn" @click.prevent="password_show = !password_show">
+                                        <span class="fas fa-fw" :class="password_show ? 'fa-eye-slash' : 'fa-eye'"></span>
+                                    </button>
                                 </div>
                             </div>
-                            <input :type="password_show ? 'text' : 'password'" class="form-control border-left-0 border-right-0" placeholder="Password" v-model="password" @focus="focused.password = true" @blur="focused.password = false">
-                            <div class="input-group-append">
-                                <button class="input-group-text bg-transparent border-left-0 btn" @click.prevent="password_show = !password_show">
-                                    <span class="fas fa-fw" :class="password_show ? 'fa-eye-slash' : 'fa-eye'"></span>
-                                </button>
+                            <div class="invalid-feedback" :class="{'d-block': Array.isArray(errors.password)}">
+                                <div v-for="error in errors.password">{{ error }}</div>
                             </div>
                         </div>
                         <div class="row">
@@ -51,9 +61,9 @@
                             <div class="col-4">
                                 <button type="submit" class="btn btn-sm btn-primary btn-block">
                                     Sign In
-                                    <div v-if="loading" class="spinner-border spinner-border-sm" role="status">
+                                    <span v-if="loading" class="spinner-border spinner-border-sm" role="status">
                                         <span class="sr-only">Loading...</span>
-                                    </div>
+                                    </span>
                                 </button>
                             </div>
                         </div>
@@ -83,6 +93,7 @@ export default {
             password: null,
             password_show: false,
             focused: {email: false, password: false},
+            errors: {},
             loading: false,
             errored: false
         }
@@ -101,7 +112,10 @@ export default {
                     if (error.response.status >= 500) {
                         this.errored = true;
                     }
-                    console.log(error.response)
+                    if (error.response.data.errors) {
+                        this.errors = error.response.data.errors;
+                        console.log(this.errors);
+                    }
                 })
                 .finally(() => this.loading = false);
         }
