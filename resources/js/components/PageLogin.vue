@@ -18,37 +18,15 @@
                         </h5>
                     </div>
                     <form @submit.prevent="onSubmit" style="position: relative" novalidate="novalidate">
-                        <div class="mb-3">
-                            <div class="input-group is-invalid" :class="{'focused': focused.email}">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text bg-transparent border-right-0 pr-0">
-                                        <span class="fas fa-envelope"></span>
-                                    </div>
-                                </div>
-                                <input type="email" class="form-control is-invalid border-left-0" placeholder="Email" v-model="email" @focus="focused.email = true" @blur="focused.email = false">
-                            </div>
-                            <div class="invalid-feedback" :class="{'d-block': Array.isArray(errors.email)}">
-                                <div v-for="error in errors.email">{{ error }}</div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="input-group is-invalid" :class="{'focused': focused.password}">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text bg-transparent border-right-0 pr-0">
-                                        <span class="fas fa-lock"></span>
-                                    </div>
-                                </div>
-                                <input :type="password_show ? 'text' : 'password'" class="form-control is-invalid border-left-0 border-right-0" placeholder="Password" v-model="password" @focus="focused.password = true" @blur="focused.password = false">
-                                <div class="input-group-append">
-                                    <button type="button" class="btn bg-transparent border-left-0" @click.prevent="password_show = !password_show">
-                                        <span class="fas fa-fw" :class="password_show ? 'fa-eye-slash' : 'fa-eye'"></span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="invalid-feedback" :class="{'d-block': Array.isArray(errors.password)}">
-                                <div v-for="error in errors.password">{{ error }}</div>
-                            </div>
-                        </div>
+                        <form-input v-model="fields.email"
+                                    :error="errors.email"
+                                    icon="fas fa-fw fa-envelope"
+                                    placeholder="Email"/>
+                        <form-input v-model="fields.password"
+                                    :error="errors.password"
+                                    type="password"
+                                    icon="fas fa-fw fa-lock"
+                                    placeholder="Password"/>
                         <button type="submit" class="btn btn-sm btn-primary mb-3">
                             Sign In
                             <span v-if="loading" class="spinner-border spinner-border-sm" role="status">
@@ -57,9 +35,6 @@
                         </button>
                         <div v-if="loading || errored" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)"></div>
                     </form>
-                    <!--<p class="mb-1">
-                        <a href="forgot-password.html">I forgot my password</a>
-                    </p>-->
                     <p class="mb-0">
                         <router-link :to="{name: 'user_register'}">Register a new membership</router-link>
                     </p>
@@ -71,16 +46,17 @@
 </template>
 
 <script>
+import FormInput from "./FormInput";
 import LayoutMini from "./LayoutMini";
 export default {
     name: "PageLogin",
-    components: {LayoutMini},
+    components: {FormInput, LayoutMini},
     data() {
         return {
-            email: null,
-            password: null,
-            password_show: false,
-            focused: {email: false, password: false},
+            fields: {
+                email: null,
+                password: null,
+            },
             errors: {},
             loading: false,
             errored: false
@@ -93,7 +69,7 @@ export default {
             this.errors  = {};
 
             axios
-                .post(__baseURL + '/api/V1/auth/login', {email: this.email, password: this.password})
+                .post(__baseURL + '/api/V1/auth/login', this.fields)
                 .then(
                     response => console.log(response),
                 )
@@ -112,8 +88,8 @@ export default {
 </script>
 
 <style scoped>
-.focused  .input-group-prepend .input-group-text,
-.focused  .input-group-append .input-group-text {
+.focused .input-group-prepend .input-group-text,
+.focused .input-group-append .input-group-text {
     border-color: #80bdff;
 }
 

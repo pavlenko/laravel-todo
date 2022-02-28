@@ -9,67 +9,25 @@
             <div class="card">
                 <div class="card-body">
                     <p class="login-box-msg">Register a new membership</p>
-                    <form @submit.prevent="onSubmit" style="position: relative">
-                        <div class="mb-3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text bg-transparent border-right-0 pr-0">
-                                        <span class="fas fa-fw fa-user"></span>
-                                    </div>
-                                </div>
-                                <input type="text" class="form-control border-left-0" placeholder="Full name" v-model="fields.name">
-                            </div>
-                            <div class="invalid-feedback" :class="{'d-block': Array.isArray(errors.name)}">
-                                <div v-for="error in errors.name">{{ error }}</div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text bg-transparent border-right-0 pr-0">
-                                        <span class="fas fa-fw fa-envelope"></span>
-                                    </div>
-                                </div>
-                                <input type="email" class="form-control border-left-0" placeholder="Email" v-model="fields.email">
-                            </div>
-                            <div class="invalid-feedback" :class="{'d-block': Array.isArray(errors.email)}">
-                                <div v-for="error in errors.email">{{ error }}</div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text bg-transparent border-right-0 pr-0">
-                                        <span class="fas fa-fw fa-lock"></span>
-                                    </div>
-                                </div>
-                                <input type="password" class="form-control border-left-0 border-right-0" placeholder="Password" v-model="fields.password">
-                                <div class="input-group-append">
-                                    <a class="input-group-text bg-transparent border-left-0 btn">
-                                        <span class="fas fa-fw fa-eye"></span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="invalid-feedback" :class="{'d-block': Array.isArray(errors.password)}">
-                                <div v-for="error in errors.password">{{ error }}</div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text bg-transparent border-right-0 pr-0">
-                                        <span class="fas fa-fw fa-lock"></span>
-                                    </div>
-                                </div>
-                                <input type="password" class="form-control border-left-0 border-right-0" placeholder="Retype password" v-model="fields.password_confirmation">
-                                <div class="input-group-append">
-                                    <a class="input-group-text bg-transparent border-left-0 btn"><span class="fas fa-fw fa-eye"></span></a>
-                                </div>
-                            </div>
-                            <div class="invalid-feedback" :class="{'d-block': Array.isArray(errors.password_confirmation)}">
-                                <div v-for="error in errors.password_confirmation">{{ error }}</div>
-                            </div>
-                        </div>
+                    <form @submit.prevent="onSubmit" style="position: relative" novalidate="novalidate">
+                        <form-input v-model="fields.name"
+                                    :error="errors.name"
+                                    icon="fas fa-fw fa-user"
+                                    placeholder="Full name"/>
+                        <form-input v-model="fields.email"
+                                    :error="errors.email"
+                                    icon="fas fa-fw fa-envelope"
+                                    placeholder="Email"/>
+                        <form-input v-model="fields.password"
+                                    :error="errors.password"
+                                    type="password"
+                                    icon="fas fa-fw fa-lock"
+                                    placeholder="Password"/>
+                        <form-input v-model="fields.password_confirmation"
+                                    :error="errors.password_confirmation"
+                                    type="password"
+                                    icon="fas fa-fw fa-lock"
+                                    placeholder="Retype password"/>
                         <button type="submit" class="btn btn-primary mb-3">
                             Register
                             <span v-if="loading" class="spinner-border spinner-border-sm" role="status">
@@ -89,9 +47,10 @@
 </template>
 
 <script>
+import FormInput from "./FormInput";
 import LayoutMini from "./LayoutMini";
 export default {
-    components: {LayoutMini},
+    components: {FormInput, LayoutMini},
     data() {
         return {
             fields: {
