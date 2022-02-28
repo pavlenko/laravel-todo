@@ -1725,7 +1725,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2328,7 +2327,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.focused  .input-group-prepend .input-group-text[data-v-695a2982],\n.focused  .input-group-append .input-group-text[data-v-695a2982] {\n    border-color: #80bdff;\n}\n", ""]);
+exports.push([module.i, "\n.focused  .input-group-prepend .input-group-text[data-v-695a2982],\n.focused  .input-group-append .input-group-text[data-v-695a2982] {\n    border-color: #80bdff;\n}\n.input-group.is-invalid .input-group-text[data-v-695a2982],\n.input-group.is-invalid .btn[data-v-695a2982] {\n    border-color: #dc3545;\n}\n.input-group.is-invalid .input-group-text[data-v-695a2982] {\n    color: #dc3545;\n}\n.input-group.is-invalid input[data-v-695a2982],\n.input-group.is-valid input[data-v-695a2982] {\n    padding-right: 0.75rem;\n    background: none;\n}\n", ""]);
 
 // exports
 
@@ -9371,6 +9370,7 @@ var render = function () {
                 "form",
                 {
                   staticStyle: { position: "relative" },
+                  attrs: { novalidate: "novalidate" },
                   on: {
                     submit: function ($event) {
                       $event.preventDefault()
@@ -9383,7 +9383,7 @@ var render = function () {
                     _c(
                       "div",
                       {
-                        staticClass: "input-group",
+                        staticClass: "input-group is-invalid",
                         class: { focused: _vm.focused.email },
                       },
                       [
@@ -9407,7 +9407,7 @@ var render = function () {
                               expression: "email",
                             },
                           ],
-                          staticClass: "form-control border-left-0",
+                          staticClass: "form-control is-invalid border-left-0",
                           attrs: { type: "email", placeholder: "Email" },
                           domProps: { value: _vm.email },
                           on: {
@@ -9445,7 +9445,7 @@ var render = function () {
                     _c(
                       "div",
                       {
-                        staticClass: "input-group",
+                        staticClass: "input-group is-invalid",
                         class: { focused: _vm.focused.password },
                       },
                       [
@@ -9471,7 +9471,7 @@ var render = function () {
                                 },
                               ],
                               staticClass:
-                                "form-control border-left-0 border-right-0",
+                                "form-control is-invalid border-left-0 border-right-0",
                               attrs: {
                                 placeholder: "Password",
                                 type: "checkbox",
@@ -9522,7 +9522,7 @@ var render = function () {
                                 },
                               ],
                               staticClass:
-                                "form-control border-left-0 border-right-0",
+                                "form-control is-invalid border-left-0 border-right-0",
                               attrs: { placeholder: "Password", type: "radio" },
                               domProps: { checked: _vm._q(_vm.password, null) },
                               on: {
@@ -9547,7 +9547,7 @@ var render = function () {
                                 },
                               ],
                               staticClass:
-                                "form-control border-left-0 border-right-0",
+                                "form-control is-invalid border-left-0 border-right-0",
                               attrs: {
                                 placeholder: "Password",
                                 type: _vm.password_show ? "text" : "password",
@@ -9573,8 +9573,7 @@ var render = function () {
                           _c(
                             "button",
                             {
-                              staticClass:
-                                "input-group-text bg-transparent border-left-0 btn",
+                              staticClass: "btn bg-transparent border-left-0",
                               attrs: { type: "button" },
                               on: {
                                 click: function ($event) {
@@ -9839,7 +9838,7 @@ var render = function () {
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "mb-3" }, [
-                    _c("div", { staticClass: "input-group mb-3" }, [
+                    _c("div", { staticClass: "input-group" }, [
                       _c("div", { staticClass: "input-group-prepend" }, [
                         _c(
                           "div",
@@ -10017,9 +10016,7 @@ var render = function () {
                     : _vm._e(),
                 ]
               ),
-              _vm._v(
-                "\n                " + _vm._s(_vm.fields) + "\n                "
-              ),
+              _vm._v(" "),
               _c(
                 "p",
                 { staticClass: "mb-0" },
