@@ -68,8 +68,13 @@ export default {
             this.errored = false;
             this.errors  = {};
 
-            axios
-                .post(__baseURL + '/api/V1/auth/login', this.fields)
+            this.$auth
+                .login({
+                    data: this.fields,
+                    redirect: {name: 'home'},
+                })
+            //axios
+                //.post(__baseURL + '/api/V1/auth/login', this.fields)
                 .then(
                     response => console.log(response),
                 )

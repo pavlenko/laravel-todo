@@ -62,17 +62,25 @@ const router = new VueRouter({
     ]
 });
 
-router.beforeEach(function (to, from, next) {
-    console.log(to);
-    next();
-    /*if ((to.path !== '/login' && to.path !== 'login') && !auth.user.authenticated) {
-        next({path: '/login'});
-    } else if ((to.path === '/login' || to.path === 'login') && auth.user.authenticated) {
-        next({path: '/'});
-    } else {
-        next();
-    }*/
-})
+import auth from '@websanova/vue-auth/dist/v2/vue-auth.min';
+import driverAuth from '@websanova/vue-auth/dist/drivers/auth/bearer.esm';
+import driverHttp from '@websanova/vue-auth/dist/drivers/http/axios.1.x.esm';
+import driverRouter from '@websanova/vue-auth/dist/drivers/router/vue-router.2.x.esm';
+
+Vue.use(auth, {
+    plugins: {
+        http:   axios,
+        router: router,
+    },
+    drivers: {
+        auth:   driverAuth,
+        http:   driverHttp,
+        router: driverRouter
+    },
+    options: {
+        loginData: {url: __baseURL + '/api/V1/auth/login'}
+    }
+});
 
 new Vue({
     el: '#app',
