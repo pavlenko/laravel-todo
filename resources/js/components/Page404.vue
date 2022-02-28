@@ -1,5 +1,6 @@
 <template>
-    <div class="content-wrapper d-flex align-items-center">
+    <layout-mini>
+    <div class="d-flex justify-content-center align-items-center bg-light min-vh-100">
         <section class="content flex-grow-1">
             <div class="error-page my-0 d-flex align-items-center">
                 <h2 class="headline text-warning mr-5"> 404</h2>
@@ -14,10 +15,12 @@
             </div>
         </section>
     </div>
+    </layout-mini>
 </template>
 
 <script>
+import LayoutMini from "./LayoutMini";
 export default {
-    name: "Page404"
+    components: {LayoutMini}
 }
 </script>

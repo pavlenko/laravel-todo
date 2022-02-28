@@ -1,4 +1,5 @@
 <template>
+    <layout-full>
     <div class="content-wrapper">
         <section class="content-header">
             <div class="container-fluid">
@@ -10,10 +11,12 @@
             </div>
         </section>
     </div>
+    </layout-full>
 </template>
 
 <script>
+import LayoutFull from "./LayoutFull";
 export default {
-    name: "Home"
+    components: {LayoutFull}
 }
 </script>

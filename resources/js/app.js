@@ -14,7 +14,7 @@ Vue.use(BootstrapVue);
 import Page404 from './components/Page404';
 import PageLogin from './components/PageLogin';
 import PageRegister from './components/PageRegister';
-import Home from "./components/Home";
+import PageHome from "./components/PageHome";
 import Desks from './components/Desks';
 import Lists from './components/Lists';
 
@@ -36,7 +36,10 @@ const router = new VueRouter({
         {
             path: '/',
             name: 'home',
-            component: Home
+            component: PageHome,
+            meta: {
+                //auth: true
+            }
         },
         {
             path: '/desks',
@@ -62,7 +65,7 @@ const router = new VueRouter({
     ]
 });
 
-import auth from '@websanova/vue-auth/dist/v2/vue-auth.min';
+import auth from '@websanova/vue-auth/dist/v2/vue-auth.esm';
 import driverAuth from '@websanova/vue-auth/dist/drivers/auth/bearer.esm';
 import driverHttp from '@websanova/vue-auth/dist/drivers/http/axios.1.x.esm';
 import driverRouter from '@websanova/vue-auth/dist/drivers/router/vue-router.2.x.esm';
@@ -78,7 +81,7 @@ Vue.use(auth, {
         router: driverRouter
     },
     options: {
-        loginData: {url: __baseURL + '/api/V1/auth/login'}
+        authRedirect: {path: '/user/login'}
     }
 });
 
