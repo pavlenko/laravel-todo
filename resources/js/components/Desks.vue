@@ -1,4 +1,5 @@
 <template>
+    <layout-full>
     <div class="content-wrapper">
         <section class="content-header">
             <div class="container-fluid">
@@ -37,14 +38,16 @@
             </div>
         </section>
     </div>
+    </layout-full>
 </template>
 
 <script>
+import LayoutFull from "./LayoutFull";
 import DesksItem from "./DesksItem";
 import DesksCreate from "./DesksCreate";
 
 export default {
-    components: {DesksItem, DesksCreate},
+    components: {LayoutFull, DesksItem, DesksCreate},
     data() {
         return {
             loading: false,
