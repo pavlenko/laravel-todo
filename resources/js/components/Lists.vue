@@ -1,23 +1,21 @@
 <template>
-    <div class="content-wrapper kanban">
+    <layout-full>
+    <div class="content-wrapper kanban flex-grow-1 d-flex flex-column">
         <section class="content-header">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <h1>{{ desk.name }}</h1>
-                    </div>
-                    <div class="col-sm-6 d-none d-sm-block">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item">
-                                <router-link :to="{name: 'home'}">Home</router-link>
-                            </li>
-                            <li class="breadcrumb-item">
-                                <router-link :to="{name: 'desks'}">Desks</router-link>
-                            </li>
-                            <li class="breadcrumb-item active">{{ desk.name }}</li>
-                        </ol>
-                    </div>
+                <div class="pb-1 mt-0 mb-0 border-bottom">
+                    <!--page header alternate markup-->
+                    <h1>{{ desk.name }}</h1>
                 </div>
+                <ol class="breadcrumb text-xs">
+                    <li class="breadcrumb-item">
+                        <router-link :to="{name: 'home'}">Home</router-link>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <router-link :to="{name: 'desks'}">Desks</router-link>
+                    </li>
+                    <li class="breadcrumb-item active">{{ desk.name }}</li>
+                </ol>
             </div>
         </section>
         <section class="content pb-3">
@@ -43,9 +41,11 @@
             </draggable>
         </section>
     </div>
+    </layout-full>
 </template>
 
 <script>
+import LayoutFull from "./LayoutFull";
 import ListsItem from "./ListsItem";
 import ListsCreate from "./ListsCreate";
 import draggable from "vuedraggable";
@@ -54,7 +54,7 @@ import DeskDTO from "../DTO/DeskDTO";
 import DesksAPI from "../api/DesksAPI";
 
 export default {
-    components: {ListsItem, ListsCreate, draggable},
+    components: {LayoutFull, ListsItem, ListsCreate, draggable},
     data() {
         return {
             deskId: this.$route.params.id,

@@ -1,21 +1,18 @@
 <template>
     <layout-full>
-    <div class="content-wrapper">
+    <div class="content-wrapper flex-grow-1 d-flex flex-column">
         <section class="content-header">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <h1>Desks</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item">
-                                <router-link :to="{ name: 'home'}">Home</router-link>
-                            </li>
-                            <li class="breadcrumb-item active">Desks</li>
-                        </ol>
-                    </div>
+                <div class="pb-1 mt-0 mb-0 border-bottom">
+                    <!--page header alternate markup-->
+                    <h1>Desks</h1>
                 </div>
+                <ol class="breadcrumb text-xs">
+                    <li class="breadcrumb-item">
+                        <router-link :to="{ name: 'home'}">Home</router-link>
+                    </li>
+                    <li class="breadcrumb-item active">Desks</li>
+                </ol>
             </div>
         </section>
         <section class="content">

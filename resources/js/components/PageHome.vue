@@ -1,12 +1,11 @@
 <template>
     <layout-full>
-    <div class="content-wrapper">
+    <div class="content-wrapper flex-grow-1 d-flex flex-column">
         <section class="content-header">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <h1>Welcome</h1>
-                    </div>
+                <div class="pb-1 mt-0 mb-0 border-bottom">
+                    <!--page header alternate markup-->
+                    <h1>Welcome</h1>
                 </div>
             </div>
         </section>

@@ -65,7 +65,7 @@ const router = new VueRouter({
     ]
 });
 
-import auth from '@websanova/vue-auth/dist/v2/vue-auth.esm';
+/*import auth from '@websanova/vue-auth/dist/v2/vue-auth.esm';
 import driverAuth from '@websanova/vue-auth/dist/drivers/auth/bearer.esm';
 import driverHttp from '@websanova/vue-auth/dist/drivers/http/axios.1.x.esm';
 import driverRouter from '@websanova/vue-auth/dist/drivers/router/vue-router.2.x.esm';
@@ -83,7 +83,15 @@ Vue.use(auth, {
     options: {
         authRedirect: {path: '/user/login'}
     }
-});
+});*/
+
+router.beforeEach((to, from, next) => {
+    let PushMenu = $('[data-widget=pushmenu]').PushMenu;
+    if (PushMenu && $('body').hasClass('sidebar-open')) {
+        PushMenu('collapse');
+    }
+    next();
+})
 
 new Vue({
     el: '#app',

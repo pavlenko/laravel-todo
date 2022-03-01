@@ -1,5 +1,5 @@
 <template>
-    <div class="sidebar-mini wrapper">
+    <div class="sidebar-mini wrapper d-flex flex-column">
         <slot name="header">
             <layout-header></layout-header>
         </slot>
