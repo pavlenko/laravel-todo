@@ -6,7 +6,6 @@
         <slot name="sidebar">
             <layout-sidebar></layout-sidebar>
         </slot>
-        <slot></slot>
         <slot>
             <layout-content></layout-content>
         </slot>
