@@ -7,6 +7,9 @@
             <layout-sidebar></layout-sidebar>
         </slot>
         <slot></slot>
+        <slot>
+            <layout-content></layout-content>
+        </slot>
         <slot name="sidebar">
             <layout-footer></layout-footer>
         </slot>
@@ -16,9 +19,10 @@
 <script>
 import LayoutHeader from './LayoutHeader';
 import LayoutSidebar from './LayoutSidebar';
+import LayoutContent from './LayoutContent';
 import LayoutFooter from './LayoutFooter';
 
 export default {
-    components: {LayoutHeader, LayoutSidebar, LayoutFooter}
+    components: {LayoutHeader, LayoutSidebar, LayoutContent, LayoutFooter}
 }
 </script>

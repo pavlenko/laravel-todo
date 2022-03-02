@@ -1,8 +1,14 @@
 <template>
-    <div class="content-wrapper">
+    <div class="content-wrapper flex-grow-1 d-flex flex-column">
+        <!--TODO allow set classes to wrapper-->
         <section class="content-header">
-            <!--TODO title-->
-            <!--TODO breadcrumbs-->
+            <div class="container-fluid">
+                <div class="pb-1 mt-0 mb-0 border-bottom">
+                    <h1><slot name="content-title"></slot></h1>
+                </div>
+                <!--TODO title-->
+                <!--TODO breadcrumbs-->
+            </div>
         </section>
         <section class="content">
             <!--TODO content-->
