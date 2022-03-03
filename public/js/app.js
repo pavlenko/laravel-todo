@@ -8414,7 +8414,7 @@ var render = function () {
     [
       _c("router-view"),
       _vm._v(" "),
-      _c("router-view", { attrs: { name: "modal" } }, [_vm._v("AAA")]),
+      _c("router-view", { attrs: { name: "modal" } }),
     ],
     1
   )
@@ -20469,7 +20469,13 @@ var router = new vue_router_dist_vue_router_min__WEBPACK_IMPORTED_MODULE_2___def
   }, {
     path: '/desks/:id',
     name: 'lists',
-    component: _components_Lists__WEBPACK_IMPORTED_MODULE_10__["default"]
+    //component: Lists,
+    components: {
+      "default": _components_Lists__WEBPACK_IMPORTED_MODULE_10__["default"],
+      modal: {
+        template: '<div class="alert-danger"></div>'
+      }
+    }
   }, {
     path: '/user/login',
     name: 'user_login',

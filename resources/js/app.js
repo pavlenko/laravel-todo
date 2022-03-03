@@ -50,7 +50,11 @@ const router = new VueRouter({
         {
             path: '/desks/:id',
             name: 'lists',
-            component: Lists
+            //component: Lists,
+            components: {
+                default: Lists,
+                modal: {template: '<div class="alert-danger">TODO here opened modal markup</div>'}
+            }
         },
         {
             path: '/user/login',
