@@ -20,11 +20,13 @@
                     <form @submit.prevent="onSubmit" style="position: relative" novalidate="novalidate">
                         <form-input v-model="fields.email"
                                     :error="errors.email"
+                                    name="email"
                                     icon="fas fa-fw fa-envelope"
                                     placeholder="Email"/>
                         <form-input v-model="fields.password"
                                     :error="errors.password"
                                     type="password"
+                                    name="password"
                                     icon="fas fa-fw fa-lock"
                                     placeholder="Password"/>
                         <button type="submit" class="btn btn-sm btn-primary mb-3">
@@ -71,10 +73,7 @@ export default {
             this.$auth
                 .login({
                     data: this.fields,
-                    redirect: {name: 'home'},
                 })
-            //axios
-                //.post(__baseURL + '/api/V1/auth/login', this.fields)
                 .then(
                     response => console.log(response),
                 )

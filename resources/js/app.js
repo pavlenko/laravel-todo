@@ -42,22 +42,31 @@ const router = new VueRouter({
             name: 'home',
             component: PageHome,
             meta: {
-                //auth: true
+                auth: true
             }
         },
         {
             path: '/desks',
             name: 'desks',
-            component: Desks
+            component: Desks,
+            meta: {
+                auth: true
+            }
         },
         {
             path: '/desks/:id',
             name: 'lists',
             component: Lists,
+            meta: {
+                auth: true
+            },
             children: [
                 {
                     path: 'cards/:cardID',//TODO try create root route as /desks/:id/cards/:cardID + maybe add cards & tasks store
                     name: 'card',
+                    meta: {
+                        auth: true
+                    },
                     components: {
                         default: Lists,
                         modal: {template: '<modal @close="$router.push({name: \'lists\', id: $route.params.id})">TODO here opened modal markup</modal>'}
@@ -96,8 +105,11 @@ Vue.use(auth, {
     },
     options: {
         authRedirect: {path: '/user/login'},
-        loginData: {url: __baseURL + '/api/V1/auth/login'},
-        fetchUser: true
+        loginData: {url: __baseURL + '/api/V1/auth/login', redirect: {name: 'home'}},
+        fetchUser: true,
+        fetchData: {url: __baseURL + '/api/V1/auth/user'},
+        logoutData: {url: __baseURL + '/api/V1/auth/logout', redirect: {name: 'user_login'}, makeRequest: true},
+        refreshData: {url: __baseURL + '/api/V1/auth/refresh'}
     }
 });
 

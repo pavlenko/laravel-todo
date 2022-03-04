@@ -2133,6 +2133,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     type: String,
@@ -2294,8 +2295,45 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "LayoutHeader"
+  name: "LayoutHeader",
+  data: function data() {
+    return {
+      loading: false,
+      errored: false
+    };
+  },
+  computed: {
+    user: function user() {
+      return this.$auth.user();
+    }
+  },
+  methods: {
+    onLogout: function onLogout() {
+      var _this = this;
+
+      this.loading = true;
+      this.errored = false;
+      this.$auth.logout({}).then(function (response) {
+        return console.log(response);
+      })["catch"](function (error) {
+        if (error.response.status >= 500) {
+          _this.errored = true;
+        }
+
+        if (error.response.data.errors) {
+          _this.errors = error.response.data.errors;
+        }
+      })["finally"](function () {
+        return _this.loading = false;
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -3049,6 +3087,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3076,13 +3116,8 @@ __webpack_require__.r(__webpack_exports__);
       this.errored = false;
       this.errors = {};
       this.$auth.login({
-        data: this.fields,
-        redirect: {
-          name: 'home'
-        }
-      }) //axios
-      //.post(__baseURL + '/api/V1/auth/login', this.fields)
-      .then(function (response) {
+        data: this.fields
+      }).then(function (response) {
         return console.log(response);
       })["catch"](function (error) {
         if (error.response.status >= 500) {
@@ -9911,6 +9946,7 @@ var render = function () {
           },
           attrs: {
             type: _vm.show ? "text" : _vm.type,
+            name: _vm.name,
             placeholder: _vm.placeholder,
           },
           domProps: { value: _vm.value },
@@ -10095,100 +10131,130 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c(
+    "nav",
+    {
+      staticClass: "main-header navbar navbar-expand navbar-white navbar-light",
+    },
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("ul", { staticClass: "navbar-nav ml-auto" }, [
+        _vm.user
+          ? _c("li", { staticClass: "nav-item dropdown user-menu" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "nav-link dropdown-toggle pr-0",
+                  attrs: { href: "#", "data-toggle": "dropdown" },
+                },
+                [
+                  _c("img", {
+                    staticClass: "user-image img-circle elevation-1",
+                    attrs: {
+                      src: "/external/admin-lte/3.1.0/img/user2-160x160.jpg",
+                      alt: "User Image",
+                    },
+                  }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "d-none d-md-in-line" }, [
+                    _vm._v(_vm._s(_vm.user.name)),
+                  ]),
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "ul",
+                {
+                  staticClass:
+                    "dropdown-menu dropdown-menu-lg dropdown-menu-right rounded-0",
+                },
+                [
+                  _c(
+                    "li",
+                    { staticClass: "mx-3 my-2 d-flex align-items-center" },
+                    [
+                      _c("img", {
+                        staticClass: "img-circle elevation-1",
+                        staticStyle: { width: "3rem", height: "auto" },
+                        attrs: {
+                          src: "/external/admin-lte/3.1.0/img/user2-160x160.jpg",
+                          alt: "User Image",
+                        },
+                      }),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "ml-3" }, [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(_vm.user.name) +
+                            "\n                        "
+                        ),
+                        _c("div", { staticClass: "text-muted text-xs" }, [
+                          _vm._v(_vm._s(_vm.user.email)),
+                        ]),
+                      ]),
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "dropdown-divider mx-2" }),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      staticClass: "dropdown-item",
+                      attrs: { href: "#" },
+                      on: {
+                        click: function ($event) {
+                          $event.preventDefault()
+                          return _vm.onLogout.apply(null, arguments)
+                        },
+                      },
+                    },
+                    [
+                      _vm._v(
+                        "\n                    Log out\n                    "
+                      ),
+                      _vm.loading
+                        ? _c(
+                            "span",
+                            {
+                              staticClass: "spinner-border spinner-border-sm",
+                              attrs: { role: "status" },
+                            },
+                            [
+                              _c("span", { staticClass: "sr-only" }, [
+                                _vm._v("Loading..."),
+                              ]),
+                            ]
+                          )
+                        : _vm._e(),
+                    ]
+                  ),
+                ]
+              ),
+            ])
+          : _vm._e(),
+      ]),
+    ]
+  )
 }
 var staticRenderFns = [
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "nav",
-      {
-        staticClass:
-          "main-header navbar navbar-expand navbar-white navbar-light",
-      },
-      [
-        _c("ul", { staticClass: "navbar-nav" }, [
-          _c("li", { staticClass: "nav-item" }, [
-            _c(
-              "a",
-              {
-                staticClass: "nav-link",
-                attrs: { "data-widget": "pushmenu", href: "#", role: "button" },
-              },
-              [_c("i", { staticClass: "fas fa-bars" })]
-            ),
-          ]),
-        ]),
-        _vm._v(" "),
-        _c("ul", { staticClass: "navbar-nav ml-auto" }, [
-          _c("li", { staticClass: "nav-item dropdown user-menu" }, [
-            _c(
-              "a",
-              {
-                staticClass: "nav-link dropdown-toggle pr-0",
-                attrs: { href: "#", "data-toggle": "dropdown" },
-              },
-              [
-                _c("img", {
-                  staticClass: "user-image img-circle elevation-1",
-                  attrs: {
-                    src: "/external/admin-lte/3.1.0/img/user2-160x160.jpg",
-                    alt: "User Image",
-                  },
-                }),
-                _vm._v(" "),
-                _c("span", { staticClass: "d-none d-md-in-line" }, [
-                  _vm._v("Alexander Pierce"),
-                ]),
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "ul",
-              {
-                staticClass:
-                  "dropdown-menu dropdown-menu-lg dropdown-menu-right",
-              },
-              [
-                _c(
-                  "li",
-                  { staticClass: "mx-3 my-2 d-flex align-items-center" },
-                  [
-                    _c("img", {
-                      staticClass: "img-circle elevation-1",
-                      staticStyle: { width: "3rem", height: "auto" },
-                      attrs: {
-                        src: "/external/admin-lte/3.1.0/img/user2-160x160.jpg",
-                        alt: "User Image",
-                      },
-                    }),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "ml-3" }, [
-                      _vm._v(
-                        "\n                        Alexander Pierce\n                        "
-                      ),
-                      _c("div", { staticClass: "text-muted text-xs" }, [
-                        _vm._v("Web Developer"),
-                      ]),
-                    ]),
-                  ]
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "dropdown-divider mx-2" }),
-                _vm._v(" "),
-                _c(
-                  "a",
-                  { staticClass: "dropdown-item", attrs: { href: "#" } },
-                  [_vm._v("Log out")]
-                ),
-              ]
-            ),
-          ]),
-        ]),
-      ]
-    )
+    return _c("ul", { staticClass: "navbar-nav" }, [
+      _c("li", { staticClass: "nav-item" }, [
+        _c(
+          "a",
+          {
+            staticClass: "nav-link",
+            attrs: { "data-widget": "pushmenu", href: "#", role: "button" },
+          },
+          [_c("i", { staticClass: "fas fa-bars" })]
+        ),
+      ]),
+    ])
   },
 ]
 render._withStripped = true
@@ -11458,6 +11524,7 @@ var render = function () {
                   _c("form-input", {
                     attrs: {
                       error: _vm.errors.email,
+                      name: "email",
                       icon: "fas fa-fw fa-envelope",
                       placeholder: "Email",
                     },
@@ -11474,6 +11541,7 @@ var render = function () {
                     attrs: {
                       error: _vm.errors.password,
                       type: "password",
+                      name: "password",
                       icon: "fas fa-fw fa-lock",
                       placeholder: "Password",
                     },
@@ -20605,20 +20673,30 @@ var router = new vue_router_dist_vue_router_min__WEBPACK_IMPORTED_MODULE_2___def
     path: '/',
     name: 'home',
     component: _components_PageHome__WEBPACK_IMPORTED_MODULE_8__["default"],
-    meta: {//auth: true
+    meta: {
+      auth: true
     }
   }, {
     path: '/desks',
     name: 'desks',
-    component: _components_Desks__WEBPACK_IMPORTED_MODULE_9__["default"]
+    component: _components_Desks__WEBPACK_IMPORTED_MODULE_9__["default"],
+    meta: {
+      auth: true
+    }
   }, {
     path: '/desks/:id',
     name: 'lists',
     component: _components_Lists__WEBPACK_IMPORTED_MODULE_10__["default"],
+    meta: {
+      auth: true
+    },
     children: [{
       path: 'cards/:cardID',
       //TODO try create root route as /desks/:id/cards/:cardID + maybe add cards & tasks store
       name: 'card',
+      meta: {
+        auth: true
+      },
       components: {
         "default": _components_Lists__WEBPACK_IMPORTED_MODULE_10__["default"],
         modal: {
@@ -20658,9 +20736,25 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(_websanova_vue_auth_dist_v2_vue_a
       path: '/user/login'
     },
     loginData: {
-      url: __baseURL + '/api/V1/auth/login'
+      url: __baseURL + '/api/V1/auth/login',
+      redirect: {
+        name: 'home'
+      }
     },
-    fetchUser: true
+    fetchUser: true,
+    fetchData: {
+      url: __baseURL + '/api/V1/auth/user'
+    },
+    logoutData: {
+      url: __baseURL + '/api/V1/auth/logout',
+      redirect: {
+        name: 'user_login'
+      },
+      makeRequest: true
+    },
+    refreshData: {
+      url: __baseURL + '/api/V1/auth/refresh'
+    }
   }
 });
 router.beforeEach(function (to, from, next) {

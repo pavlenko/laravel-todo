@@ -7,6 +7,7 @@
                 </div>
             </div>
             <input :type="show ? 'text' : type"
+                   :name="name"
                    class="form-control"
                    :class="{'is-invalid': error, 'border-left-0': !!icon, 'border-right-0': type === 'password'}"
                    :placeholder="placeholder"
