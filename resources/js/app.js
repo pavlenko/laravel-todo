@@ -19,6 +19,9 @@ import PageHome from "./components/PageHome";
 import Desks from './components/Desks';
 import Lists from './components/Lists';
 
+import Modal from './components/Modal';
+Vue.component('modal', Modal);
+
 // TODO color styles for bg and other bootstrap components
 const colors = {
     'primary': '#007bff',
@@ -53,7 +56,7 @@ const router = new VueRouter({
             //component: Lists,
             components: {
                 default: Lists,
-                modal: {template: '<div class="alert-danger">TODO here opened modal markup</div>'}
+                modal: {template: '<modal>TODO here opened modal markup</modal>'}
             }
         },
         {
