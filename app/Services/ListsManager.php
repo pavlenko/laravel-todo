@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\DTO\ListDTO;
 use App\Models\ListModel;
+use Illuminate\Database\Eloquent\Builder;
 
 final class ListsManager extends BaseManager
 {
@@ -14,6 +15,47 @@ final class ListsManager extends BaseManager
     {
         $this->cards = $cards ?: new CardsManager();
         $this->tasks = $tasks ?: new TasksManager();
+    }
+
+    private function createQuery(array $where, array $with = []): Builder
+    {
+        $query = ListModel::query();
+        if (!empty($with)) {
+            $query->with($with);
+        }
+        if (isset($where['desk_id'])) {
+            return $query->whereIn('desk_id', (array) $where['desk_id']);
+        }
+        return $query->where($where);
+    }
+
+    public function getListsBy(array $where, array $with = []): array
+    {
+        //TODO maybe create internal converter
+        //TODO standardize response structure for one desk id & array of desk id
+        //TODO maybe:
+        // - group rows by desk id
+        // - sort each group
+        // - flatten array before out
+        $data = [];
+        $rows = $this->createQuery($where, $with)->get();
+
+        if (isset($where['desk_id']) && is_array($where['desk_id'])) {
+            $rows = $rows->groupBy('desk_id');
+        } else {
+            $rows = [$where['desk_id'] => $rows];
+        }
+
+        /* @var $rows ListModel[][] */
+        foreach ($rows as $groupID => $items) {
+            foreach ($items as $item) {
+                $data[$groupID][] = $this->createList($item->getAttributes());
+            }
+
+            $data[$groupID] = $this->sortByPrevNext($data[$groupID]);
+        }
+
+        return $data;
     }
 
     public function getAllList(int $deskID, bool $withCards = false): array
