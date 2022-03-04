@@ -53,11 +53,17 @@ const router = new VueRouter({
         {
             path: '/desks/:id',
             name: 'lists',
-            //component: Lists,
-            components: {
-                default: Lists,
-                modal: {template: '<modal>TODO here opened modal markup</modal>'}
-            }
+            component: Lists,
+            children: [
+                {
+                    path: 'cards/:cardID',//TODO try create root route as /desks/:id/cards/:cardID + maybe add cards & tasks store
+                    name: 'card',
+                    components: {
+                        default: Lists,
+                        modal: {template: '<modal @close="$router.push({name: \'lists\', id: $route.params.id})">TODO here opened modal markup</modal>'}
+                    },
+                }
+            ]
         },
         {
             path: '/user/login',

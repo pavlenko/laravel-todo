@@ -9,7 +9,7 @@
                 </div>
                 <ol class="breadcrumb text-xs">
                     <li class="breadcrumb-item">
-                        <router-link :to="{ name: 'home'}">Home</router-link>
+                        <router-link :to="{name: 'home'}">Home</router-link>
                     </li>
                     <li class="breadcrumb-item active">Desks</li>
                 </ol>

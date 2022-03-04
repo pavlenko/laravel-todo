@@ -9,6 +9,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <slot></slot>
                     <p>Modal body text goes here.</p>
                 </div>
                 <div class="modal-footer">
@@ -25,10 +26,12 @@
 export default {
     name: "Modal",
     mounted() {
+        console.log(this.$route);
         $(this.$el).modal('show');
         $(this.$el).on('hidden.bs.modal', function (event) {
+            this.$emit('close');
             //TODO goto backurl on close or maybe override close logic
-        })
+        }.bind(this))
     }
 }
 </script>

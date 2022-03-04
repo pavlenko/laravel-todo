@@ -1,6 +1,7 @@
 <template>
     <div class="info-box justify-content-between align-items-stretch overflow-hidden border-top border-primary">
-        <div class="flex-grow-1" @click.prevent v-b-modal="uuid">{{ card.name }}</div>
+        <!--<div class="flex-grow-1" @click.prevent v-b-modal="uuid">{{ card.name }}</div>-->
+        <router-link class="flex-grow-1" :to="{name: 'card', params: {cardID: card.id}}">{{ card.name }}</router-link>
         <cards-delete class="align-self-start" :card="card" @deleteCard="deleteCard"></cards-delete>
         <b-modal :id="uuid" title="Edit Card" hide-footer :header-class="'py-1 px-3'">
             <cards-update-name :card="card"></cards-update-name>

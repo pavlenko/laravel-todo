@@ -1530,6 +1530,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -2430,6 +2431,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -2904,13 +2906,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 //TODO all possible bootstrap options + backURL + subcomponents if needed
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Modal",
   mounted: function mounted() {
+    console.log(this.$route);
     $(this.$el).modal('show');
-    $(this.$el).on('hidden.bs.modal', function (event) {//TODO goto backurl on close
-    });
+    $(this.$el).on('hidden.bs.modal', function (event) {
+      this.$emit('close'); //TODO goto backurl on close or maybe override close logic
+    }.bind(this));
   }
 });
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
@@ -8959,22 +8964,10 @@ var render = function () {
     },
     [
       _c(
-        "div",
+        "router-link",
         {
-          directives: [
-            {
-              name: "b-modal",
-              rawName: "v-b-modal",
-              value: _vm.uuid,
-              expression: "uuid",
-            },
-          ],
           staticClass: "flex-grow-1",
-          on: {
-            click: function ($event) {
-              $event.preventDefault()
-            },
-          },
+          attrs: { to: { name: "card", params: { cardID: _vm.card.id } } },
         },
         [_vm._v(_vm._s(_vm.card.name))]
       ),
@@ -10374,146 +10367,154 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("layout-full", [
-    _c(
-      "div",
-      { staticClass: "content-wrapper kanban flex-grow-1 d-flex flex-column" },
-      [
-        _c("section", { staticClass: "content-header" }, [
-          _c("div", { staticClass: "container-fluid" }, [
-            _c("div", { staticClass: "pb-1 mt-0 mb-0 border-bottom" }, [
-              _c("h1", [_vm._v(_vm._s(_vm.desk.name))]),
-            ]),
-            _vm._v(" "),
-            _c("ol", { staticClass: "breadcrumb text-xs" }, [
-              _c(
-                "li",
-                { staticClass: "breadcrumb-item" },
-                [
-                  _c("router-link", { attrs: { to: { name: "home" } } }, [
-                    _vm._v("Home"),
-                  ]),
-                ],
-                1
-              ),
+  return _c(
+    "layout-full",
+    [
+      _c(
+        "div",
+        {
+          staticClass: "content-wrapper kanban flex-grow-1 d-flex flex-column",
+        },
+        [
+          _c("section", { staticClass: "content-header" }, [
+            _c("div", { staticClass: "container-fluid" }, [
+              _c("div", { staticClass: "pb-1 mt-0 mb-0 border-bottom" }, [
+                _c("h1", [_vm._v(_vm._s(_vm.desk.name))]),
+              ]),
               _vm._v(" "),
-              _c(
-                "li",
-                { staticClass: "breadcrumb-item" },
-                [
-                  _c("router-link", { attrs: { to: { name: "desks" } } }, [
-                    _vm._v("Desks"),
-                  ]),
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c("li", { staticClass: "breadcrumb-item active" }, [
-                _vm._v(_vm._s(_vm.desk.name)),
+              _c("ol", { staticClass: "breadcrumb text-xs" }, [
+                _c(
+                  "li",
+                  { staticClass: "breadcrumb-item" },
+                  [
+                    _c("router-link", { attrs: { to: { name: "home" } } }, [
+                      _vm._v("Home"),
+                    ]),
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "li",
+                  { staticClass: "breadcrumb-item" },
+                  [
+                    _c("router-link", { attrs: { to: { name: "desks" } } }, [
+                      _vm._v("Desks"),
+                    ]),
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("li", { staticClass: "breadcrumb-item active" }, [
+                  _vm._v(_vm._s(_vm.desk.name)),
+                ]),
               ]),
             ]),
           ]),
-        ]),
-        _vm._v(" "),
-        _c(
-          "section",
-          { staticClass: "content pb-3" },
-          [
-            _vm.errored
-              ? _c(
-                  "div",
-                  {
-                    staticClass: "alert alert-danger p-2 mx-2",
-                    attrs: { role: "alert" },
-                  },
-                  [
-                    _c("h5", { staticClass: "alert-heading m-0" }, [
-                      _vm._v(
-                        "\n                Something went wrong\n                "
-                      ),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-sm btn-danger",
-                          attrs: { type: "button", "data-dismiss": "alert" },
-                          on: { click: _vm.fetchLists },
-                        },
-                        [
-                          _vm._v(
-                            "\n                    Try again\n                "
-                          ),
-                        ]
-                      ),
-                    ]),
-                  ]
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.loading
-              ? _c("div", { staticClass: "d-flex justify-content-center" }, [
-                  _c("div", {
-                    staticClass: "spinner-border",
-                    attrs: { role: "status", "aria-hidden": "true" },
-                  }),
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _c(
-              "draggable",
-              {
-                ref: "sortable",
-                staticClass: "container-fluid h-100",
-                staticStyle: { "min-width": "100%" },
-                attrs: { forceFallback: true },
-                on: { update: _vm.resort },
-                model: {
-                  value: _vm.lists,
-                  callback: function ($$v) {
-                    _vm.lists = $$v
-                  },
-                  expression: "lists",
-                },
-              },
-              [
-                _vm._l(_vm.lists, function (list, index) {
-                  return _c("lists-item", {
-                    key: index,
-                    attrs: { list: list },
-                    on: {
-                      updateList: _vm.updateList,
-                      deleteList: _vm.deleteList,
-                    },
-                  })
-                }),
-                _vm._v(" "),
-                _c("lists-create", {
-                  attrs: {
-                    "desk-id": _vm.desk.id,
-                    "prev-id":
-                      _vm.lists.length > 0
-                        ? _vm.lists[_vm.lists.length - 1].id
-                        : 0,
-                  },
-                  on: { createList: _vm.createList },
-                  scopedSlots: _vm._u([
+          _vm._v(" "),
+          _c(
+            "section",
+            { staticClass: "content pb-3" },
+            [
+              _vm.errored
+                ? _c(
+                    "div",
                     {
-                      key: "footer",
-                      fn: function () {
-                        return undefined
-                      },
-                      proxy: true,
+                      staticClass: "alert alert-danger p-2 mx-2",
+                      attrs: { role: "alert" },
                     },
-                  ]),
-                }),
-              ],
-              2
-            ),
-          ],
-          1
-        ),
-      ]
-    ),
-  ])
+                    [
+                      _c("h5", { staticClass: "alert-heading m-0" }, [
+                        _vm._v(
+                          "\n                Something went wrong\n                "
+                        ),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-sm btn-danger",
+                            attrs: { type: "button", "data-dismiss": "alert" },
+                            on: { click: _vm.fetchLists },
+                          },
+                          [
+                            _vm._v(
+                              "\n                    Try again\n                "
+                            ),
+                          ]
+                        ),
+                      ]),
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.loading
+                ? _c("div", { staticClass: "d-flex justify-content-center" }, [
+                    _c("div", {
+                      staticClass: "spinner-border",
+                      attrs: { role: "status", "aria-hidden": "true" },
+                    }),
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "draggable",
+                {
+                  ref: "sortable",
+                  staticClass: "container-fluid h-100",
+                  staticStyle: { "min-width": "100%" },
+                  attrs: { forceFallback: true },
+                  on: { update: _vm.resort },
+                  model: {
+                    value: _vm.lists,
+                    callback: function ($$v) {
+                      _vm.lists = $$v
+                    },
+                    expression: "lists",
+                  },
+                },
+                [
+                  _vm._l(_vm.lists, function (list, index) {
+                    return _c("lists-item", {
+                      key: index,
+                      attrs: { list: list },
+                      on: {
+                        updateList: _vm.updateList,
+                        deleteList: _vm.deleteList,
+                      },
+                    })
+                  }),
+                  _vm._v(" "),
+                  _c("lists-create", {
+                    attrs: {
+                      "desk-id": _vm.desk.id,
+                      "prev-id":
+                        _vm.lists.length > 0
+                          ? _vm.lists[_vm.lists.length - 1].id
+                          : 0,
+                    },
+                    on: { createList: _vm.createList },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "footer",
+                        fn: function () {
+                          return undefined
+                        },
+                        proxy: true,
+                      },
+                    ]),
+                  }),
+                ],
+                2
+              ),
+            ],
+            1
+          ),
+        ]
+      ),
+      _vm._v(" "),
+      _c("router-view", { attrs: { name: "modal" } }),
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -11163,71 +11164,80 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c(
+    "div",
+    {
+      staticClass: "modal",
+      attrs: {
+        "data-backdrop": "static",
+        "data-keyboard": "false",
+        tabindex: "-1",
+      },
+    },
+    [
+      _c("div", { staticClass: "modal-dialog" }, [
+        _c("div", { staticClass: "modal-content" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "modal-body" },
+            [
+              _vm._t("default"),
+              _vm._v(" "),
+              _c("p", [_vm._v("Modal body text goes here.")]),
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _vm._m(1),
+        ]),
+      ]),
+    ]
+  )
 }
 var staticRenderFns = [
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "modal",
-        attrs: {
-          "data-backdrop": "static",
-          "data-keyboard": "false",
-          tabindex: "-1",
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Modal title")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close",
+          },
         },
-      },
-      [
-        _c("div", { staticClass: "modal-dialog" }, [
-          _c("div", { staticClass: "modal-content" }, [
-            _c("div", { staticClass: "modal-header" }, [
-              _c("h5", { staticClass: "modal-title" }, [_vm._v("Modal title")]),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "close",
-                  attrs: {
-                    type: "button",
-                    "data-dismiss": "modal",
-                    "aria-label": "Close",
-                  },
-                },
-                [
-                  _c("span", { attrs: { "aria-hidden": "true" } }, [
-                    _vm._v("×"),
-                  ]),
-                ]
-              ),
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-body" }, [
-              _c("p", [_vm._v("Modal body text goes here.")]),
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-footer" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-secondary",
-                  attrs: { type: "button", "data-dismiss": "modal" },
-                },
-                [_vm._v("Close")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                { staticClass: "btn btn-primary", attrs: { type: "button" } },
-                [_vm._v("Save changes")]
-              ),
-            ]),
-          ]),
-        ]),
-      ]
-    )
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      ),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "button", "data-dismiss": "modal" },
+        },
+        [_vm._v("Close")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "button" } },
+        [_vm._v("Save changes")]
+      ),
+    ])
   },
 ]
 render._withStripped = true
@@ -20604,13 +20614,18 @@ var router = new vue_router_dist_vue_router_min__WEBPACK_IMPORTED_MODULE_2___def
   }, {
     path: '/desks/:id',
     name: 'lists',
-    //component: Lists,
-    components: {
-      "default": _components_Lists__WEBPACK_IMPORTED_MODULE_10__["default"],
-      modal: {
-        template: '<modal>TODO here opened modal markup</modal>'
+    component: _components_Lists__WEBPACK_IMPORTED_MODULE_10__["default"],
+    children: [{
+      path: 'cards/:cardID',
+      //TODO try create root route as /desks/:id/cards/:cardID + maybe add cards & tasks store
+      name: 'card',
+      components: {
+        "default": _components_Lists__WEBPACK_IMPORTED_MODULE_10__["default"],
+        modal: {
+          template: '<modal @close="$router.push({name: \'lists\', id: $route.params.id})">TODO here opened modal markup</modal>'
+        }
       }
-    }
+    }]
   }, {
     path: '/user/login',
     name: 'user_login',

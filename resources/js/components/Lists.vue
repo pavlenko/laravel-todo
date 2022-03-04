@@ -41,6 +41,7 @@
             </draggable>
         </section>
     </div>
+        <router-view name="modal"></router-view><!--TODO required in parent for child routes-->
     </layout-full>
 </template>
 
