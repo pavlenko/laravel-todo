@@ -15,7 +15,44 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right rounded-0">
                     <li class="mx-3 my-2 d-flex align-items-center">
-                        <img :src="user.avatar" style="width: 3rem; height: auto" class="img-circle elevation-1" alt="User Image">
+                        <a class="avatar position-relative" v-b-modal="uuid">
+                            <span class="card-img-overlay d-flex justify-content-center align-items-center rounded-circle" style="background-color: rgba(0, 0, 0, 0.5)">
+                                <i class="fas fa-camera text-white elevation-1"></i>
+                            </span>
+                            <img :src="user.avatar" style="width: 3rem; height: auto" class="img-circle elevation-1" alt="User Image">
+                        </a>
+                        <b-modal :id="uuid" title="Update Avatar" hide-footer :header-class="'py-1 px-3'" body-class="p-0">
+                            <div v-if="errored" class="alert alert-danger p-2" role="alert">
+                                <h4 class="alert-heading m-0">
+                                    Something went wrong
+                                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" @click="errored = false">
+                                        Try again
+                                    </button>
+                                </h4>
+                            </div>
+                            <form @submit.prevent style="position: relative">
+                                <div class="px-3 pt-3">
+                                    <div class="form-group">
+                                        <label>Avatar</label>
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="exampleInputFile">
+                                                <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer py-1 justify-content-between">
+                                    <button type="submit" class="btn btn-sm btn-success">Update</button>
+                                </div>
+                                <div v-if="errored" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)"></div>
+                                <div v-if="loading" class="card-img-overlay" style="background-color: rgba(255, 255, 255, 0.5)">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <div class="spinner-border" role="status" aria-hidden="true"></div>
+                                    </div>
+                                </div>
+                            </form>
+                        </b-modal>
                         <div class="ml-3">
                             {{ user.name }}
                             <div class="text-muted text-xs">{{ user.email }}</div>
@@ -35,10 +72,12 @@
 </template>
 
 <script>
+import {v4 as uuid} from "uuid";
 export default {
     name: "LayoutHeader",
     data() {
         return {
+            uuid: uuid(),
             loading: false,
             errored: false
         }
@@ -71,3 +110,12 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+a.avatar span.card-img-overlay {
+    display: none !important;
+}
+a.avatar:hover span.card-img-overlay {
+    display: flex !important;
+}
+</style>
