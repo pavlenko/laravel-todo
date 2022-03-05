@@ -17,7 +17,7 @@ final class ListController extends Controller
             'desk_id' => 'required|integer|exists:desks,id'
         ]);
 
-        $lists = (new ListsManager())->getAllList($request->desk_id);
+        $lists = (new ListsManager())->getListsBy(['desk_id' => $request->desk_id]);
         return JsonResource::collection($lists);
     }
 

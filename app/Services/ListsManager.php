@@ -31,12 +31,6 @@ final class ListsManager extends BaseManager
 
     public function getListsBy(array $where, array $with = []): array
     {
-        //TODO maybe create internal converter
-        //TODO standardize response structure for one desk id & array of desk id
-        //TODO maybe:
-        // - group rows by desk id
-        // - sort each group
-        // - flatten array before out
         $data = [];
         $rows = $this->createQuery($where, $with)->get();
 
@@ -48,6 +42,8 @@ final class ListsManager extends BaseManager
 
         /* @var $rows ListModel[][] */
         foreach ($rows as $groupID => $items) {
+            $data[$groupID] = $data[$groupID] ?? [];
+
             foreach ($items as $item) {
                 $data[$groupID][] = $this->createList($item->getAttributes());
             }
@@ -55,7 +51,7 @@ final class ListsManager extends BaseManager
             $data[$groupID] = $this->sortByPrevNext($data[$groupID]);
         }
 
-        return $data;
+        return array_merge(...$data);
     }
 
     public function getAllList(int $deskID, bool $withCards = false): array
