@@ -38,7 +38,7 @@ final class ListDTO extends BaseSortableDTO
     {
         $this->cards = [];
         foreach ($cards as $index => $item) {
-            if (!($item instanceof ListDTO)) {
+            if (!($item instanceof CardDTO)) {
                 throw new \InvalidArgumentException(sprintf(
                     'Lists item must be of type %s, got %s at index \'%s\'',
                     CardDTO::class,

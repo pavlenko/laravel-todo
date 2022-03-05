@@ -98,6 +98,22 @@ final class ListsManager extends BaseManager
         );
     }
 
+    public function createListFromModel(ListModel $model, bool $withCards = false): ListDTO
+    {
+        //TODO optimize $withCards logic
+        return new ListDTO(
+            $model->getAttributes(),
+            $withCards
+                ? $this->sortByPrevNext(array_map(fn(array $item) => $this->cards->createCard($item), $model->cards->toArray()))
+                : []
+        );
+    }
+
+    public function createListFromArray(array $attributes, array $cards = []): ListDTO
+    {
+        return new ListDTO($attributes, $cards);
+    }
+
     public function createList(array $attributes, array $cards = []): ListDTO
     {
         return new ListDTO($attributes, $cards);
