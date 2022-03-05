@@ -28,7 +28,7 @@ final class ListController extends Controller
         ]);
 
         $manager = new ListsManager();
-        $dto     = $manager->createList($request->input());
+        $dto     = $manager->createListFromArray($request->input());
 
         $manager->insertList($dto);
         return new JsonResource($dto);

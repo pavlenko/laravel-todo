@@ -22,7 +22,7 @@ final class DeskController extends Controller
         $request->validate([]);
 
         $manager = new DesksManager();
-        $dto   = $manager->createDesk($request->input());
+        $dto   = $manager->createDeskFromArray($request->input());
 
         $manager->insertDesk($dto);
         return new JsonResource($dto);

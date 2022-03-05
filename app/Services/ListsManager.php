@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTO\CardDTO;
 use App\DTO\ListDTO;
 use App\Models\ListModel;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,11 +18,11 @@ final class ListsManager extends BaseManager
         $this->tasks = $tasks ?: new TasksManager();
     }
 
-    private function createQuery(array $where, array $with = []): Builder
+    private function createQuery(array $where, bool $withCards = false): Builder
     {
         $query = ListModel::query();
-        if (!empty($with)) {
-            $query->with($with);
+        if ($withCards) {
+            $query->with('cards');
         }
         if (isset($where['desk_id'])) {
             return $query->whereIn('desk_id', (array) $where['desk_id']);
@@ -29,10 +30,10 @@ final class ListsManager extends BaseManager
         return $query->where($where);
     }
 
-    public function getListsBy(array $where, array $with = []): array
+    public function getListsBy(array $where, bool $withCards = false): array
     {
         $data = [];
-        $rows = $this->createQuery($where, $with)->get();
+        $rows = $this->createQuery($where, $withCards)->get();
 
         if (isset($where['desk_id']) && is_array($where['desk_id'])) {
             $rows = $rows->groupBy('desk_id');
@@ -45,7 +46,7 @@ final class ListsManager extends BaseManager
             $data[$groupID] = $data[$groupID] ?? [];
 
             foreach ($items as $item) {
-                $data[$groupID][] = $this->createList($item->getAttributes());
+                $data[$groupID][] = $this->createListFromModel($item);
             }
 
             $data[$groupID] = $this->sortByPrevNext($data[$groupID]);
@@ -66,12 +67,7 @@ final class ListsManager extends BaseManager
         $data = [];
 
         foreach ($rows as $row) {
-            $data[] = $this->createList(
-                $row->getAttributes(),
-                $withCards
-                    ? $this->sortByPrevNext(array_map(fn(array $item) => $this->cards->createCard($item), $row->cards->toArray()))
-                    : []
-            );
+            $data[] = $this->createListFromModel($row, $withCards);
         }
 
         return $this->sortByPrevNext($data);
@@ -90,31 +86,19 @@ final class ListsManager extends BaseManager
             return null;
         }
 
-        return $this->createList(
-            $data->getAttributes(),
-            $withCards
-                ? $this->sortByPrevNext(array_map(fn(array $item) => $this->cards->createCard($item), $data->cards->toArray()))
-                : []
-        );
+        return $this->createListFromModel($data, $withCards);
     }
 
     public function createListFromModel(ListModel $model, bool $withCards = false): ListDTO
     {
-        //TODO optimize $withCards logic
-        return new ListDTO(
-            $model->getAttributes(),
-            $withCards
-                ? $this->sortByPrevNext(array_map(fn(array $item) => $this->cards->createCard($item), $model->cards->toArray()))
-                : []
-        );
+        $cards = $withCards
+            ? array_map(fn(CardDTO $item) => $this->cards->createCard($item), $model->cards->all())
+            : [];
+
+        return $this->createListFromArray($model->getAttributes(), $this->sortByPrevNext($cards));
     }
 
     public function createListFromArray(array $attributes, array $cards = []): ListDTO
-    {
-        return new ListDTO($attributes, $cards);
-    }
-
-    public function createList(array $attributes, array $cards = []): ListDTO
     {
         return new ListDTO($attributes, $cards);
     }

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTO\DeskDTO;
+use App\DTO\ListDTO;
 use App\Models\DeskModel;
 
 final class DesksManager extends BaseManager
@@ -32,12 +33,7 @@ final class DesksManager extends BaseManager
         $rows = $query->get();
         $data = [];
         foreach ($rows as $row) {
-            $data[] = $this->createDesk(
-                $row->getAttributes(),
-                $withLists
-                    ? $this->sortByPrevNext(array_map(fn(array $item) => $this->lists->createList($item), $row->lists->toArray()))
-                    : []
-            );
+            $data[] = $this->createDeskFromModel($row, $withLists);
         }
 
         return $data;
@@ -56,15 +52,19 @@ final class DesksManager extends BaseManager
             return null;
         }
 
-        return $this->createDesk(
-            $data->getAttributes(),
-            $withLists
-                ? $this->sortByPrevNext(array_map(fn(array $item) => $this->lists->createList($item), $data->lists->toArray()))
-                : []
-        );
+        return $this->createDeskFromModel($data, $withLists);
     }
 
-    public function createDesk(array $attributes, array $lists = []): DeskDTO
+    public function createDeskFromModel(DeskModel $model, bool $withLists = false): DeskDTO
+    {
+        $lists = $withLists
+            ? array_map(fn(ListDTO $item) => $this->lists->createListFromModel($item), $model->lists->all())
+            : [];
+
+        return $this->createDeskFromArray($model->getAttributes(), $lists);
+    }
+
+    public function createDeskFromArray(array $attributes, array $lists = []): DeskDTO
     {
         return new DeskDTO($attributes, $lists);
     }
