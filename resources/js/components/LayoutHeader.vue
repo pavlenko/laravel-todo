@@ -10,12 +10,12 @@
         <ul class="navbar-nav ml-auto">
             <li v-if="user" class="nav-item dropdown user-menu">
                 <a href="#" class="nav-link dropdown-toggle pr-0" data-toggle="dropdown">
-                    <img src="/external/admin-lte/3.1.0/img/user2-160x160.jpg" class="user-image img-circle elevation-1"  alt="User Image">
+                    <img :src="user.avatar" class="user-image img-circle elevation-1"  alt="User Image">
                     <span class="d-none d-md-in-line">{{ user.name }}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right rounded-0">
                     <li class="mx-3 my-2 d-flex align-items-center">
-                        <img src="/external/admin-lte/3.1.0/img/user2-160x160.jpg" style="width: 3rem; height: auto" class="img-circle elevation-1" alt="User Image">
+                        <img :src="user.avatar" style="width: 3rem; height: auto" class="img-circle elevation-1" alt="User Image">
                         <div class="ml-3">
                             {{ user.name }}
                             <div class="text-muted text-xs">{{ user.email }}</div>

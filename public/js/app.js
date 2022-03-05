@@ -10151,10 +10151,7 @@ var render = function () {
                 [
                   _c("img", {
                     staticClass: "user-image img-circle elevation-1",
-                    attrs: {
-                      src: "/external/admin-lte/3.1.0/img/user2-160x160.jpg",
-                      alt: "User Image",
-                    },
+                    attrs: { src: _vm.user.avatar, alt: "User Image" },
                   }),
                   _vm._v(" "),
                   _c("span", { staticClass: "d-none d-md-in-line" }, [
@@ -10177,10 +10174,7 @@ var render = function () {
                       _c("img", {
                         staticClass: "img-circle elevation-1",
                         staticStyle: { width: "3rem", height: "auto" },
-                        attrs: {
-                          src: "/external/admin-lte/3.1.0/img/user2-160x160.jpg",
-                          alt: "User Image",
-                        },
+                        attrs: { src: _vm.user.avatar, alt: "User Image" },
                       }),
                       _vm._v(" "),
                       _c("div", { staticClass: "ml-3" }, [
@@ -20707,11 +20701,17 @@ var router = new vue_router_dist_vue_router_min__WEBPACK_IMPORTED_MODULE_2___def
   }, {
     path: '/user/login',
     name: 'user_login',
-    component: _components_PageLogin__WEBPACK_IMPORTED_MODULE_6__["default"]
+    component: _components_PageLogin__WEBPACK_IMPORTED_MODULE_6__["default"],
+    meta: {
+      auth: false
+    }
   }, {
     path: '/user/register',
     name: 'user_register',
-    component: _components_PageRegister__WEBPACK_IMPORTED_MODULE_7__["default"]
+    component: _components_PageRegister__WEBPACK_IMPORTED_MODULE_7__["default"],
+    meta: {
+      auth: false
+    }
   }, {
     path: "*",
     component: _components_Page404__WEBPACK_IMPORTED_MODULE_5__["default"]

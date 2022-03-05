@@ -77,12 +77,18 @@ const router = new VueRouter({
         {
             path: '/user/login',
             name: 'user_login',
-            component: PageLogin
+            component: PageLogin,
+            meta: {
+                auth: false
+            }
         },
         {
             path: '/user/register',
             name: 'user_register',
-            component: PageRegister
+            component: PageRegister,
+            meta: {
+                auth: false
+            }
         },
         {path: "*", component: Page404}
     ]

@@ -63,6 +63,19 @@ final class AuthController extends Controller
 
     public function user(Request $request): JsonResource
     {
+        /* @var $user User */
+        $user = $request->user('api');
+        if (empty($user->avatar)) {
+            // Generate avatar if not has
+            $user->avatar = file_get_contents('https://ui-avatars.com/api/?size=160&name=' . urlencode($user->name)) ?: null;
+            $user->save();
+        }
+
+        if (!empty($user->avatar)) {
+            // Convert for response
+            $user->avatar = 'data:image/png;base64,' . base64_encode($user->avatar);
+        }
+
         return new JsonResource($request->user('api'));
     }
 
