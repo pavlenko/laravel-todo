@@ -20733,7 +20733,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(_websanova_vue_auth_dist_v2_vue_a
   },
   options: {
     authRedirect: {
-      path: '/user/login'
+      name: 'user_login'
+    },
+    notFoundRedirect: {
+      name: 'home'
     },
     loginData: {
       url: __baseURL + '/api/V1/auth/login',

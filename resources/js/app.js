@@ -110,7 +110,8 @@ Vue.use(auth, {
         router: driverRouter
     },
     options: {
-        authRedirect: {path: '/user/login'},
+        authRedirect: {name: 'user_login'},
+        notFoundRedirect: {name: 'home'},
         loginData: {url: __baseURL + '/api/V1/auth/login', redirect: {name: 'home'}},
         fetchUser: true,
         fetchData: {url: __baseURL + '/api/V1/auth/user'},
