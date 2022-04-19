@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\DTO\DeskDTO;
-use App\DTO\ListDTO;
 use App\Models\DeskModel;
+use App\Models\ListModel;
 
 final class DesksManager extends BaseManager
 {
@@ -58,7 +58,7 @@ final class DesksManager extends BaseManager
     public function createDeskFromModel(DeskModel $model, bool $withLists = false): DeskDTO
     {
         $lists = $withLists
-            ? array_map(fn(ListDTO $item) => $this->lists->createListFromModel($item), $model->lists->all())
+            ? array_map(fn(ListModel $item) => $this->lists->createListFromModel($item), $model->lists->all())
             : [];
 
         return $this->createDeskFromArray($model->getAttributes(), $lists);

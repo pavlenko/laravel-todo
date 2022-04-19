@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\JWTGuard;
 
 final class AuthController extends Controller
@@ -53,10 +54,15 @@ final class AuthController extends Controller
 
     public function refresh(): JsonResponse
     {
-        if ($token = $this->guard()->refresh()) {
-            return response()
-                ->json(['status' => 'success'])
-                ->header('Authorization', $token);
+        // Try refresh token, else return 401
+        try {
+            if ($token = $this->guard()->refresh()) {
+                return response()
+                    ->json(['status' => 'success'])
+                    ->header('Authorization', $token);
+            }
+        } catch (TokenExpiredException $exception) {
+            // Do nothing but force auth in front
         }
         return response()->json(['error' => 'refresh_token_error'], 401);
     }
