@@ -5,6 +5,7 @@ namespace App\Services;
 use App\DTO\DeskDTO;
 use App\Models\DeskModel;
 use App\Models\ListModel;
+use Illuminate\Database\Eloquent\Builder;
 
 final class DesksManager extends BaseManager
 {
@@ -19,14 +20,26 @@ final class DesksManager extends BaseManager
         $this->tasks = $tasks ?: new TasksManager();
     }
 
+    private function createQuery(array $with = []): Builder
+    {
+        $query = DeskModel::query()->orderBy('updated_at', 'desc');
+        if ($with) {
+            $query->with($with);
+        }
+        return $query;
+    }
+
     /**
      * @return array<DeskDTO>
      */
     public function getAllDesk(bool $withLists = false): array
     {
-        $query = DeskModel::query()->orderBy('updated_at', 'desc');
+        //$query = DeskModel::query()->orderBy('updated_at', 'desc');
         if ($withLists) {
-            $query->with('lists');
+            //$query->with('lists');
+            $query = $this->createQuery(['lists']);
+        } else {
+            $query = $this->createQuery([]);
         }
 
         /* @var $rows DeskModel[] */
