@@ -65,6 +65,7 @@ final class ListDTO extends BaseSortableDTO
 
     public function toArray(): array
     {
-        return parent::toArray() + ['cards' => $this->cards];
+        return parent::toArray()
+            + ['cards' => array_map(fn(CardDTO $card) => $card->toArray(), $this->getCards())];
     }
 }

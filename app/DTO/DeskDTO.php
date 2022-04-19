@@ -59,6 +59,7 @@ final class DeskDTO extends BaseDTO
 
     public function toArray(): array
     {
-        return parent::toArray() + ['lists' => $this->lists];
+        return parent::toArray()
+            + ['lists' => array_map(fn(ListDTO $list) => $list->toArray(), $this->getLists())];
     }
 }
